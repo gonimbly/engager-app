@@ -1,0 +1,21 @@
+{
+  "name": "dreamforce",
+  "version": "0.0.1",
+  "authors": [
+    "Dr. Barak Avraham"
+  ],
+  "moduleType": [
+    "node"
+  ],
+  "license": "GoNimbly Private License",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "app/vendor",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "modernizr": "~2.8.3"
+  }
+}

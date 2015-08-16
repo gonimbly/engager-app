@@ -20,7 +20,6 @@ var scoreBoxStyle = {
         color: '#ffffff',
         height: '6px'
     }
-
 };
 
 var ScoreBox = React.createClass({

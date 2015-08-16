@@ -35,3 +35,31 @@ body {
 .header-tabs-style {
     background-color: #57c6ff;
 }
+
+.service-button-base {
+    width: 100px;
+    height: 55px;
+    background-color: transparent;
+    border: 1px solid #2fb9fe;
+    color: #2fb9fe;
+    margin: 12px 8px;
+    line-height: 16px;
+    text-align: left;
+    text-transform: none;
+    border-radius: 2px;
+}
+
+.service-button-selected {
+    width: 100px;
+    height: 55px;
+    background-color: #2fb9fe;
+    border: 1px solid #2fb9fe;
+    color: #2fb9fe;
+    margin: 12px 8px;
+    line-height: 16px;
+    text-align: left;
+    text-transform: none;
+    color: #ffffff;
+    outline: 0;
+    border-radius: 2px;
+}

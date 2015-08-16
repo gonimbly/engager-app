@@ -5,13 +5,14 @@ var _ = require('lodash');
 
 var ServiceButton = require("./ServiceButton");
 
+var ScrollbarWrapper = require('react-scrollbars').ScrollbarWrapper;
 var ServicesActions = require("../../actions/ServicesActions");
 var ServicesStore = require('../../stores/ServicesStore');
 
 var panelStyle = {
     backgroundColor: '#111f26',
+    height: '80px',
     width: '100%',
-    height: '70px',
     position: 'absolute',
     top: '200px',
     list: {
@@ -38,8 +39,8 @@ var ServicesPanel = React.createClass({
 
         var list = _.map(services, function(service){
             return (
-                <li style={panelStyle.item}>
-                    <ServiceButton onClick={this.clickService} service={service} />
+                <li key={service.id} style={panelStyle.item}>
+                    <ServiceButton  onClick={this.clickService} service={service} />
                 </li>
             )
         }.bind(this));

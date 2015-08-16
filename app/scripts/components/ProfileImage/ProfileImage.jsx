@@ -10,7 +10,6 @@ var imageStyle = {
     right: '0',
     image: {
         width: '30px',
-        borderRadius: '25px',
     }
 };
 
@@ -19,7 +18,7 @@ var ProfileImage = React.createClass({
     return (
       <div style={imageStyle}>
           <a href="#">
-              <img src='../../assets/profile.png' style={imageStyle.image} />
+              <img src='../../assets/profile.png' style={imageStyle.image} className="img-rounded" />
           </a>
       </div>
     );

@@ -1,7 +1,9 @@
 var Reflux = require('reflux');
 
 var ServicesActions = Reflux.createActions([
-    'clickOnService'
+    'clickOnService',
+    'onPopulateQuestions',
+    'onSelectService'
 ]);
 
 module.exports = ServicesActions;

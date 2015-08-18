@@ -10,16 +10,18 @@ var ServicesActions = require("../../actions/ServicesActions");
 var ServicesStore = require('../../stores/ServicesStore');
 
 var panelStyle = {
-    backgroundColor: '#111f26',
+    backgroundColor: '#14200f',
     height: '80px',
     width: '100%',
     position: 'absolute',
     top: '200px',
+    whiteSpace: 'nowrap',
     list: {
-        width: '100%',
+        overflowX: 'scroll',
+        width: 'auto',
         listStyleType: 'none',
         margin: '0',
-        padding: '0',
+        padding: '0'
     },
     item: {
         display: 'inline'
@@ -35,7 +37,7 @@ var ServicesPanel = React.createClass({
         ServicesActions.clickOnService(service);
     },
     render: function() {
-        var services = this.state.servicesData;
+        var services = this.state.servicesData.services;
 
         var list = _.map(services, function(service){
             return (

@@ -5,9 +5,10 @@ var ProfileImage = require('./ProfileImage/ProfileImage');
 var ScoreBox = require('./ScoreBox/ScoreBox');
 var CoverImage = require('./CoverImage/CoverImage');
 var ServicesPanel = require('./ServicesPanel/ServicesPanel');
+var QuestionsList = require('./QuestionsList/QuestionsList');
 
 var headerStyle = {
-    backgroundColor: '#57c6ff',
+    backgroundColor: '#81d05f',
     height: '200px'
 };
 
@@ -20,6 +21,7 @@ var AppHeader = React.createClass({
               <ProfileImage />
               <ScoreBox />
               <ServicesPanel />
+              <QuestionsList />
           </div>
       </div>
     );

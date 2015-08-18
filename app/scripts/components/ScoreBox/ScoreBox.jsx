@@ -5,7 +5,7 @@ var Reflux = require('reflux');
 var UserStore = require('../../stores/UserStore');
 
 var scoreBoxStyle = {
-    backgroundColor: '#111f26',
+    backgroundColor: '#14200f',
     width: '80px',
     height: '80px',
     marginTop: '100px',

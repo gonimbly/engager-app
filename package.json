@@ -13,6 +13,8 @@
     "react-mdl": "^0.9.1",
     "react-router": "~0.13.2",
     "react-scrollbars": "0.0.5",
+    "react-swipe-to-reveal-options": "^0.1.6",
+    "react-window-mixins": "0.0.6",
     "reflux": "~0.2.7"
   },
   "devDependencies": {

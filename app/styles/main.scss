@@ -1,5 +1,5 @@
 body {
-    background: #fafafa;
+    background: #d3d3d5;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     color: #333;
 }
@@ -21,6 +21,13 @@ body {
     }
 }
 
+.wordwrap {
+   white-space: pre-wrap;      /* CSS3 */
+   white-space: -moz-pre-wrap; /* Firefox */
+   white-space: -o-pre-wrap;   /* Opera 7 */
+   word-wrap: break-word;      /* IE */
+}
+
 .browsehappy {
     margin: 0.2em 0;
     background: #ccc;
@@ -40,8 +47,8 @@ body {
     width: 100px;
     height: 55px;
     background-color: transparent;
-    border: 1px solid #2fb9fe;
-    color: #2fb9fe;
+    border: 1px solid #71c04f;
+    color: #71c04f;
     margin: 12px 8px;
     line-height: 16px;
     text-align: left;
@@ -52,9 +59,8 @@ body {
 .service-button-selected {
     width: 100px;
     height: 55px;
-    background-color: #2fb9fe;
-    border: 1px solid #2fb9fe;
-    color: #2fb9fe;
+    background-color: #71c04f;
+    border: 1px solid #71c04f;
     margin: 12px 8px;
     line-height: 16px;
     text-align: left;

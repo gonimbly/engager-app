@@ -12,7 +12,7 @@ var headerStyle = {
     height: '200px'
 };
 
-var AppHeader = React.createClass({
+var AppContainer = React.createClass({
   render: function() {
     return (
       <div>
@@ -28,4 +28,4 @@ var AppHeader = React.createClass({
   }
 });
 
-module.exports = AppHeader;
+module.exports = AppContainer;

@@ -1,13 +1,13 @@
 var React = require('react');
 var ReactMDL = require('react-mdl');
 
-var AppHeader = require('./AppHeader');
+var AppContainer = require('./AppContainer');
 
 var MainWindow = React.createClass({
   render: function() {
     return (
         <div>
-            <AppHeader />
+            <AppContainer />
         </div>
     );
   }

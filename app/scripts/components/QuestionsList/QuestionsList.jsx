@@ -4,9 +4,10 @@ var OnResize = require("react-window-mixins").OnResize;
 var Router = require('react-router');
 var Reflux = require('reflux');
 var _ = require('lodash');
-var SwipeToRevealOptions = require('react-swipe-to-reveal-options');
+var Rating = require('react-rating');
 
 var ServicesStore = require('../../stores/ServicesStore');
+var UserActions = require("../../actions/UserActions");
 var QuestionItem = require('./QuestionItem');
 
 var ListGroup = ReactBootstrap.ListGroup;
@@ -41,7 +42,7 @@ var QuestionsList = React.createClass({
              Reflux.connect(ServicesStore, 'servicesData')],
 
      onClickQuestion: function(question) {
-
+         UserActions.increasePoints(question);
      },
 
      render: function() {

@@ -1,6 +1,5 @@
 var React = require('react');
-
-
+var SwipeToRevealOptions = require('./SwipeRow');
 
 var QuestionItem = React.createClass({
     PropTypes:{
@@ -12,6 +11,10 @@ var QuestionItem = React.createClass({
         this.props.onClick(question);
     },
 
+    createLeftContent: function() {
+        return ("");
+    },
+
     render: function() {
         var question = this.props.question;
 
@@ -21,8 +24,10 @@ var QuestionItem = React.createClass({
         var pointsStyle = {
             height: '80px',
             width: '100%',
+            marginLeft: '20px',
+            marginRight: '20px',
             right: '0px',
-            display: 'table-cell',
+            fontSize: '17px',
             verticalAlign: 'middle',
             color: '#71c04f'
         };
@@ -31,7 +36,6 @@ var QuestionItem = React.createClass({
             height: '80px',
             width: '100%',
             right: '0px',
-            display: 'table-cell',
             verticalAlign: 'middle',
             color: '#71c04f',
         };
@@ -45,32 +49,51 @@ var QuestionItem = React.createClass({
             okStyle.display = "none";
         }
 
+        var item = {
+            leftOptions: [{
+                content: "<Rating  />",
+                class: 'trash'
+            }],
+        };
+
         return (
-            <div style={{
-                    display: 'table',
-                    backgroundColor: bg,
-                    height: '80px',
-                    width: '100%',
-                    paddingLeft: '10px',
-                    textAlign: 'left',
-                    color: text
-                }} className="">
-                <span style={{
-                        height: '80px',
-                        width: '80%',
-                        left: '0',
-                        display: 'table-cell',
-                        verticalAlign: 'middle',
-                    }} className="wordwrap">
-                    {question.text}
-                </span>
-                <span style={pointsStyle} className="text-center">
-                    <label style={{marginBottom: '0px'}}>{question.points}</label>
-                    <div style={{margin: '0px', lineHeight: '3px', fontSize: '10px'}}>pts</div>
-                </span>
-                <span style={okStyle} className="text-center">
-                    <img src="../../../assets/check.png" width="20px" height="16px"/>
-                </span>
+            <div>
+                <SwipeToRevealOptions
+                    actionThreshold={300}
+                    visibilityThreshold={50}
+                    leftOptions={item.leftOptions}
+                    rightOptions={[]}
+                    callActionWhenSwipingFarRight={true}
+                    callActionWhenSwipingFarLeft={false}>
+                    <table>
+                        <tr>
+                            <td style={{
+                                    height: '80px',
+                                    width: '100%',
+                                    left: '0',
+                                    verticalAlign: 'middle',
+                                }}>
+                                <span className="wordwrap">
+                                    {question.text}
+                                </span>
+                            </td>
+                            <td style={{
+                                    height: '80px',
+                                    width: '100%',
+                                    marginTop: '10px',
+                                    verticalAlign: 'middle',
+                                }}>
+                                <span style={pointsStyle} className="text-center">
+                                    <label style={{paddingTop: '20px', marginBottom: '0px'}}>{question.points}</label>
+                                    <div style={{margin: '0px', lineHeight: '3px', fontSize: '10px'}}>pts</div>
+                                </span>
+                                <span style={okStyle} className="text-center">
+                                    <img src="../../../assets/check.png" width="20px" height="16px"/>
+                                </span>
+                            </td>
+                        </tr>
+                    </table>
+                </SwipeToRevealOptions>
             </div>
         );
     }

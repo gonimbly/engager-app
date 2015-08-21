@@ -69,3 +69,97 @@ body {
     outline: 0;
     border-radius: 2px;
 }
+
+.trash {
+    color: #71c04f;
+}
+
+.stro-container {
+  width: 300%;
+  margin-left: -100% ;
+  position: relative;
+  height: 80px;
+}
+
+.stro-container.transition-back {
+  transition: all .4s ease;
+}
+
+.stro-left {
+    position: relative;
+    display: inline-block;
+    width: 33.33333333%;
+    height: 80px;
+    vertical-align: top;
+    background-color: #FFFFFF;
+}
+
+.stro-content {
+    position: relative;
+    display: inline-block;
+    width: 33.33333333%;
+    vertical-align: top;
+    background-color: #f8f8fa;
+    height: 80px;
+    padding-left: 10px;
+    text-align: left;
+    color: #000000
+}
+
+.stro-content-selected {
+    position: relative;
+    display: inline-block;
+    width: 33.33333333%;
+    vertical-align: top;
+    background-color: #71c04f;
+    height: 80px;
+    padding-left: 10px;
+    text-align: left;
+    color: #FFFFFF
+}
+
+.stro-right {
+  position: relative;
+  display: inline-block;
+  width: 33.33333333%;
+  height: 80px;
+  vertical-align: top;
+  background-color: #FFFFFF;
+}
+
+.stro-button {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+}
+
+.stro-button span {
+  position: absolute;
+  top: 27px;
+  transform: translate(0, -50%);
+  display: block;
+}
+
+.stro-button.stro-right-button {
+  left: 0;
+}
+.stro-button.stro-right-button span {
+  left: 0;
+  text-align: center;
+}
+.stro-button.stro-left-button {
+  right: 0;
+}
+.stro-button.stro-left-button span {
+  right: 5px;
+  text-align: center;
+  font-size: 25px;
+  font-weight: bold;
+}
+
+.stro-container.show-right-buttons,
+.stro-container.show-left-buttons,
+.stro-container.show-right-buttons .stro-button,
+.stro-container.show-left-buttons .stro-button{
+  transition: all .3s ease;
+}

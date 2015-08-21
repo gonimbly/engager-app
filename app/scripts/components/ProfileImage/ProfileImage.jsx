@@ -1,7 +1,4 @@
 var React = require('react');
-var ReactMDL = require('react-mdl');
-
-var Layout = ReactMDL.Layout;
 
 var imageStyle = {
     marginRight: '10px',

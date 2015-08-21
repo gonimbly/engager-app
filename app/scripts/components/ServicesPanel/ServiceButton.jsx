@@ -1,8 +1,5 @@
 var React = require('react');
-var ReactMDL = require('react-mdl');
 var Radium = require('radium');
-
-var Button = ReactMDL.Button;
 
 var ServiceButton = React.createClass({
     PropTypes:{

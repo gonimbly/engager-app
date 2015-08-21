@@ -1,6 +1,4 @@
 var React = require('react');
-var ReactMDL = require('react-mdl');
-
 var AppContainer = require('./AppContainer');
 
 var MainWindow = React.createClass({

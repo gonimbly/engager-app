@@ -176,7 +176,13 @@
       onLeftClick: React.PropTypes.func,
       onReveal: React.PropTypes.func,
       maxItemWidth: React.PropTypes.number,
-      parentWidth: React.PropTypes.number
+      parentWidth: React.PropTypes.number,
+      contentBgColor: React.PropTypes.string,
+      isLeftActive: React.PropTypes.bool,
+      isRightActive: React.PropTypes.bool,
+      onRate: React.PropTypes.func,
+      onDismiss: React.PropTypes.func,
+      questionObj: React.PropTypes.object,
     },
 
     getInitialState: function getInitialState() {
@@ -210,108 +216,165 @@
       };
     },
 
-    render: function render() {
-      var classes = this.props.className + " stro-container";
-      if (this.state.transitionBack) {
-        classes += " transition-back";
-      }
-      if (this.state.showRightButtons) {
-        classes += " show-right-buttons";
-      }
-      if (this.state.showLeftButtons) {
-        classes += " show-left-buttons";
-      }
+    onRate: function(rate) {
+        if (rate == undefined) {
+            return;
+        }
 
-      return React.createElement("div", { className: classes,
-        style: this.getContainerStyle() }, React.createElement("div", { className: "stro-left" }, this.props.leftOptions.map((function (option, index) {
-        return React.createElement("div", { className: "stro-button stro-left-button " + option["class"],
-          style: this.getStyle("left", index) }, <Rating full={"glyphicon glyphicon-star"} empty={"glyphicon glyphicon-star-empty"} start={0} stop={4} />);
-      }).bind(this))), React.createElement(Swipeable, { className: "stro-content",
-        onSwipingLeft: this.swipingLeft,
-        onClick: this.handleContentClick,
-        onSwipingRight: this.swipingRight,
-        delta: 15,
-        onSwiped: this.swiped }, this.props.children), React.createElement("div", { className: "stro-right" }, this.props.rightOptions.map((function (option, index) {
-        return React.createElement("div", { className: "stro-button stro-right-button " + option["class"],
-          onClick: this.rightClick.bind(this, option),
-          style: this.getStyle("right", index) }, React.createElement("span", { style: this.getSpanStyle("right", index), dangerouslySetInnerHTML: { __html: option.label } }));
-      }).bind(this))));
+        this.props.onRate(rate, this.props.questionObj);
+        this.transitionBack();
+    },
+
+    onDismiss: function(question) {
+        this.props.onDismiss(question);
+        this.transitionBack();
+    },
+
+    render: function render() {
+        var q = this.props.questionObj;
+
+        var classes = this.props.className + " stro-container";
+
+        if (this.state.transitionBack) {
+            classes += " transition-back";
+        }
+
+        if (this.state.showRightButtons) {
+            classes += " show-right-buttons";
+        }
+
+        if (this.state.showLeftButtons) {
+            classes += " show-left-buttons";
+        }
+
+        return React.createElement("div", {
+                className: classes,
+                style: this.getContainerStyle()
+            },
+            React.createElement("div", {
+                className: "stro-left"
+            },
+            this.props.leftOptions.map(
+                (function (option, index) {
+                    return React.createElement("div", {
+                        className: "stro-button stro-left-button " + option["class"],
+                        style: this.getStyle("left", index),
+                    },
+                    <Rating
+                      full={"glyphicon glyphicon-star"}
+                      empty={"glyphicon glyphicon-star-empty"}
+                      start={0}
+                      stop={4}
+                      onRate={this.onRate}/>
+                )
+            }).bind(this))),
+            React.createElement(Swipeable, {
+                    className: "stro-content",
+                    onSwipingLeft: this.swipingLeft,
+                    onClick: this.handleContentClick,
+                    onSwipingRight: this.swipingRight,
+                    delta: 15,
+                    onSwiped: this.swiped,
+                    style: {backgroundColor: this.props.contentBgColor}
+                },
+                this.props.children),
+            React.createElement("div", {
+                className: "stro-right"
+            },
+            this.props.rightOptions.map(
+                (function (option, index) {
+                    return React.createElement("div", {
+                        className: "stro-button stro-right-button text-center" + option["class"],
+                        onClick: this.onDismiss.bind(this, q),
+                        style: this.getStyle("right", index)
+                    },React.createElement("span", { style: this.getSpanStyle("right", index), dangerouslySetInnerHTML: { __html: "Dismiss" } }));
+
+            }).bind(this))));
     },
 
     swipingLeft: function swipingLeft(event, delta) {
-      if (this.swipingHandleStylesAndDelta(delta, "left")) {
-        return;
-      }
+        if (!this.props.isLeftActive) {
+            return;
+        }
 
-      var action = null;
-      if (delta > this.props.visibilityThreshold) {
-        action = "rightVisible";
-      }
-      if (this.props.callActionWhenSwipingFarLeft && delta > this.props.actionThreshold) {
-        action = "rightAction";
-      }
+        if (this.swipingHandleStylesAndDelta(delta, "left")) {
+            return;
+        }
 
-      this.setState({
-        delta: -delta,
-        action: action,
-        swipingLeft: true
-      });
+        var action = null;
+        if (delta > this.props.visibilityThreshold) {
+            action = "rightVisible";
+        }
+        if (this.props.callActionWhenSwipingFarLeft && delta > this.props.actionThreshold) {
+            action = "rightAction";
+        }
+
+        this.setState({
+            delta: -delta,
+            action: action,
+            swipingLeft: true
+        });
     },
 
     swipingRight: function swipingRight(event, delta) {
-      if (this.swipingHandleStylesAndDelta(delta, "right")) {
-        return;
-      }
+        if (!this.props.isRightActive) {
+            return;
+        }
 
-      var action = null;
-      if (delta > this.props.visibilityThreshold) {
-        action = "leftVisible";
-      }
-      if (this.props.callActionWhenSwipingFarRight && delta > this.props.actionThreshold) {
-        action = "leftAction";
-      }
+        if (this.swipingHandleStylesAndDelta(delta, "right")) {
+            return;
+        }
 
-      this.setState({
-        delta: delta,
-        action: action,
-        swipingRight: true
-      });
+        var action = null;
+        if (delta > this.props.visibilityThreshold) {
+            action = "leftVisible";
+        }
+        if (this.props.callActionWhenSwipingFarRight && delta > this.props.actionThreshold) {
+            action = "leftAction";
+        }
+
+        this.setState({
+            delta: delta,
+            action: action,
+            swipingRight: true
+        });
     },
 
     swipingHandleStylesAndDelta: function swipingHandleStylesAndDelta(delta, direction) {
-      if (this.shouldAbort(direction)) {
-        return true;
-      }
+        if (this.shouldAbort(direction)) {
+            return true;
+        }
 
-      this.shouldTransitionBack(direction);
-      this.shouldCloseOthers(direction);
+        this.shouldTransitionBack(direction);
+        this.shouldCloseOthers(direction);
 
-      return false;
+        return false;
     },
 
     shouldAbort: function shouldAbort(direction) {
-      if (this.state.transitionBack) {
-        return true;
-      }
-      if (direction === "right") {
-        return !this.props.leftOptions.length && !this.state.showRightButtons || this.state.showLeftButtons && !this.props.callActionWhenSwipingFarRight;
-      } else {
-        return !this.props.rightOptions.length && !this.state.showLeftButtons || this.state.showRightButtons && !this.props.callActionWhenSwipingFarLeft;
-      }
+        if (this.state.transitionBack) {
+            return true;
+        }
+        if (direction === "right") {
+            return !this.props.leftOptions.length && !this.state.showRightButtons || this.state.showLeftButtons && !this.props.callActionWhenSwipingFarRight;
+        }
+        else {
+            return !this.props.rightOptions.length && !this.state.showLeftButtons || this.state.showRightButtons && !this.props.callActionWhenSwipingFarLeft;
+        }
     },
 
     shouldTransitionBack: function shouldTransitionBack(direction) {
-      if (direction === "right" && this.state.showRightButtons || this.state.showLeftButtons) {
-        this.transitionBack();
-      }
+        if (direction === "right" && this.state.showRightButtons || this.state.showLeftButtons) {
+            this.transitionBack();
+        }
     },
 
     shouldCloseOthers: function shouldCloseOthers(direction) {
-      if (this.props.closeOthers) {
-        if (direction === "right" && !this.state.swipingRight || !this.state.swipingLeft) {
-          this.props.closeOthers();
+        if (this.props.closeOthers) {
+            if (direction === "right" && !this.state.swipingRight || !this.state.swipingLeft) {
+                this.props.closeOthers();
+            }
         }
-      }
     },
 
     swiped: function swiped() {
@@ -345,28 +408,28 @@
     },
 
     rightClick: function rightClick(option) {
-      this.props.onRightClick(option);
-      this.transitionBack();
+        this.props.onRightClick(option);
+        this.transitionBack();
     },
 
     leftClick: function leftClick(option) {
-      this.props.onLeftClick(option);
-      this.transitionBack();
+        this.props.onLeftClick(option);
+        this.transitionBack();
     },
 
     close: function close() {
-      this.transitionBack();
+        this.transitionBack();
     },
 
     transitionBack: function transitionBack() {
-      this.setState({
-        showLeftButtons: false,
-        showRightButtons: false,
-        transitionBack: true
-      });
-      setTimeout((function () {
-        this.setState({ transitionBack: false });
-      }).bind(this), this.props.transitionBackTimeout);
+        this.setState({
+            showLeftButtons: false,
+            showRightButtons: false,
+            transitionBack: true
+        });
+        setTimeout((function () {
+            this.setState({ transitionBack: false });
+        }).bind(this), this.props.transitionBackTimeout);
     },
 
     getContainerStyle: function getContainerStyle() {

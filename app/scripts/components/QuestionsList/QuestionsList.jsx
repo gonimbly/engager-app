@@ -27,7 +27,7 @@ var listContainerStyle = {
 var itemStyle = {
     listStyle: 'none',
     marginLeft: '0',
-    marginBottom: '3px',
+    marginBottom: '3px'
 };
 
 var listStyle = {
@@ -41,10 +41,6 @@ var QuestionsList = React.createClass({
 			 Router.State,
              Reflux.connect(ServicesStore, 'servicesData')],
 
-     onClickQuestion: function(question) {
-         UserActions.increasePoints(question);
-     },
-
      render: function() {
         var windowHeight = this.state.window.height;
         var listHeight = windowHeight - 290;
@@ -53,11 +49,20 @@ var QuestionsList = React.createClass({
         listStyle.borderRadius = '0px';
 
         var questions = this.state.servicesData.lastSelection.questions;
+        var answered = this.state.servicesData.lastSelection.answered;
 
         var list = _.map(questions, function(question) {
             return (
                 <li key={question.id} style={itemStyle}>
-                    <QuestionItem question={question} onClick={this.onClickQuestion} />
+                    <QuestionItem question={question} isAnswered={false} onClick={this.onClickQuestion} />
+                </li>
+            )
+        }.bind(this));
+
+        var answeredList = _.map(answered, function(answer) {
+            return (
+                <li key={answer.id} style={itemStyle}>
+                    <QuestionItem question={answer} isAnswered={true} onClick={this.onClickQuestion} />
                 </li>
             )
         }.bind(this));
@@ -66,6 +71,7 @@ var QuestionsList = React.createClass({
             <div style={listContainerStyle}>
                 <ul style={listStyle}>
                     {list}
+                    {answeredList}
                 </ul>
             </div>
         );

@@ -1,5 +1,4 @@
 var React = require('react');
-var ReactMDL = require('react-mdl');
 
 var ProfileImage = require('./ProfileImage/ProfileImage');
 var ScoreBox = require('./ScoreBox/ScoreBox');

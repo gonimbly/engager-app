@@ -1,25 +1,32 @@
 var React = require('react');
 var SwipeToRevealOptions = require('./SwipeRow');
+var Rating = require('react-rating');
+
+var UserActions = require("../../actions/UserActions");
+var ServicesActions = require("../../actions/ServicesActions");
 
 var QuestionItem = React.createClass({
     PropTypes:{
         question: React.PropTypes.object.isRequired,
-        onClick: React.PropTypes.func.isRequired
+        isAnswered: React.PropTypes.bool.isRequired
     },
 
-    onClick: function(question){
-        this.props.onClick(question);
+    onRate: function(rate, question) {
+        UserActions.increasePoints(question);
+        ServicesActions.answerQuestion(question);
     },
 
-    createLeftContent: function() {
-        return ("");
+    onDismiss: function(question) {
+        ServicesActions.dismissQuestion(question);
     },
 
     render: function() {
         var question = this.props.question;
+        var isAnswered = this.props.isAnswered;
 
         var bg = "#f8f8fa";
         var text = "#000000";
+        var swipe = true;
 
         var pointsStyle = {
             height: '80px',
@@ -35,14 +42,18 @@ var QuestionItem = React.createClass({
         var okStyle = {
             height: '80px',
             width: '100%',
+            marginLeft: '20px',
+            marginRight: '20px',
             right: '0px',
+            fontSize: '17px',
             verticalAlign: 'middle',
             color: '#71c04f',
         };
 
-        if (question.state == "1") {
+        if (isAnswered) {
             bg = "#71c04f";
             text = "#FFFFFF";
+            swipe = false;
             pointsStyle.display = "none";
         }
         else {
@@ -51,8 +62,12 @@ var QuestionItem = React.createClass({
 
         var item = {
             leftOptions: [{
-                content: "<Rating  />",
-                class: 'trash'
+                content: null,
+                class: 'rate-starts'
+            }],
+            rightOptions: [{
+                content: null,
+                class: 'dismiss-button'
             }],
         };
 
@@ -62,9 +77,15 @@ var QuestionItem = React.createClass({
                     actionThreshold={300}
                     visibilityThreshold={50}
                     leftOptions={item.leftOptions}
-                    rightOptions={[]}
-                    callActionWhenSwipingFarRight={true}
-                    callActionWhenSwipingFarLeft={false}>
+                    rightOptions={item.rightOptions}
+                    callActionWhenSwipingFarRight={swipe}
+                    callActionWhenSwipingFarLeft={swipe}
+                    contentBgColor={bg}
+                    isRightActive={swipe}
+                    isLeftActive={swipe}
+                    onRate={this.onRate}
+                    onDismiss={this.onDismiss}
+                    questionObj={question}>
                     <table>
                         <tr>
                             <td style={{
@@ -73,7 +94,7 @@ var QuestionItem = React.createClass({
                                     left: '0',
                                     verticalAlign: 'middle',
                                 }}>
-                                <span className="wordwrap">
+                                <span style={{color: text, fontSize: '16px'}} className="wordwrap">
                                     {question.text}
                                 </span>
                             </td>

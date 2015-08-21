@@ -70,8 +70,11 @@ body {
     border-radius: 2px;
 }
 
-.trash {
+.rate-starts {
     color: #71c04f;
+}
+
+.dismiss-button {
 }
 
 .stro-container {
@@ -146,6 +149,8 @@ body {
 .stro-button.stro-right-button span {
   left: 0;
   text-align: center;
+  top: 40px;
+  font-size: 16px;
 }
 .stro-button.stro-left-button {
   right: 0;

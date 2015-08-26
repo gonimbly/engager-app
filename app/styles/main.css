@@ -54,6 +54,7 @@ body {
     text-align: left;
     text-transform: none;
     border-radius: 2px;
+    outline: 0;
 }
 
 .service-button-selected {
@@ -167,4 +168,42 @@ body {
 .stro-container.show-right-buttons .stro-button,
 .stro-container.show-left-buttons .stro-button{
   transition: all .3s ease;
+}
+
+.addedpoints-enter {
+  opacity: 0.01;
+}
+
+.addedpoints-enter.addedpoints-enter-active {
+    opacity: 1;
+    transition: opacity .5s ease-in;
+}
+
+.addedpoints-leave {
+  opacity: 1;
+}
+
+.addedpoints-leave.addedpoints-leave-active {
+    opacity: 0.01;
+    transition: opacity .5s ease-in;
+}
+
+.addedpoints-appear {
+    opacity: 0.01;
+    transition: opacity .5s ease-in;
+}
+
+.addedpoints-appear.addedpoints-appear-active {
+    opacity: 1;
+}
+
+.ReactModal__Overlay--after-open {
+    background-color: rgba(0, 0, 0, 0.8) !important;
+}
+
+.ReactModal__Content--after-open {
+    height: 40%;
+    margin-top: 40%;
+    border-radius: 4px;
+    padding: 0px !important;
 }

@@ -1,7 +1,8 @@
 var Reflux = require('reflux');
 
 var UserActions = Reflux.createActions([
-    'increasePoints'
+    'increasePoints',
+    'getUser'
 ]);
 
 module.exports = UserActions;

@@ -293,10 +293,6 @@
     },
 
     swipingLeft: function swipingLeft(event, delta) {
-        if (!this.props.isLeftActive) {
-            return;
-        }
-
         if (this.swipingHandleStylesAndDelta(delta, "left")) {
             return;
         }
@@ -305,6 +301,11 @@
         if (delta > this.props.visibilityThreshold) {
             action = "rightVisible";
         }
+
+        if (!this.props.isLeftActive) {
+            return;
+        }
+
         if (this.props.callActionWhenSwipingFarLeft && delta > this.props.actionThreshold) {
             action = "rightAction";
         }
@@ -317,10 +318,6 @@
     },
 
     swipingRight: function swipingRight(event, delta) {
-        if (!this.props.isRightActive) {
-            return;
-        }
-
         if (this.swipingHandleStylesAndDelta(delta, "right")) {
             return;
         }
@@ -329,6 +326,11 @@
         if (delta > this.props.visibilityThreshold) {
             action = "leftVisible";
         }
+
+        if (!this.props.isRightActive) {
+            return;
+        }
+
         if (this.props.callActionWhenSwipingFarRight && delta > this.props.actionThreshold) {
             action = "leftAction";
         }

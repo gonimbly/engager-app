@@ -2,8 +2,9 @@ var React = require('react');
 var Router = require('react-router');
 var Reflux = require('reflux');
 
-var UserStore = require('../../stores/UserStore');
+var AppStore = require('../../stores/AppStore');
 var UserActions = require('../../actions/UserActions');
+var Animate = require('rc-animate');
 
 var scoreBoxStyle = {
     backgroundColor: '#14200f',
@@ -36,11 +37,12 @@ var scoreBoxStyle = {
 var ScoreBox = React.createClass({
     mixins: [Router.Navigation,
 			Router.State,
-            Reflux.connect(UserStore, 'userData')],
+            Reflux.connect(AppStore, 'appData')],
 
     increasePoints: function() {
         UserActions.increasePoints();
-
+        
+        //
 
     },
 
@@ -48,8 +50,8 @@ var ScoreBox = React.createClass({
         return (
             <div>
               <div style={scoreBoxStyle}>
-                  <p style={scoreBoxStyle.added}>{this.state.userData.added}</p>
-                  <p style={scoreBoxStyle.score} className="text-center">{this.state.userData.score}</p>
+                  <p style={scoreBoxStyle.added}>{this.state.appData.user.added}</p>
+                  <p style={scoreBoxStyle.score} className="text-center">{this.state.appData.user.score}</p>
                   <p style={scoreBoxStyle.text} className="text-center">points</p>
               </div>
             </div>

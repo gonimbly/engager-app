@@ -1,19 +1,27 @@
 var React = require('react');
 var SwipeToRevealOptions = require('./SwipeRow');
 var Rating = require('react-rating');
+var Router = require('react-router');
+var Reflux = require('reflux');
+var _ = require('lodash');
 
 var UserActions = require("../../actions/UserActions");
 var ServicesActions = require("../../actions/ServicesActions");
+var AppStore = require('../../stores/AppStore');
 
 var QuestionItem = React.createClass({
+    mixins: [Router.Navigation,
+             Router.State,
+             Reflux.connect(AppStore, 'appData')],
+
     PropTypes:{
         question: React.PropTypes.object.isRequired,
-        isAnswered: React.PropTypes.bool.isRequired
+        rowType: React.PropTypes.number.isRequired
     },
 
     onRate: function(rate, question) {
         UserActions.increasePoints(question);
-        ServicesActions.answerQuestion(question);
+        ServicesActions.answerQuestion(question, this.state.appData.user);
     },
 
     onDismiss: function(question) {
@@ -22,11 +30,12 @@ var QuestionItem = React.createClass({
 
     render: function() {
         var question = this.props.question;
-        var isAnswered = this.props.isAnswered;
+        var rowType = this.props.rowType;
 
         var bg = "#f8f8fa";
         var text = "#000000";
         var swipe = true;
+        var isRightActive = swipe;
 
         var pointsStyle = {
             height: '80px',
@@ -50,14 +59,21 @@ var QuestionItem = React.createClass({
             color: '#71c04f',
         };
 
-        if (isAnswered) {
-            bg = "#71c04f";
-            text = "#FFFFFF";
-            swipe = false;
-            pointsStyle.display = "none";
-        }
-        else {
-            okStyle.display = "none";
+        switch (rowType) {
+            case 1: // unanswered
+                okStyle.display = "none";
+            break;
+            case 2: // answered
+                bg = "#71c04f";
+                text = "#FFFFFF";
+                swipe = false;
+                pointsStyle.display = "none";
+            break;
+            case 3: // dismissed
+                okStyle.display = "none";
+                bg = "#e9e7e7";
+                isRightActive = false;
+            break;
         }
 
         var item = {
@@ -82,7 +98,7 @@ var QuestionItem = React.createClass({
                     callActionWhenSwipingFarLeft={swipe}
                     contentBgColor={bg}
                     isRightActive={swipe}
-                    isLeftActive={swipe}
+                    isLeftActive={isRightActive}
                     onRate={this.onRate}
                     onDismiss={this.onDismiss}
                     questionObj={question}>

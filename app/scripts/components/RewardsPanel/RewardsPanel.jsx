@@ -2,12 +2,13 @@ var React = require('react');
 var Router = require('react-router');
 var Reflux = require('reflux');
 var _ = require('lodash');
+var Modal = require('react-modal');
 
-var ServiceButton = require("./ServiceButton");
+var RewardButton = require("./RewardButton");
 
 var ScrollbarWrapper = require('react-scrollbars').ScrollbarWrapper;
 var ServicesActions = require("../../actions/ServicesActions");
-var ServicesStore = require('../../stores/ServicesStore');
+var AppStore = require('../../stores/AppStore');
 
 var panelStyle = {
     backgroundColor: '#14200f',
@@ -28,21 +29,29 @@ var panelStyle = {
     }
 };
 
-var ServicesPanel = React.createClass({
+var RewardsPanel = React.createClass({
     mixins: [Router.Navigation,
 			 Router.State,
-             Reflux.connect(ServicesStore, 'servicesData')],
+             Reflux.connect(AppStore, 'appData')],
 
-    clickService: function(service) {
-        ServicesActions.clickOnService(service);
+    clickReward: function(reward) {
+        ServicesActions.clickOnService(reward);
+        ServicesActions.openReward(reward);
     },
     render: function() {
-        var services = this.state.servicesData.services;
+        var rewards = this.state.appData.rewards;
 
-        var list = _.map(services, function(service){
+        var list = _.map(rewards, function(reward){
+
+            var method = function(){};
+
+            if (reward.className === "service-button-selected") {
+                method = this.clickReward;
+            }
+
             return (
-                <li key={service.id} style={panelStyle.item}>
-                    <ServiceButton  onClick={this.clickService} service={service} />
+                <li key={reward.id} style={panelStyle.item}>
+                    <RewardButton  onClick={method} reward={reward} />
                 </li>
             )
         }.bind(this));
@@ -57,4 +66,4 @@ var ServicesPanel = React.createClass({
     }
 });
 
-module.exports = ServicesPanel;
+module.exports = RewardsPanel;

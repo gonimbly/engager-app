@@ -6,6 +6,9 @@ var ServicesActions = Reflux.createActions([
     'onSelectService',
     'answerQuestion',
     'dismissQuestion',
+    'updateRewards',
+    'openReward',
+    'closeReward',
 ]);
 
 module.exports = ServicesActions;

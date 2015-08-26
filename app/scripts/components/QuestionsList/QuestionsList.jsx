@@ -6,7 +6,7 @@ var Reflux = require('reflux');
 var _ = require('lodash');
 var Rating = require('react-rating');
 
-var ServicesStore = require('../../stores/ServicesStore');
+var AppStore = require('../../stores/AppStore');
 var UserActions = require("../../actions/UserActions");
 var QuestionItem = require('./QuestionItem');
 
@@ -39,7 +39,7 @@ var listStyle = {
 var QuestionsList = React.createClass({
     mixins: [OnResize, Router.Navigation,
 			 Router.State,
-             Reflux.connect(ServicesStore, 'servicesData')],
+             Reflux.connect(AppStore, 'appData')],
 
      render: function() {
         var windowHeight = this.state.window.height;
@@ -48,13 +48,14 @@ var QuestionsList = React.createClass({
         listStyle.height = listHeight+"px";
         listStyle.borderRadius = '0px';
 
-        var questions = this.state.servicesData.lastSelection.questions;
-        var answered = this.state.servicesData.lastSelection.answered;
+        var questions = this.state.appData.questions.unanswered;
+        var answered = this.state.appData.questions.answered;
+        var dismissed = this.state.appData.questions.dismissed;
 
-        var list = _.map(questions, function(question) {
+        var unansweredList = _.map(questions, function(question) {
             return (
                 <li key={question.id} style={itemStyle}>
-                    <QuestionItem question={question} isAnswered={false} onClick={this.onClickQuestion} />
+                    <QuestionItem question={question} rowType={1} onClick={this.onClickQuestion} />
                 </li>
             )
         }.bind(this));
@@ -62,7 +63,15 @@ var QuestionsList = React.createClass({
         var answeredList = _.map(answered, function(answer) {
             return (
                 <li key={answer.id} style={itemStyle}>
-                    <QuestionItem question={answer} isAnswered={true} onClick={this.onClickQuestion} />
+                    <QuestionItem question={answer} rowType={2} onClick={this.onClickQuestion} />
+                </li>
+            )
+        }.bind(this));
+
+        var dismissedList = _.map(dismissed, function(question) {
+            return (
+                <li key={question.id} style={itemStyle}>
+                    <QuestionItem question={question} rowType={3} onClick={this.onClickQuestion} />
                 </li>
             )
         }.bind(this));
@@ -70,7 +79,8 @@ var QuestionsList = React.createClass({
         return (
             <div style={listContainerStyle}>
                 <ul style={listStyle}>
-                    {list}
+                    {unansweredList}
+                    {dismissedList}
                     {answeredList}
                 </ul>
             </div>

@@ -1,6 +1,5 @@
 var Reflux = require('reflux');
 var _ = require('lodash');
-var express = require('express');
 
 var AppActions = require("../actions/AppActions");
 var UserActions = require('../actions/UserActions')

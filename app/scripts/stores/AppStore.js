@@ -102,6 +102,7 @@ var AppStore = Reflux.createStore({
 
         this.listenTo(AppActions.clickOnService, this.onClickReward);
         this.listenTo(AppActions.answerQuestion, this.onAnswerQuestion);
+        this.listenTo(AppActions.answerDismissedQuestion, this.onAnswerDismissedQuestion);
         this.listenTo(AppActions.dismissQuestion, this.onDismissQuestion);
         this.listenTo(AppActions.updateRewards, this.activeRewards);
         this.listenTo(AppActions.openReward, this.openReward);
@@ -213,6 +214,17 @@ var AppStore = Reflux.createStore({
 
         this.appData.questions.answered.push(unanswered[i]);
         this.appData.questions.unanswered.splice(i,1);
+
+        this.trigger(this.appData);
+
+        this.activeRewards();
+    },
+    onAnswerDismissedQuestion: function(question, user) {
+        var dismissed = this.appData.questions.dismissed;
+        var i = _.indexOf(dismissed, question);
+
+        this.appData.questions.answered.push(dismissed[i]);
+        this.appData.questions.dismissed.splice(i,1);
 
         this.trigger(this.appData);
 

@@ -21,7 +21,15 @@ var QuestionItem = React.createClass({
 
     onRate: function(rate, question) {
         UserActions.increasePoints(question);
-        AppActions.answerQuestion(question, this.state.appData.user);
+
+        switch (this.props.rowType) {
+            case 1:
+                AppActions.answerQuestion(question, this.state.appData.user);
+            break;
+            case 3:
+                AppActions.answerDismissedQuestion(question, this.state.appData.user);
+            break;
+        }
     },
 
     onDismiss: function(question) {

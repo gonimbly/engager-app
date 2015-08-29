@@ -55,7 +55,7 @@ var QuestionsList = React.createClass({
         var unansweredList = _.map(questions, function(question) {
             return (
                 <li key={question.id} style={itemStyle}>
-                    <QuestionItem question={question} rowType={1} onClick={this.onClickQuestion} />
+                    <QuestionItem question={question} rowType={1} />
                 </li>
             )
         }.bind(this));
@@ -63,7 +63,7 @@ var QuestionsList = React.createClass({
         var answeredList = _.map(answered, function(answer) {
             return (
                 <li key={answer.id} style={itemStyle}>
-                    <QuestionItem question={answer} rowType={2} onClick={this.onClickQuestion} />
+                    <QuestionItem question={answer} rowType={2} />
                 </li>
             )
         }.bind(this));
@@ -71,7 +71,7 @@ var QuestionsList = React.createClass({
         var dismissedList = _.map(dismissed, function(question) {
             return (
                 <li key={question.id} style={itemStyle}>
-                    <QuestionItem question={question} rowType={3} onClick={this.onClickQuestion} />
+                    <QuestionItem question={question} rowType={3} />
                 </li>
             )
         }.bind(this));

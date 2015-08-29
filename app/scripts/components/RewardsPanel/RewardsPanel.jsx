@@ -7,7 +7,7 @@ var Modal = require('react-modal');
 var RewardButton = require("./RewardButton");
 
 var ScrollbarWrapper = require('react-scrollbars').ScrollbarWrapper;
-var ServicesActions = require("../../actions/ServicesActions");
+var AppActions = require("../../actions/AppActions");
 var AppStore = require('../../stores/AppStore');
 
 var panelStyle = {
@@ -35,8 +35,8 @@ var RewardsPanel = React.createClass({
              Reflux.connect(AppStore, 'appData')],
 
     clickReward: function(reward) {
-        ServicesActions.clickOnService(reward);
-        ServicesActions.openReward(reward);
+        AppActions.clickOnService(reward);
+        AppActions.openReward(reward);
     },
     render: function() {
         var rewards = this.state.appData.rewards;

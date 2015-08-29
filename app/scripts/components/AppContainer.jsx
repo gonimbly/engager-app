@@ -8,10 +8,10 @@ var ScoreBox = require('./ScoreBox/ScoreBox');
 var CoverImage = require('./CoverImage/CoverImage');
 var RewardsPanel = require('./RewardsPanel/RewardsPanel');
 var QuestionsList = require('./QuestionsList/QuestionsList');
-var ServicesActions = require("../actions/ServicesActions");
+var AppActions = require("../actions/AppActions");
 var AppStore = require('../stores/AppStore');
 var RewardPopup = require('./RewardPopup/RewardPopup');
-
+var RewardClaimTooltip = require('./RewardClaimTooltip/RewardClaimTooltip');
 
 var headerStyle = {
     backgroundColor: '#81d05f',
@@ -31,6 +31,7 @@ var AppContainer = React.createClass({
         return (
               <div>
                   <div style={headerStyle}>
+                      <RewardClaimTooltip />
                       <CoverImage />
                       <ProfileImage />
                       <ScoreBox />

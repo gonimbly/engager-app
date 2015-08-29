@@ -1,10 +1,14 @@
 var Reflux = require('reflux');
 var _ = require('lodash');
+var express = require('express');
 
-var ServicesActions = require("../actions/ServicesActions");
+var AppActions = require("../actions/AppActions");
 var UserActions = require('../actions/UserActions')
 
 var data = [];
+
+var endpoint = "https://engager-api.herokuapp.com";
+var userId = "1";
 
 var AppStore = Reflux.createStore({
     appData: {
@@ -12,7 +16,8 @@ var AppStore = Reflux.createStore({
             id: "1",
             username: "David",
             score: 270,
-            added: ""
+            added: "",
+            rewards: []
         },
         questions: {
             unanswered: [
@@ -83,6 +88,12 @@ var AppStore = Reflux.createStore({
                 className: "service-button-base"
             },
         ],
+        animations: {
+            scoreboxScoreAnim: "scorebox-score",
+            scoreboxPtsAnim: "scorebox-text",
+            scoreboxAddedAnim: "scorebox-points",
+            rewardToolbarAnim: "reward-toolbar",
+        }
     },
     init: function() {
         console.log('ServicesStore initialized');
@@ -90,13 +101,15 @@ var AppStore = Reflux.createStore({
         this.sortQuestions();
         this.activeRewards();
 
-        this.listenTo(ServicesActions.clickOnService, this.onClickReward);
-        this.listenTo(ServicesActions.answerQuestion, this.onAnswerQuestion);
-        this.listenTo(ServicesActions.dismissQuestion, this.onDismissQuestion);
-        this.listenTo(ServicesActions.updateRewards, this.activeRewards);
-        this.listenTo(ServicesActions.openReward, this.openReward);
-        this.listenTo(ServicesActions.closeReward, this.closeReward);
+        this.listenTo(AppActions.clickOnService, this.onClickReward);
+        this.listenTo(AppActions.answerQuestion, this.onAnswerQuestion);
+        this.listenTo(AppActions.dismissQuestion, this.onDismissQuestion);
+        this.listenTo(AppActions.updateRewards, this.activeRewards);
+        this.listenTo(AppActions.openReward, this.openReward);
+        this.listenTo(AppActions.claimReward, this.claimReward);
+        this.listenTo(AppActions.closeReward, this.closeReward);
         this.listenTo(UserActions.increasePoints, this.onReceiveScore);
+        this.listenTo(UserActions.scoreToNormal, this.onScoreReturnToNormal);
     },
     getInitialState: function(){
         return this.appData;
@@ -110,6 +123,24 @@ var AppStore = Reflux.createStore({
         this.appData.selectedReward = {};
         this.appData.isRewardOpen = false;
         this.trigger(this.appData);
+    },
+    claimReward: function(reward) {
+        this.appData.animations.rewardToolbarAnim = "reward-toolbar-added";
+        this.appData.isRewardOpen = false;
+
+        // move the reward to user's rewards
+        var i = _.indexOf(this.appData.rewards, reward);
+        this.appData.rewards.splice(i, 1);
+        this.appData.user.rewards.push(reward);
+
+        this.trigger(this.appData);
+
+        var self = this;
+
+        setTimeout(function() {
+            self.appData.animations.rewardToolbarAnim = "reward-toolbar";
+            self.trigger(self.appData);
+        }, 3000);
     },
     activeRewards: function() {
         for (var i = 0; i < this.appData.rewards.length; i++) {
@@ -147,6 +178,27 @@ var AppStore = Reflux.createStore({
         var pts = question.points;
         this.appData.user.added = "+"+pts;
         this.appData.user.score = parseInt(this.appData.user.score) + parseInt(pts);
+        this.appData.animations.scoreboxScoreAnim = "scorebox-score-added";
+        this.appData.animations.scoreboxPtsAnim = "scorebox-text-added";
+        this.appData.animations.scoreboxAddedAnim = "scorebox-points-added";
+
+        this.trigger(this.appData);
+
+        var self = this;
+
+        setTimeout(function() {
+            self.appData.animations.scoreboxScoreAnim = "scorebox-score";
+            self.appData.animations.scoreboxPtsAnim = "scorebox-text";
+            self.appData.animations.scoreboxAddedAnim = "scorebox-points";
+
+            self.trigger(self.appData);
+        }, 3000);
+    },
+    onScoreReturnToNormal: function() {
+        this.appData.animations.scoreboxScoreAnim = "scorebox-score";
+        this.appData.animations.scoreboxPtsAnim = "scorebox-text";
+        this.appData.animations.scoreboxAddedAnim = "scorebox-points";
+
         this.trigger(this.appData);
     },
     onClickReward: function(reward) {

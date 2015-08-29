@@ -12,17 +12,6 @@ var scoreBoxStyle = {
     height: '100px',
     marginTop: '80px',
     position: 'absolute',
-    score: {
-        color: '#ffffff',
-        fontSize: '23px',
-        fontWeight: 'bold',
-        height: '6px',
-        marginTop: '30%'
-    },
-    text: {
-        color: '#ffffff',
-        height: '6px'
-    },
     added: {
         position: 'absolute',
         right: '0',
@@ -39,20 +28,13 @@ var ScoreBox = React.createClass({
 			Router.State,
             Reflux.connect(AppStore, 'appData')],
 
-    increasePoints: function() {
-        UserActions.increasePoints();
-        
-        //
-
-    },
-
     render: function() {
         return (
             <div>
               <div style={scoreBoxStyle}>
-                  <p style={scoreBoxStyle.added}>{this.state.appData.user.added}</p>
-                  <p style={scoreBoxStyle.score} className="text-center">{this.state.appData.user.score}</p>
-                  <p style={scoreBoxStyle.text} className="text-center">points</p>
+                  <p className={this.state.appData.animations.scoreboxAddedAnim}>{this.state.appData.user.added}</p>
+                  <p className={this.state.appData.animations.scoreboxScoreAnim}>{this.state.appData.user.score}</p>
+                  <p className={this.state.appData.animations.scoreboxPtsAnim}>points</p>
               </div>
             </div>
         );

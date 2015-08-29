@@ -3,7 +3,7 @@ var Modal = require('react-modal');
 var Router = require('react-router');
 var Reflux = require('reflux');
 var AppStore = require('../../stores/AppStore');
-var ServicesActions = require("../../actions/ServicesActions");
+var AppActions = require("../../actions/AppActions");
 
 var content = document.getElementById('content');
 Modal.setAppElement(content);
@@ -27,12 +27,13 @@ var RewardPopup = React.createClass({
              Router.State,
              Reflux.connect(AppStore, 'appData')],
 
+    claimReward: function(reward) {
+        AppActions.claimReward(reward);
+    },
     closeModal: function() {
-        ServicesActions.closeReward();
+        AppActions.closeReward();
     },
     render: function() {
-        console.log("reward = "+JSON.stringify(this.state.appData.selectedReward));
-
         var reward = this.state.appData.selectedReward;
 
         return (
@@ -52,7 +53,7 @@ var RewardPopup = React.createClass({
                           </div>
                       </div>
                       <div>
-                          <button style={{
+                          <button onClick={this.claimReward.bind(this, reward)} style={{
                                   width: '50%',
                                   backgroundColor: '#71c04f',
                                   color: '#FFFFFF',
@@ -60,7 +61,7 @@ var RewardPopup = React.createClass({
                                   margin: '0px',
                                   outline: '0',
                                   border: 'none',
-                              }}>Calim</button>
+                              }}><strong>Claim</strong></button>
                           <button onClick={this.closeModal} style={{
                                   width: '50%',
                                   backgroundColor: '#000000',
@@ -69,7 +70,7 @@ var RewardPopup = React.createClass({
                                   margin: '0px',
                                   outline: '0',
                                   border: 'none',
-                              }}>No Thanks</button>
+                              }}><strong>No Thanks</strong></button>
                       </div>
                   </Modal>
               </div>

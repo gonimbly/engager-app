@@ -1,14 +1,14 @@
 var Reflux = require('reflux');
 
-var ServicesActions = Reflux.createActions([
+var AppActions = Reflux.createActions([
     'clickOnService',
     'onPopulateQuestions',
-    'onSelectService',
     'answerQuestion',
     'dismissQuestion',
     'updateRewards',
     'openReward',
     'closeReward',
+    'claimReward'
 ]);
 
-module.exports = ServicesActions;
+module.exports = AppActions;

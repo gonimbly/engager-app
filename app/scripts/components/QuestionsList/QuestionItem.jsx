@@ -6,7 +6,7 @@ var Reflux = require('reflux');
 var _ = require('lodash');
 
 var UserActions = require("../../actions/UserActions");
-var ServicesActions = require("../../actions/ServicesActions");
+var AppActions = require("../../actions/AppActions");
 var AppStore = require('../../stores/AppStore');
 
 var QuestionItem = React.createClass({
@@ -21,11 +21,11 @@ var QuestionItem = React.createClass({
 
     onRate: function(rate, question) {
         UserActions.increasePoints(question);
-        ServicesActions.answerQuestion(question, this.state.appData.user);
+        AppActions.answerQuestion(question, this.state.appData.user);
     },
 
     onDismiss: function(question) {
-        ServicesActions.dismissQuestion(question);
+        AppActions.dismissQuestion(question);
     },
 
     render: function() {
@@ -68,6 +68,7 @@ var QuestionItem = React.createClass({
                 text = "#FFFFFF";
                 swipe = false;
                 pointsStyle.display = "none";
+                isRightActive = false;
             break;
             case 3: // dismissed
                 okStyle.display = "none";

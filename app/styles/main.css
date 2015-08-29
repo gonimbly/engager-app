@@ -207,3 +207,224 @@ body {
     border-radius: 4px;
     padding: 0px !important;
 }
+
+.scorebox-score {
+    color: #ffffff;
+    font-size: 23px;
+    font-weight: bold;
+    height: 6px;
+    margin-top: 30%;
+    text-align: center;
+}
+
+.scorebox-score-added {
+    color: #ffffff;
+    font-size: 23px;
+    font-weight: bold;
+    height: 6px;
+    margin-top: 30%;
+    text-align: center;
+    animation: scoreboxanim ease-in 4s;
+}
+
+.scorebox-text {
+    color: #ffffff;
+    height: 6px;
+    text-align: center;
+}
+
+.scorebox-text-added {
+    color: #FFFFFF;
+    height: 6px;
+    text-align: center;
+    animation: scoreboxanim ease-in 4s;
+}
+
+.scorebox-points {
+    position: absolute;
+    right: 0;
+    color: #FFFFFF;
+    font-weight: bold;
+    font-size: 17px;
+    margin-right: 10px;
+    margin-top: 6px;
+    opacity: 0;
+}
+
+.scorebox-points-added {
+    position: absolute;
+    right: 0;
+    color: #FFFFFF;
+    font-weight: bold;
+    font-size: 17px;
+    margin-right: 10px;
+    margin-top: 6px;
+    opacity: 0;
+    animation: scoreboxpointsanim ease-in 4s;
+}
+
+.reward-toolbar {
+    position: absolute;
+    color: #FFFFFF;
+    background-color: #000000;
+    opacity: 0.75;
+    padding-left: 10px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    padding-right: 10px;
+    top: 25px;
+    right: 10px;
+    z-index: 1000;
+    border-radius: 2px;
+    opacity: 0;
+}
+
+.reward-toolbar-added {
+    position: absolute;
+    color: #FFFFFF;
+    background-color: #000000;
+    opacity: 0.75;
+    padding-left: 10px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    padding-right: 10px;
+    top: 25px;
+    right: 10px;
+    z-index: 1000;
+    border-radius: 2px;
+    opacity: 0;
+    animation: scoreboxpointsanim ease-in 5s;
+}
+
+@keyframes scoreboxanim {
+    0% {
+        color: #FFFFFF;
+    }
+    25% {
+        color: #71c04f;
+    }
+    50% {
+        color: #71c04f;
+    }
+    75% {
+        color: #71c04f;
+    }
+	100% {
+        color: #FFFFFF;
+    }
+}
+
+@keyframes scoreboxpointsanim {
+  0% {
+    opacity:0.1;
+    transform:  translate(0px,-12px);
+  }
+  25% {
+    opacity:1;
+    transform:  translate(0px,0px);
+  }
+  50% {
+    opacity:1;
+    transform:  translate(0px,0px);
+  }
+  75% {
+    opacity:1;
+    transform:  translate(0px,0px);
+  }
+  100% {
+    opacity:0;
+    transform:  translate(0px,-12px);
+  }
+}
+
+@-moz-keyframes scoreboxpointsanim {
+    0% {
+      opacity:0.1;
+      -moz-transform:  translate(0px,-12px);
+    }
+    25% {
+      opacity:1;
+      -moz-transform:  translate(0px,0px);
+    }
+    50% {
+      opacity:1;
+      -moz-transform:  translate(0px,0px);
+    }
+    75% {
+      opacity:1;
+      -moz-transform:  translate(0px,0px);
+    }
+    100% {
+      opacity:0;
+      -moz-transform:  translate(0px,-12px);
+    }
+}
+
+@-webkit-keyframes scoreboxpointsanim {
+    0% {
+      opacity:0.1;
+      -webkit-transform:  translate(0px,-12px);
+    }
+    25% {
+      opacity:1;
+      -webkit-transform:  translate(0px,0px);
+    }
+    50% {
+      opacity:1;
+      -webkit-transform:  translate(0px,0px);
+    }
+    75% {
+      opacity:1;
+      -webkit-transform:  translate(0px,0px);
+    }
+    100% {
+      opacity:0;
+      -webkit-transform:  translate(0px,-12px);
+    }
+}
+
+@-o-keyframes scoreboxpointsanim {
+    0% {
+      opacity:0.1;
+      -o-transform:  translate(0px,-12px);
+    }
+    25% {
+      opacity:1;
+      -o-transform:  translate(0px,0px);
+    }
+    50% {
+      opacity:1;
+      -o-transform:  translate(0px,0px);
+    }
+    75% {
+      opacity:1;
+      -o-transform:  translate(0px,0px);
+    }
+    100% {
+      opacity:0;
+      -o-transform:  translate(0px,-12px);
+    }
+}
+
+@-ms-keyframes scoreboxpointsanim {
+    0% {
+      opacity:0.1;
+      -ms-transform:  translate(0px,-12px);
+    }
+    25% {
+      opacity:1;
+      -ms-transform:  translate(0px,0px);
+    }
+    50% {
+      opacity:1;
+      -ms-transform:  translate(0px,0px);
+    }
+    75% {
+      opacity:1;
+      -ms-transform:  translate(0px,0px);
+    }
+    100% {
+      opacity:0;
+      -ms-transform:  translate(0px,-12px);
+    }
+}

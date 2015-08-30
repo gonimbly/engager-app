@@ -202,7 +202,7 @@ var AppStore = Reflux.createStore({
 
                 this.appData.user.rewards.push(data);
                 this.trigger(this.appData);
-                
+
             }.bind(this),
             error: function(xhr, status, err) {
                 console.error(status, err.toString());
@@ -433,6 +433,8 @@ var AppStore = Reflux.createStore({
         this.trigger(this.appData);
 
         this.activeRewards();
+
+        this.answerQuestion(question);
     },
     onDismissQuestion: function(question) {
         var unanswered = this.appData.questions.unanswered;

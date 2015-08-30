@@ -22,6 +22,8 @@ var QuestionItem = React.createClass({
     onRate: function(rate, question) {
         UserActions.increasePoints(question);
 
+        question.rate = rate;
+
         switch (this.props.rowType) {
             case 1:
                 AppActions.answerQuestion(question, this.state.appData.user);

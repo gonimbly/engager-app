@@ -21,6 +21,25 @@ body {
     }
 }
 
+.textfield {
+    width: 300px;
+    margin-left: 30px;
+    margin-right: 30px;
+    color: #1c1c1c;
+}
+
+.mdl-spinner__circle-clipper {
+    border-color: #71c04f;
+}
+
+.mdl-textfield--floating-label.is-focused .mdl-textfield__label, .mdl-textfield--floating-label.is-dirty .mdl-textfield__label {
+    color: #71c04f;
+}
+
+.mdl-textfield .mdl-js-textfield .mdl-textfield--floating-label .textfield .is-dirty .is-upgraded .is-focused {
+    border-color: #71c04f;
+}
+
 .wordwrap {
    white-space: pre-wrap;      /* CSS3 */
    white-space: -moz-pre-wrap; /* Firefox */

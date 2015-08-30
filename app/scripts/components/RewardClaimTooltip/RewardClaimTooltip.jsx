@@ -10,7 +10,6 @@ var RewardClaimTooltip = React.createClass({
              Router.State,
              Reflux.connect(AppStore, 'appData')],
 
-
     render: function() {
         return (
             <div className={this.state.appData.animations.rewardToolbarAnim}>

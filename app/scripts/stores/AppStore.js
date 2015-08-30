@@ -9,89 +9,39 @@ var data = [];
 var endpoint = "https://engager-api.herokuapp.com";
 var userId = "1";
 
+// REST calls
+var signinURL = endpoint+"/api/auth/login";
+var signupURL = endpoint+"/api/auth/signup";
+var getUserURL = endpoint+"/api/users";
+var getRewardsURL = endpoint+"/api/rewards";
+
 var AppStore = Reflux.createStore({
     appData: {
         user: {
             id: "1",
-            username: "David",
+            email: "test@test.com",
+            name: "",
             score: 270,
             added: "",
-            rewards: []
+            rewards: [],
+            token: "",
+            password: "1234",
+            isSignin: false
         },
         questions: {
-            unanswered: [
-                {
-                    id: "1",
-                    text: "bla blafdkjhdlkfjh lsdk fjhg lksdfjh glksd jhfg lksdj hfl lfdkjg lskdjf glsd fghlsd kfjghdls  bla?",
-                    points: 5
-                },
-                {
-                    id: "2",
-                    text: "bla bla bla id 2?",
-                    points: 12
-                },
-                {
-                    id: "3",
-                    text: "bla bla bla id 3?",
-                    points: 20
-                },
-            ],
-            answered: [
-                {
-                    id: "5",
-                    text: "bla bla bla id 5?",
-                    points: 1
-                }
-            ],
-            dismissed:[
-                {
-                    id: "4",
-                    text: "bla bla bla id 4?",
-                    points: 10
-                },
-            ]
+            unanswered: [],
+            answered: [],
+            dismissed:[]
         },
         isRewardOpen: false,
         selectedReward: {},
-        rewards: [
-            {
-                id: "1",
-                name: "Uber",
-                redeem: 10,
-                points: 300,
-                description: "Redeem $10 in credit for Uber car services! Just click Claim and check your profile for the reward code. ",
-                className: "service-button-base"
-            },
-            {
-                id: "2",
-                name: "Uber2",
-                redeem: 5,
-                points: 280,
-                description: "Redeem $10 in credit for Uber car services! Just click Claim and check your profile for the reward code. ",
-                className: "service-button-base"
-            },
-            {
-                id: "3",
-                name: "Uber3",
-                redeem: 30,
-                points: 230,
-                description: "Redeem $10 in credit for Uber car services! Just click Claim and check your profile for the reward code. ",
-                className: "service-button-base"
-            },
-            {
-                id: "4",
-                name: "Uber4",
-                redeem: 50,
-                points: 260,
-                description: "Redeem $10 in credit for Uber car services! Just click Claim and check your profile for the reward code. ",
-                className: "service-button-base"
-            },
-        ],
+        rewards: [],
         animations: {
             scoreboxScoreAnim: "scorebox-score",
             scoreboxPtsAnim: "scorebox-text",
             scoreboxAddedAnim: "scorebox-points",
             rewardToolbarAnim: "reward-toolbar",
+            loaderIcon: "hide"
         }
     },
     init: function() {
@@ -110,9 +60,261 @@ var AppStore = Reflux.createStore({
         this.listenTo(AppActions.closeReward, this.closeReward);
         this.listenTo(UserActions.increasePoints, this.onReceiveScore);
         this.listenTo(UserActions.scoreToNormal, this.onScoreReturnToNormal);
+
+        this.listenTo(UserActions.signin, this.onSignin);
+        this.listenTo(UserActions.signup, this.onSignup);
+        this.listenTo(UserActions.onChangeName, this.onChangeName);
+        this.listenTo(UserActions.onChangeEmail, this.onChangeEmail);
+        this.listenTo(UserActions.onChangePassword, this.onChangePassword);
+
     },
     getInitialState: function(){
         return this.appData;
+    },
+    onSignin: function() {
+        this.appData.animations.loaderIcon = "show";
+        this.trigger(this.appData);
+
+        $.ajax({
+            url: signinURL,
+            dataType: 'text',
+            type: 'POST',
+            data: {
+                email: this.appData.user.email,
+                password: this.appData.user.password
+            },
+            success: function(data) {
+                this.appData.user.token = data;
+
+                // get user info
+                $.ajax({
+                    url: getUserURL,
+                    dataType: 'json',
+                    type: 'GET',
+                    headers: {
+                        "Authorization": "Bearer "+data
+                    },
+                    success: function(data) {
+                        this.appData.user.isSignin = true;
+                        this.appData.user.id = data.id;
+                        this.appData.user.email = data.email;
+                        this.appData.user.name = data.first+" "+data.last;
+                        this.appData.user.password = data.password;
+                        this.trigger(this.appData);
+
+                        // get new questions
+                        this.getNewQuestions();
+                    }.bind(this),
+                    error: function(xhr, status, err) {
+                        console.error(status, err.toString());
+                    }.bind(this)
+                });
+
+            }.bind(this),
+            error: function(xhr, status, err) {
+                console.error(status, err.toString());
+            }.bind(this)
+        });
+    },
+    getNewQuestions: function() {
+        $.ajax({
+            url: getUserURL+"/"+this.appData.user.id+"/questions/new",
+            dataType: 'json',
+            type: 'GET',
+            headers: {
+                "Authorization": "Bearer "+this.appData.user.token
+            },
+            success: function(data) {
+                console.log("data = "+JSON.stringify(data));
+
+                this.appData.questions.unanswered = data.questions;
+                //this.trigger(this.appData);
+
+                // get new questions
+                this.getAnsweredQuestions();
+            }.bind(this),
+            error: function(xhr, status, err) {
+                console.error(status, err.toString());
+            }.bind(this)
+        });
+    },
+    getAnsweredQuestions: function() {
+        $.ajax({
+            url: getUserURL+"/"+this.appData.user.id+"/questions/answered",
+            dataType: 'json',
+            type: 'GET',
+            headers: {
+                "Authorization": "Bearer "+this.appData.user.token
+            },
+            success: function(data) {
+                console.log("data = "+JSON.stringify(data));
+
+                this.appData.questions.answered = data.questions;
+                //this.trigger(this.appData);
+
+                // get new questions
+                this.getDismissedQuestions();
+            }.bind(this),
+            error: function(xhr, status, err) {
+                console.error(status, err.toString());
+            }.bind(this)
+        });
+    },
+    getDismissedQuestions: function() {
+        $.ajax({
+            url: getUserURL+"/"+this.appData.user.id+"/questions/dismissed",
+            dataType: 'json',
+            type: 'GET',
+            headers: {
+                "Authorization": "Bearer "+this.appData.user.token
+            },
+            success: function(data) {
+                console.log("data = "+JSON.stringify(data));
+
+                this.appData.questions.dismissed = data.questions;
+                //this.trigger(this.appData);
+
+                // get wallet info
+                this.getWalletInfo();
+            }.bind(this),
+            error: function(xhr, status, err) {
+                console.error(status, err.toString());
+            }.bind(this)
+        });
+    },
+    answerQuestion: function(question) {
+        $.ajax({
+            url: getUserURL+"/"+this.appData.user.id+"/answer",
+            dataType: 'json',
+            type: 'POST',
+            headers: {
+                "Authorization": "Bearer "+this.appData.user.token
+            },
+            data: {
+                user_name: this.appData.user.name,
+                value: question.rate,
+                question_text: question.text,
+                user_id: this.appData.user.id,
+                question_id: question.id
+            },
+            success: function(data) {
+                console.log("data = "+JSON.stringify(data));
+
+                this.appData.user.rewards.push(data);
+                this.trigger(this.appData);
+                
+            }.bind(this),
+            error: function(xhr, status, err) {
+                console.error(status, err.toString());
+            }.bind(this)
+        });
+    },
+    getWalletInfo: function() {
+        $.ajax({
+            url: getUserURL+"/"+this.appData.user.id+"/wallet",
+            dataType: 'json',
+            type: 'GET',
+            headers: {
+                "Authorization": "Bearer "+this.appData.user.token
+            },
+            success: function(data) {
+                console.log("data = "+JSON.stringify(data));
+
+                this.appData.user.score = data.amount;
+                this.trigger(this.appData);
+
+                this.getRewardsInfo();
+            }.bind(this),
+            error: function(xhr, status, err) {
+                console.error(status, err.toString());
+            }.bind(this)
+        });
+    },
+    getRewardsInfo: function() {
+        $.ajax({
+            url: getRewardsURL,
+            dataType: 'json',
+            type: 'GET',
+            headers: {
+                "Authorization": "Bearer "+this.appData.user.token
+            },
+            success: function(data) {
+                console.log("data = "+JSON.stringify(data));
+
+                for (var i = 0; i < data.length; i++) {
+                    data[i].className = "service-button-base";
+                }
+
+                this.appData.rewards = data;
+                this.appData.animations.loaderIcon = "hide";
+                this.trigger(this.appData);
+
+                window.location = "/#/wallet";
+            }.bind(this),
+            error: function(xhr, status, err) {
+                console.error(status, err.toString());
+            }.bind(this)
+        });
+    },
+    redeemReward: function() {
+        $.ajax({
+            url: getRewardsURL+"/"+this.appData.user.id+"/redeem",
+            dataType: 'json',
+            type: 'POST',
+            headers: {
+                "Authorization": "Bearer "+this.appData.user.token
+            },
+            data: {
+
+            },
+            success: function(data) {
+                console.log("data = "+JSON.stringify(data));
+
+                // this.appData.user.score = data.amount;
+                // this.trigger(this.appData);
+
+                //window.location = "/#/wallet";
+            }.bind(this),
+            error: function(xhr, status, err) {
+                console.error(status, err.toString());
+            }.bind(this)
+        });
+    },
+    onSignup: function() {
+        var firstName = this.appData.user.name;
+        var lastName = this.appData.user.name;
+        var email = this.appData.user.email;
+        var password = this.appData.user.password;
+
+        $.ajax({
+            url: signupURL,
+            dataType: 'json',
+            type: 'POST',
+            data: {
+                firstName: firstName,
+                lastName: lastName,
+                email: email,
+                password: password
+            },
+            success: function(data) {
+                console.log("data = "+JSON.stringify(data));
+            }.bind(this),
+            error: function(xhr, status, err) {
+                console.error(status, err.toString());
+            }.bind(this)
+        });
+    },
+    onChangeName: function(val) {
+        this.appData.user.name = val;
+        this.trigger(this.appData);
+    },
+    onChangeEmail: function(val) {
+        this.appData.user.email = val;
+        this.trigger(this.appData);
+    },
+    onChangePassword: function(val) {
+        this.appData.user.password = val;
+        this.trigger(this.appData);
     },
     openReward: function(reward) {
         this.appData.selectedReward = reward;
@@ -218,6 +420,8 @@ var AppStore = Reflux.createStore({
         this.trigger(this.appData);
 
         this.activeRewards();
+
+        this.answerQuestion(question);
     },
     onAnswerDismissedQuestion: function(question, user) {
         var dismissed = this.appData.questions.dismissed;

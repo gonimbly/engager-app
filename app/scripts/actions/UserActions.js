@@ -3,7 +3,12 @@ var Reflux = require('reflux');
 var UserActions = Reflux.createActions([
     'increasePoints',
     'getUser',
-    'scoreToNormal'
+    'scoreToNormal',
+    'signin',
+    'signup',
+    'onChangeName',
+    'onChangeEmail',
+    'onChangePassword',
 ]);
 
 module.exports = UserActions;

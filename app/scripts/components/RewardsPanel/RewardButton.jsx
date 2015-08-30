@@ -17,7 +17,7 @@ var RewardButton = React.createClass({
         return (
             <span>
                 <button className={reward.className} onClick={this.onClick.bind(this, reward)}>
-                    <span><strong>{reward.name} ${reward.redeem}</strong></span>
+                    <span><strong>{reward.name} ${reward.cost}</strong></span>
                     <br/>
                     <span style={{fontWeight: "200"}}>{reward.points}pts</span>
                 </button>

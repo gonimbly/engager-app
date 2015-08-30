@@ -1,25 +1,22 @@
 var React = require('react');
-var AppContainer = require('./AppContainer');
+var ReactMDL = require('react-mdl');
 var Router = require('react-router');
 var Reflux = require('reflux');
+var AppActions = require("../actions/AppActions");
 var AppStore = require('../stores/AppStore');
 
-var MainWindow = React.createClass({
+var UserProfileWindow = React.createClass({
     mixins: [Router.Navigation,
              Router.State,
              Reflux.connect(AppStore, 'appData')],
 
     render: function() {
-        if (!this.state.appData.user.isSignin) {
-            window.location = "/#/signin";
-        }
-
         return (
             <div>
-                <AppContainer />
+                <p>Your content - user profile</p>
             </div>
         );
     }
 });
 
-module.exports = MainWindow;
+module.exports = UserProfileWindow;

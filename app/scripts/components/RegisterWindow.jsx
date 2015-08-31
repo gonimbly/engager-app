@@ -43,14 +43,6 @@ var orStyle = {
     color: 'gray',
 };
 
-function linkToState(target, property) {
-    return value => {
-        target.setState({
-            [property]: value
-        });
-    };
-}
-
 var RegisterWindow = React.createClass({
     mixins: [Router.Navigation,
              Router.State,

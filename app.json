@@ -1,5 +1,9 @@
 {
   "name": "Go Nimbly Engager",
   "description": "Heroku CX, Customer Rewards App",
-  "image": "heroku/nodejs"
+  "image": "heroku/nodejs",
+  "env": {
+    "API_URL": {
+      "description": "Endpoint for all your web-requests"
+    }
 }

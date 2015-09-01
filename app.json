@@ -6,4 +6,5 @@
     "API_URL": {
       "description": "Endpoint for all your web-requests"
     }
+  }
 }

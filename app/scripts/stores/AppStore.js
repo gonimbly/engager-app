@@ -6,7 +6,7 @@ var UserActions = require('../actions/UserActions')
 
 var data = [];
 
-var endpoint = "https://engager-api.herokuapp.com";
+var endpoint = API_URL;
 var userId = "1";
 
 // REST calls

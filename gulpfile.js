@@ -74,7 +74,7 @@ gulp.task('scripts', function() {
         d.run(bundle);
       }));
   } else {
-    bundle();
+    return bundle();
   }
 });
 

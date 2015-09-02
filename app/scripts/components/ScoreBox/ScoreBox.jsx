@@ -12,15 +12,6 @@ var scoreBoxStyle = {
     height: '100px',
     marginTop: '80px',
     position: 'absolute',
-    added: {
-        position: 'absolute',
-        right: '0',
-        color: '#FFFFFF',
-        fontWeight: 'bold',
-        fontSize: '17px',
-        marginRight: '10px',
-        marginTop: '6px'
-    }
 };
 
 var ScoreBox = React.createClass({

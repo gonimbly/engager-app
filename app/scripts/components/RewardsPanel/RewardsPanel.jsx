@@ -29,6 +29,15 @@ var panelStyle = {
     }
 };
 
+var msgStyle = {
+    color: '#FFFFFF',
+    position: 'absolute',
+    top: '36%',
+    left: '25%',
+    fontSize: '15px',
+    opacity: '0.8',
+};
+
 var RewardsPanel = React.createClass({
     mixins: [Router.Navigation,
 			 Router.State,
@@ -40,9 +49,8 @@ var RewardsPanel = React.createClass({
     },
     render: function() {
         var rewards = this.state.appData.rewards;
-
+        var isShow = "hide";
         var list = _.map(rewards, function(reward){
-
             var method = function(){};
 
             if (reward.className === "service-button-selected") {
@@ -56,8 +64,13 @@ var RewardsPanel = React.createClass({
             )
         }.bind(this));
 
+        if (list.length == 0) {
+            isShow = "show";
+        }
+
         return (
             <div style={panelStyle}>
+                <p className={isShow} style={msgStyle}>No rewards are available</p>
                 <ul style={panelStyle.list}>
                     {list}
                 </ul>

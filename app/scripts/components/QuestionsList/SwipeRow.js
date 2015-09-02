@@ -261,11 +261,11 @@
                         style: this.getStyle("left", index),
                     },
                     <Rating
-                      full={"glyphicon glyphicon-star"}
-                      empty={"glyphicon glyphicon-star-empty"}
-                      start={0}
-                      stop={4}
-                      onRate={this.onRate}/>
+                        full={"fa fa-star"}
+                        empty={"fa fa-star-o"}
+                        start={0}
+                        stop={5}
+                        onRate={this.onRate}/>
                 )
             }).bind(this))),
             React.createElement(Swipeable, {

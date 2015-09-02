@@ -1,13 +1,11 @@
 var Reflux = require('reflux');
 var _ = require('lodash');
+var Cookie = require('react-cookie');
 
 var AppActions = require("../actions/AppActions");
 var UserActions = require('../actions/UserActions')
 
-var data = [];
-
 var endpoint = API_URL;
-var userId = "1";
 
 // REST calls
 var signinURL = endpoint+"/api/auth/login";
@@ -18,14 +16,14 @@ var getRewardsURL = endpoint+"/api/rewards";
 var AppStore = Reflux.createStore({
     appData: {
         user: {
-            id: "1",
-            email: "test@test.com",
+            id: "-1",
+            email: "",
             name: "",
-            score: 270,
+            score: 0,
             added: "",
             rewards: [],
             token: "",
-            password: "1234",
+            password: "",
             isSignin: false
         },
         questions: {
@@ -36,6 +34,7 @@ var AppStore = Reflux.createStore({
         isRewardOpen: false,
         selectedReward: {},
         rewards: [],
+        loadingInfo: "show",
         animations: {
             scoreboxScoreAnim: "scorebox-score",
             scoreboxPtsAnim: "scorebox-text",
@@ -45,7 +44,9 @@ var AppStore = Reflux.createStore({
         }
     },
     init: function() {
-        console.log('ServicesStore initialized');
+        // check that the user has active token
+        this.onLoadToken();
+
         // sort the list.
         this.sortQuestions();
         this.activeRewards();
@@ -66,7 +67,7 @@ var AppStore = Reflux.createStore({
         this.listenTo(UserActions.onChangeName, this.onChangeName);
         this.listenTo(UserActions.onChangeEmail, this.onChangeEmail);
         this.listenTo(UserActions.onChangePassword, this.onChangePassword);
-
+        this.listenTo(UserActions.hasNoToken, this.onHasNoToken);
     },
     getInitialState: function(){
         return this.appData;
@@ -86,35 +87,62 @@ var AppStore = Reflux.createStore({
             success: function(data) {
                 this.appData.user.token = data;
 
-                // get user info
-                $.ajax({
-                    url: getUserURL,
-                    dataType: 'json',
-                    type: 'GET',
-                    headers: {
-                        "Authorization": "Bearer "+data
-                    },
-                    success: function(data) {
-                        this.appData.user.isSignin = true;
-                        this.appData.user.id = data.id;
-                        this.appData.user.email = data.email;
-                        this.appData.user.name = data.first+" "+data.last;
-                        this.appData.user.password = data.password;
-                        this.trigger(this.appData);
+                // save the token.
+                Cookie.save('usertoken', data);
 
-                        // get new questions
-                        this.getNewQuestions();
-                    }.bind(this),
-                    error: function(xhr, status, err) {
-                        console.error(status, err.toString());
-                    }.bind(this)
-                });
-
+                this.getUserInfo();
             }.bind(this),
             error: function(xhr, status, err) {
                 console.error(status, err.toString());
             }.bind(this)
         });
+    },
+    getUserInfo: function() {
+        // get user info
+        $.ajax({
+            url: getUserURL,
+            dataType: 'json',
+            crossDomain: true,
+            type: 'GET',
+            headers: {
+                "Authorization": "Bearer "+this.appData.user.token
+            },
+            success: function(data) {
+                this.appData.user.isSignin = true;
+                this.appData.user.id = data.id;
+                this.appData.user.email = data.email;
+                this.appData.user.name = data.first+" "+data.last;
+                this.appData.user.password = data.password;
+                this.trigger(this.appData);
+
+                // get new questions
+                this.getNewQuestions();
+            }.bind(this),
+            error: function(xhr, status, err) {
+                console.error(status, err.toString());
+            }.bind(this)
+        });
+    },
+    onHasNoToken: function() {
+        Cookie.remove('usertoken');
+        this.appData.user.isSignin = false;
+        this.appData.user.token = "";
+        this.appData.loadingInfo = "show";
+        this.trigger(this.appData);
+    },
+    onLoadToken: function() {
+        var token = Cookie.load('usertoken');
+
+        if (token) {
+            this.appData.user.isSignin = true;
+            this.appData.user.token = token;
+            this.trigger(this.appData);
+
+            this.getUserInfo();
+        }
+        else {
+            this.onHasNoToken();
+        }
     },
     getNewQuestions: function() {
         $.ajax({
@@ -125,10 +153,7 @@ var AppStore = Reflux.createStore({
                 "Authorization": "Bearer "+this.appData.user.token
             },
             success: function(data) {
-                console.log("data = "+JSON.stringify(data));
-
                 this.appData.questions.unanswered = data.questions;
-                //this.trigger(this.appData);
 
                 // get new questions
                 this.getAnsweredQuestions();
@@ -147,10 +172,7 @@ var AppStore = Reflux.createStore({
                 "Authorization": "Bearer "+this.appData.user.token
             },
             success: function(data) {
-                console.log("data = "+JSON.stringify(data));
-
                 this.appData.questions.answered = data.questions;
-                //this.trigger(this.appData);
 
                 // get new questions
                 this.getDismissedQuestions();
@@ -169,10 +191,7 @@ var AppStore = Reflux.createStore({
                 "Authorization": "Bearer "+this.appData.user.token
             },
             success: function(data) {
-                console.log("data = "+JSON.stringify(data));
-
                 this.appData.questions.dismissed = data.questions;
-                //this.trigger(this.appData);
 
                 // get wallet info
                 this.getWalletInfo();
@@ -193,13 +212,12 @@ var AppStore = Reflux.createStore({
             data: {
                 user_name: this.appData.user.name,
                 value: question.rate,
+                points: question.points,
                 question_text: question.text,
                 user_id: this.appData.user.id,
                 question_id: question.id
             },
             success: function(data) {
-                console.log("data = "+JSON.stringify(data));
-
                 this.appData.user.rewards.push(data);
                 this.trigger(this.appData);
 
@@ -218,8 +236,6 @@ var AppStore = Reflux.createStore({
                 "Authorization": "Bearer "+this.appData.user.token
             },
             success: function(data) {
-                console.log("data = "+JSON.stringify(data));
-
                 this.appData.user.score = data.amount;
                 this.trigger(this.appData);
 
@@ -239,15 +255,16 @@ var AppStore = Reflux.createStore({
                 "Authorization": "Bearer "+this.appData.user.token
             },
             success: function(data) {
-                console.log("data = "+JSON.stringify(data));
-
                 for (var i = 0; i < data.length; i++) {
                     data[i].className = "service-button-base";
                 }
 
                 this.appData.rewards = data;
                 this.appData.animations.loaderIcon = "hide";
+                this.appData.loadingInfo = "hide";
                 this.trigger(this.appData);
+
+                this.activeRewards();
 
                 window.location = "/#/wallet";
             }.bind(this),
@@ -256,7 +273,7 @@ var AppStore = Reflux.createStore({
             }.bind(this)
         });
     },
-    redeemReward: function() {
+    redeemReward: function(reward) {
         $.ajax({
             url: getRewardsURL+"/"+this.appData.user.id+"/redeem",
             dataType: 'json',
@@ -265,15 +282,12 @@ var AppStore = Reflux.createStore({
                 "Authorization": "Bearer "+this.appData.user.token
             },
             data: {
-
+                user_id: this.appData.user.id,
+                reward_id: reward.id
             },
             success: function(data) {
-                console.log("data = "+JSON.stringify(data));
-
-                // this.appData.user.score = data.amount;
-                // this.trigger(this.appData);
-
-                //window.location = "/#/wallet";
+                this.appData.selectedReward.code = data.text;
+                this.trigger(this.appData);
             }.bind(this),
             error: function(xhr, status, err) {
                 console.error(status, err.toString());
@@ -322,7 +336,7 @@ var AppStore = Reflux.createStore({
         this.trigger(this.appData);
     },
     closeReward: function() {
-        this.appData.selectedReward = {};
+        //this.appData.selectedReward = {};
         this.appData.isRewardOpen = false;
         this.trigger(this.appData);
     },
@@ -337,6 +351,8 @@ var AppStore = Reflux.createStore({
 
         this.trigger(this.appData);
 
+        this.redeemReward(reward);
+
         var self = this;
 
         setTimeout(function() {
@@ -349,7 +365,7 @@ var AppStore = Reflux.createStore({
             var el = this.appData.rewards[i];
             var userScore = this.appData.user.score;
 
-            if (el.points <= userScore) {
+            if (el.cost <= userScore) {
                 el.className = "service-button-selected";
             }
         }

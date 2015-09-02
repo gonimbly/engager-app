@@ -41,8 +41,8 @@ var RewardPopup = React.createClass({
                   <Modal isOpen={this.state.appData.isRewardOpen} onRequestClose={this.closeModal}>
                       <div style={contentStyle}>
                           <div style={titleStyle}>
-                              <span>${reward.redeem} in {reward.name} credits</span>
-                              <span style={{right: '0px', float: 'right'}}>{reward.points}pt</span>
+                              <span>{reward.name} credits</span>
+                              <span style={{right: '0px', float: 'right'}}>{reward.cost}pt</span>
                           </div>
                           <div>
                               <p style={{

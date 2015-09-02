@@ -12,14 +12,11 @@ var AppActions = require("../actions/AppActions");
 var AppStore = require('../stores/AppStore');
 var RewardPopup = require('./RewardPopup/RewardPopup');
 var RewardClaimTooltip = require('./RewardClaimTooltip/RewardClaimTooltip');
+var Spinner = require('react-spinkit');
 
 var headerStyle = {
     backgroundColor: '#81d05f',
     height: '200px'
-};
-
-var modalStyle = {
-
 };
 
 var AppContainer = React.createClass({
@@ -30,6 +27,9 @@ var AppContainer = React.createClass({
     render: function() {
         return (
               <div>
+                  <div style={{position: 'absolute', top: '60%', left: '45%', zIndex: '1000'}} className={this.state.appData.loadingInfo}>
+                      <Spinner spinnerName='three-bounce'/>
+                  </div>
                   <div style={headerStyle}>
                       <RewardClaimTooltip />
                       <CoverImage />

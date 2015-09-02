@@ -9,6 +9,7 @@ var UserActions = Reflux.createActions([
     'onChangeName',
     'onChangeEmail',
     'onChangePassword',
+    'hasNoToken',
 ]);
 
 module.exports = UserActions;

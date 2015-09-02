@@ -5,6 +5,7 @@ var Reflux = require('reflux');
 var AppActions = require("../actions/AppActions");
 var UserActions = require("../actions/UserActions");
 var AppStore = require('../stores/AppStore');
+var Cookie = require('react-cookie');
 
 var Textfield = ReactMDL.Textfield;
 var Button = ReactMDL.Button;

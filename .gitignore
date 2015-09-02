@@ -5,3 +5,9 @@ test/temp
 app/vendor
 .tmp
 test/scripts/
+*.tar
+public
+*.log
+.sass-cache
+client/bower_components
+.DS_Store

@@ -5,6 +5,9 @@
   "env": {
       "API_URL": {
           "description": "Endpoint for all your web-requests"
+      },
+      "COMPILE_TIMEOUT": {
+          "value": "3000"
       }
   },
   "scripts": {

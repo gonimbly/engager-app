@@ -1,0 +1,12 @@
+#!/usr/bin/env node
+'use strict';
+
+var replace = require("replace");
+
+replace({
+    regex: "$APIURL$",
+    replacement: process.env.API_URL,
+    paths: ['../app/index.html'],
+    recursive: true,
+    silent: true,
+});

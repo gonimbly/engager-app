@@ -3,8 +3,11 @@
   "description": "Heroku CX, Customer Rewards App",
   "image": "heroku/nodejs",
   "env": {
-    "API_URL": {
-      "description": "Endpoint for all your web-requests"
-    }
+      "API_URL": {
+          "description": "Endpoint for all your web-requests"
+      }
+  },
+  "scripts": {
+      "postdeploy": "bin/init-endpoint"
   }
 }

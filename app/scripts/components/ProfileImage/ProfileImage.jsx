@@ -15,7 +15,7 @@ var ProfileImage = React.createClass({
     return (
       <div style={imageStyle}>
           <a href="#">
-              <img src='../../assets/profile.png' style={imageStyle.image} className="img-rounded" />
+              <img src='../../images/profile.png' style={imageStyle.image} className="img-rounded" />
           </a>
       </div>
     );

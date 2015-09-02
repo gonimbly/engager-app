@@ -1,13 +1,6 @@
 node_modules
-dist
 test/temp
 .sass-cache
 app/vendor
 .tmp
 test/scripts/
-*.tar
-public
-*.log
-.sass-cache
-client/bower_components
-.DS_Store

@@ -88,8 +88,13 @@ gulp.task('imagemin', function() {
     .pipe(gulp.dest('dist/images'));
 });
 
+gulp.task('copyimage', function() {
+  return gulp.src('app/images/*')
+    .pipe(gulp.dest('dist/images'));
+});
+
 gulp.task('copy', function() {
-  return gulp.src(['app/*.txt', 'app/*.ico'])
+  return gulp.src(['app/*.txt', 'app/*.ico', 'package.json', 'Procfile', 'app.json'])
     .pipe(gulp.dest('dist'));
 })
 
@@ -126,7 +131,6 @@ gulp.task('webserver', function() {
   webserver = gulp.src(['.tmp', 'app'])
     .pipe($.webserver({
       host: '0.0.0.0', //change to 'localhost' to disable outside connections
-      port: process.env.PORT || 9001,
       livereload: {
         enable: true,
         filter: function(filePath) {
@@ -152,8 +156,8 @@ gulp.task('serve', function() {
 gulp.task('build', function() {
   env = 'prod';
   runSequence(['clean:dev', 'clean:dist'],
-              ['scripts', 'imagemin'],
-              'bundle', 'copy');
+              ['scripts'],
+              'bundle', 'copyimage', 'copy');
 });
 
 gulp.task('default', ['build']);

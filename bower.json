@@ -1,13 +1,13 @@
 {
-  "name": "dreamforce",
-  "version": "0.0.1",
+  "name": "test3",
+  "version": "0.0.0",
   "authors": [
-    "Dr. Barak Avraham"
+    "Jane Doe"
   ],
   "moduleType": [
     "node"
   ],
-  "license": "GoNimbly Private License",
+  "license": "MIT",
   "ignore": [
     "**/.*",
     "node_modules",
@@ -16,6 +16,5 @@
     "tests"
   ],
   "dependencies": {
-    "modernizr": "~2.8.3"
   }
 }

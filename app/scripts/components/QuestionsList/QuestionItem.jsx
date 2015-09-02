@@ -136,7 +136,7 @@ var QuestionItem = React.createClass({
                                     <div style={{margin: '0px', lineHeight: '3px', fontSize: '10px'}}>pts</div>
                                 </span>
                                 <span style={okStyle} className="text-center">
-                                    <img src="../../../assets/check.png" width="20px" height="16px"/>
+                                    <img src="../../../images/check.png" width="20px" height="16px"/>
                                 </span>
                             </td>
                         </tr>

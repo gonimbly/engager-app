@@ -16,7 +16,7 @@ var CoverImage = React.createClass({
       <div>
           <div style={addPhotoStyle.center} className="center-block">
               <a href="#">
-                  <img src="../../assets/addphoto.png" style={addPhotoStyle} />
+                  <img src="../../images/addphoto.png" style={addPhotoStyle} />
               </a>
           </div>
       </div>

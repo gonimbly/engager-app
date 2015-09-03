@@ -2,7 +2,9 @@ var express = require('express');
 var app = express();
 
 app.get("/endpoint", function(req, res) {
-    res.send(process.env.API_URL);
+    res.json({
+        serverurl: process.env.API_URL
+    });
 });
 
 app.use(express.static(__dirname + '/dist'));

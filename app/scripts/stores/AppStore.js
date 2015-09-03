@@ -5,13 +5,13 @@ var Cookie = require('react-cookie');
 var AppActions = require("../actions/AppActions");
 var UserActions = require('../actions/UserActions')
 
-var endpoint = API_URL;
+var endpoint = "NO_URL";
 
 // REST calls
-var signinURL = endpoint+"/api/auth/login";
-var signupURL = endpoint+"/api/auth/signup";
-var getUserURL = endpoint+"/api/users";
-var getRewardsURL = endpoint+"/api/rewards";
+var signinURL;
+var signupURL;
+var getUserURL;
+var getRewardsURL;
 
 var AppStore = Reflux.createStore({
     appData: {
@@ -72,29 +72,50 @@ var AppStore = Reflux.createStore({
     getInitialState: function(){
         return this.appData;
     },
+    fetchEndpoint: function(callback) {
+        $.ajax({
+            url: "/endpoint",
+            dataType: 'text',
+            type: 'GET',
+            success: function(data) {
+                endpoint = res.serverurl;
+
+                signinURL = endpoint+"/api/auth/login";
+                signupURL = endpoint+"/api/auth/signup";
+                getUserURL = endpoint+"/api/users";
+                getRewardsURL = endpoint+"/api/rewards";
+
+                callback(data);
+            },
+            error: function(xhr, status, err) {
+            }
+        });
+    },
     onSignin: function() {
         this.appData.animations.loaderIcon = "show";
         this.trigger(this.appData);
 
-        $.ajax({
-            url: signinURL,
-            dataType: 'text',
-            type: 'POST',
-            data: {
-                email: this.appData.user.email,
-                password: this.appData.user.password
-            },
-            success: function(data) {
-                this.appData.user.token = data;
+        this.fetchEndpoint(function(res) {
+            $.ajax({
+                url: signinURL,
+                dataType: 'text',
+                type: 'POST',
+                data: {
+                    email: this.appData.user.email,
+                    password: this.appData.user.password
+                },
+                success: function(data) {
+                    this.appData.user.token = data;
 
-                // save the token.
-                Cookie.save('usertoken', data);
+                    // save the token.
+                    Cookie.save('usertoken', data);
 
-                this.getUserInfo();
-            }.bind(this),
-            error: function(xhr, status, err) {
-                console.error(status, err.toString());
-            }.bind(this)
+                    this.getUserInfo();
+                }.bind(this),
+                error: function(xhr, status, err) {
+                    console.error(status, err.toString());
+                }.bind(this)
+            });
         });
     },
     getUserInfo: function() {
@@ -138,7 +159,9 @@ var AppStore = Reflux.createStore({
             this.appData.user.token = token;
             this.trigger(this.appData);
 
-            this.getUserInfo();
+            this.fetchEndpoint(function(res) {
+                this.getUserInfo();
+            });
         }
         else {
             this.onHasNoToken();

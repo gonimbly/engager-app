@@ -85,52 +85,38 @@ var AppStore = Reflux.createStore({
                 getUserURL = endpoint+"/api/users";
                 getRewardsURL = endpoint+"/api/rewards";
 
-                callback(data).bind(this);
-            },
+                callback(data);
+            }.bind(this),
             error: function(xhr, status, err) {
-            }
+            }.bind(this)
         });
     },
     onSignin: function() {
         this.appData.animations.loaderIcon = "show";
         this.trigger(this.appData);
 
-        $.ajax({
-            url: "/endpoint",
-            dataType: 'text',
-            type: 'GET',
-            success: function(data) {
-                endpoint = data.serverurl;
+        this.fetchEndpoint(function(res) {
+            $.ajax({
+                url: signinURL,
+                dataType: 'text',
+                type: 'POST',
+                data: {
+                    email: this.appData.user.email,
+                    password: this.appData.user.password
+                },
+                success: function(data) {
+                    this.appData.user.token = data;
 
-                signinURL = endpoint+"/api/auth/login";
-                signupURL = endpoint+"/api/auth/signup";
-                getUserURL = endpoint+"/api/users";
-                getRewardsURL = endpoint+"/api/rewards";
+                    // save the token.
+                    Cookie.save('usertoken', data);
 
-                $.ajax({
-                    url: signinURL,
-                    dataType: 'text',
-                    type: 'POST',
-                    data: {
-                        email: this.appData.user.email,
-                        password: this.appData.user.password
-                    },
-                    success: function(data) {
-                        this.appData.user.token = data;
-
-                        // save the token.
-                        Cookie.save('usertoken', data);
-
-                        this.getUserInfo();
-                    }.bind(this),
-                    error: function(xhr, status, err) {
-                        console.error(status, err.toString());
-                    }.bind(this)
-                });
-            },
-            error: function(xhr, status, err) {
-            }
-        });
+                    this.getUserInfo();
+                }.bind(this),
+                error: function(xhr, status, err) {
+                    console.error(status, err.toString());
+                }.bind(this)
+            });
+        }).bind(this);
     },
     getUserInfo: function() {
         // get user info
@@ -173,21 +159,9 @@ var AppStore = Reflux.createStore({
             this.appData.user.token = token;
             this.trigger(this.appData);
 
-            $.ajax({
-                url: "/endpoint",
-                dataType: 'text',
-                type: 'GET',
-                success: function(data) {
-                    endpoint = data.serverurl;
-
-                    signinURL = endpoint+"/api/auth/login";
-                    signupURL = endpoint+"/api/auth/signup";
-                    getUserURL = endpoint+"/api/users";
-                    getRewardsURL = endpoint+"/api/rewards";
-
-                    this.getUserInfo();
-                }
-            });
+            this.fetchEndpoint(function(res) {
+                this.getUserInfo();
+            })
         }
         else {
             this.onHasNoToken();

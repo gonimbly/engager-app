@@ -93,6 +93,11 @@ gulp.task('copyimage', function() {
     .pipe(gulp.dest('dist/images'));
 });
 
+gulp.task('copycss', function() {
+  return gulp.src('app/style/*')
+    .pipe(gulp.dest('dist/style'));
+});
+
 gulp.task('copy', function() {
   return gulp.src(['app/*.txt', 'app/*.ico', 'package.json', 'Procfile', 'app.json'])
     .pipe(gulp.dest('dist'));
@@ -157,7 +162,7 @@ gulp.task('build', function() {
   env = 'prod';
   runSequence(['clean:dev', 'clean:dist'],
               ['scripts'],
-              'bundle', 'copyimage', 'copy');
+              'bundle', 'copyimage', 'copycss', 'copy');
 });
 
 gulp.task('default', ['build']);

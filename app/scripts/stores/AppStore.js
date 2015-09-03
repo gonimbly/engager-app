@@ -77,7 +77,7 @@ var AppStore = Reflux.createStore({
             url: "/endpoint",
             dataType: 'text',
             type: 'GET',
-            success: function(data) {
+            success: function(res) {
                 endpoint = res.serverurl;
 
                 signinURL = endpoint+"/api/auth/login";
@@ -85,7 +85,7 @@ var AppStore = Reflux.createStore({
                 getUserURL = endpoint+"/api/users";
                 getRewardsURL = endpoint+"/api/rewards";
 
-                callback(data);
+                callback(res);
             },
             error: function(xhr, status, err) {
             }

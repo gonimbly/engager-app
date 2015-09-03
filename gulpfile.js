@@ -7,6 +7,7 @@ var browserify    = require('browserify');
 var preprocessify = require('preprocessify');
 var runSequence   = require('run-sequence');
 var domain        = require('domain');
+var replace       = require('gulp-replace');
 
 var env           = 'dev';
 var webserver     = false;
@@ -132,6 +133,12 @@ gulp.task('bundle', function () {
     .pipe($.size());
 });
 
+gulp.task('replacetoken', function() {
+    gulp.src(['app/index.html'])
+    .pipe(replace(/APIURL/g, process.env.API_URL))
+    .pipe(gulp.dest('app/'));
+});
+
 gulp.task('webserver', function() {
   webserver = gulp.src(['.tmp', 'app'])
     .pipe($.webserver({
@@ -162,6 +169,7 @@ gulp.task('serve', function() {
 gulp.task('build', function() {
   env = 'prod';
   runSequence(['clean:dev', 'clean:dist'],
+              ['replacetoken'],
               ['scripts'],
               'bundle', 'copyimage', 'copycss', 'copy');
 });

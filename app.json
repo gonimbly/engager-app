@@ -9,8 +9,5 @@
       "COMPILE_TIMEOUT": {
           "value": "3000"
       }
-  },
-  "scripts": {
-      "postdeploy": "bin/init-endpoint"
   }
 }

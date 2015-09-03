@@ -136,6 +136,7 @@ gulp.task('webserver', function() {
   webserver = gulp.src(['.tmp', 'app'])
     .pipe($.webserver({
       host: '0.0.0.0', //change to 'localhost' to disable outside connections
+      port: process.env.PORT || 9001,
       livereload: {
         enable: true,
         filter: function(filePath) {

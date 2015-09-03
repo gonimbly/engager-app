@@ -116,7 +116,7 @@ var AppStore = Reflux.createStore({
                     console.error(status, err.toString());
                 }.bind(this)
             });
-        });
+        }).bind(this);
     },
     getUserInfo: function() {
         // get user info
@@ -161,7 +161,7 @@ var AppStore = Reflux.createStore({
 
             this.fetchEndpoint(function(res) {
                 this.getUserInfo();
-            });
+            }).bind(this);
         }
         else {
             this.onHasNoToken();

@@ -3,7 +3,7 @@ var app = express();
 
 app.get("/endpoint", function(req, res) {
     res.json({
-        serverurl: process.env.API_URL
+        serverurl: process.env.API_URL || "CHECKCK"
     });
 });
 

@@ -1,18 +1,18 @@
 #!/usr/bin/env node
-'use strict';
-
-var fs = require('fs');
-var path = require("path");
-
-var filePath = path.join(__dirname, '../app/index.html');
-
-fs.readFile(filePath, 'utf8', function (err, data) {
-    if (err) {
-        return console.log(err);
-    }
-    var result = data.replace("APIURL", process.env.API_URL);
-
-    fs.writeFile(filePath, result, 'utf8', function (err) {
-        if (err) return console.log(err);
-    });
-});
+// 'use strict';
+//
+// var fs = require('fs');
+// var path = require("path");
+//
+// var filePath = path.join(__dirname, '../app/index.html');
+//
+// fs.readFile(filePath, 'utf8', function (err, data) {
+//     if (err) {
+//         return console.log(err);
+//     }
+//     var result = data.replace("APIURL", process.env.API_URL);
+//
+//     fs.writeFile(filePath, result, 'utf8', function (err) {
+//         if (err) return console.log(err);
+//     });
+// });

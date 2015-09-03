@@ -49,6 +49,7 @@
     "gulp-minify-css": "~1.0.0",
     "gulp-plumber": "~1.0.0",
     "gulp-preprocess": "^1.2.0",
+    "gulp-replace": "^0.5.4",
     "gulp-rev-all": "~0.8.16",
     "gulp-size": "~1.2.1",
     "gulp-tap": "~0.1.3",

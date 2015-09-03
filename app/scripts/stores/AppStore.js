@@ -78,6 +78,7 @@ var AppStore = Reflux.createStore({
             dataType: 'text',
             type: 'GET',
             success: function(data) {
+                console.log("data = ", data);
                 endpoint = data.serverurl;
 
                 signinURL = endpoint+"/api/auth/login";

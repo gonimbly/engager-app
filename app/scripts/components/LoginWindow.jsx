@@ -6,10 +6,10 @@ var AppActions = require("../actions/AppActions");
 var UserActions = require("../actions/UserActions");
 var AppStore = require('../stores/AppStore');
 var Cookie = require('react-cookie');
+var Spinner = require('react-spinkit');
 
 var Textfield = ReactMDL.Textfield;
 var Button = ReactMDL.Button;
-var Spinner = ReactMDL.Spinner;
 
 var loginStyle = {
     backgroundColor: '#FFFFFF',
@@ -34,9 +34,7 @@ var buttonStyle = {
 };
 
 var spinnerStyle = {
-    marginRight: '50%',
-    marginLeft: '45%',
-    width: '28px',
+    width: 'auto',
     marginBottom: '20px',
     marginTop: '20px',
 };
@@ -87,12 +85,13 @@ var LoginWindow = React.createClass({
                     label="Enter your password"
                     floatingLabel={true}
                     className="textfield"
+                    type="password"
                 /><br/>
             <Button className="text-center" style={buttonStyle} raised={true} ripple={true} onClick={this.onClickSignin.bind(this)}>Signin</Button><br/>
             <p style={orStyle} className="text-center">- or -</p><br/>
             <p style={orStyle} className="text-center">Not a user! Signup now.</p><br/>
             <Button className="text-center" style={signupStyle} raised={true} ripple={true} onClick={this.onClickSignup.bind(this)}>Signup</Button>
-            <Spinner style={spinnerStyle} singleColor={true} className={this.state.appData.animations.loaderIcon}/>
+            <Spinner style={spinnerStyle} spinnerName='three-bounce' className={this.state.appData.animations.loaderIcon}/>
             </div>
         );
     }

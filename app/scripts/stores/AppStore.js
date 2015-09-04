@@ -63,6 +63,7 @@ var AppStore = Reflux.createStore({
         this.listenTo(UserActions.scoreToNormal, this.onScoreReturnToNormal);
 
         this.listenTo(UserActions.signin, this.onSignin);
+        this.listenTo(UserActions.signout, this.onSignout);
         this.listenTo(UserActions.signup, this.onSignup);
         this.listenTo(UserActions.onChangeName, this.onChangeName);
         this.listenTo(UserActions.onChangeEmail, this.onChangeEmail);
@@ -78,11 +79,8 @@ var AppStore = Reflux.createStore({
             dataType: 'text',
             type: 'GET',
             success: function(data) {
-                console.log("data = ", data);
                 data = JSON.parse(data);
-                console.log("data2 = ", data);
-                
-                endpoint = data.serverurl;
+                endpoint = data.serverurl || "http://localhost:9000";
 
                 signinURL = endpoint+"/api/auth/login";
                 signupURL = endpoint+"/api/auth/signup";
@@ -92,8 +90,19 @@ var AppStore = Reflux.createStore({
                 callback(data);
             }.bind(this),
             error: function(xhr, status, err) {
+                endpoint = "http://localhost:9000";
+
+                signinURL = endpoint+"/api/auth/login";
+                signupURL = endpoint+"/api/auth/signup";
+                getUserURL = endpoint+"/api/users";
+                getRewardsURL = endpoint+"/api/rewards";
+
+                callback(null);
             }.bind(this)
         });
+    },
+    onSignout: function() {
+        this.onHasNoToken();
     },
     onSignin: function() {
         this.appData.animations.loaderIcon = "show";
@@ -117,7 +126,9 @@ var AppStore = Reflux.createStore({
                     this.getUserInfo();
                 }.bind(this),
                 error: function(xhr, status, err) {
-                    console.error(status, err.toString());
+                    if (err == "Unauthorized") {
+                        this.onHasNoToken();
+                    }
                 }.bind(this)
             });
         }.bind(this));
@@ -144,7 +155,9 @@ var AppStore = Reflux.createStore({
                 this.getNewQuestions();
             }.bind(this),
             error: function(xhr, status, err) {
-                console.error(status, err.toString());
+                if (err == "Unauthorized") {
+                    this.onHasNoToken();
+                }
             }.bind(this)
         });
     },
@@ -310,11 +323,17 @@ var AppStore = Reflux.createStore({
             },
             data: {
                 user_id: this.appData.user.id,
-                reward_id: reward.id
+                reward_id: reward.id,
+                amount: reward.cost
             },
             success: function(data) {
+                var cost = reward.cost;
+                var userScore = this.appData.user.score;
                 this.appData.selectedReward.code = data.text;
+                this.appData.user.score = parseInt(userScore) - parseInt(cost);
                 this.trigger(this.appData);
+
+                this.activeRewards();
             }.bind(this),
             error: function(xhr, status, err) {
                 console.error(status, err.toString());

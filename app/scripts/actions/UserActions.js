@@ -5,6 +5,7 @@ var UserActions = Reflux.createActions([
     'getUser',
     'scoreToNormal',
     'signin',
+    'signout',
     'signup',
     'onChangeName',
     'onChangeEmail',

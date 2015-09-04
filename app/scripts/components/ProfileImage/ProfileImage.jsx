@@ -1,4 +1,5 @@
 var React = require('react');
+var UserActions = require("../../actions/UserActions");
 
 var imageStyle = {
     marginRight: '10px',
@@ -10,16 +11,25 @@ var imageStyle = {
     }
 };
 
+var iconStyle = {
+    backgroundColor: 'transparent',
+    border: 'none',
+    outline: '0'
+};
+
 var ProfileImage = React.createClass({
-  render: function() {
-    return (
-      <div style={imageStyle}>
-          <a href="#">
-              <img src='../../images/profile.png' style={imageStyle.image} className="img-rounded" />
-          </a>
-      </div>
-    );
-  }
+    onSignout: function() {
+        UserActions.signout();
+    },
+    render: function() {
+        return (
+            <div style={imageStyle}>
+                <button style={iconStyle} onClick={this.onSignout.bind(this)}>
+                    <img src='../../images/profile.png' style={imageStyle.image} className="img-rounded" />
+                </button>
+            </div>
+        );
+    }
 });
 
 module.exports = ProfileImage;

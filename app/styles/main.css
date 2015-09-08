@@ -16,6 +16,22 @@ body {
     background-color: #71c04f;
 }
 
+.signin-error-message {
+    color: #de3226;
+    font-size: 12px;
+    margin-top: 3px;
+}
+
+.signup-error-message {
+    color: #de3226;
+    font-size: 12px;
+    position: absolute;
+    margin-top: 3px;
+    width: 200px;
+    margin-left: -100px;
+    left: 50%;
+}
+
 .hero-unit {
     margin: 50px auto 0 auto;
     width: 300px;
@@ -233,10 +249,15 @@ body {
 }
 
 .ReactModal__Content--after-open {
-    height: 40%;
+    height: 16em;
     margin-top: 40%;
     border-radius: 4px;
     padding: 0px !important;
+}
+
+.ReactModal__Content {
+    border: none !important;
+    overflow: hidden !important;
 }
 
 .scorebox-score {

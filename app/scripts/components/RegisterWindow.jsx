@@ -24,7 +24,7 @@ var titleStyle = {
 };
 
 var buttonStyle = {
-    marginTop: '10px',
+    marginTop: '30px',
     marginBottom: '10px',
     backgroundColor: '#71c04f',
     width: '300px',
@@ -32,7 +32,6 @@ var buttonStyle = {
 };
 
 var signupStyle = {
-    marginTop: '10px',
     marginBottom: '10px',
     backgroundColor: '#1c1c1c',
     width: '300px',
@@ -41,6 +40,7 @@ var signupStyle = {
 
 var orStyle = {
     color: 'gray',
+    lineHeight: '30px'
 };
 
 var RegisterWindow = React.createClass({
@@ -66,32 +66,33 @@ var RegisterWindow = React.createClass({
      render: function() {
          return (
             <div style={loginStyle} className="text-center">
-                <h1 style={titleStyle} className="text-center">Engaged Signup</h1>
+                <h1 style={titleStyle} className="text-center">Engager Register</h1>
                     <Textfield
                         onChange={this.onChangeName.bind(this)}
                         value={this.state.appData.user.name}
                         label="Enter your full name"
                         floatingLabel={true}
                         className="textfield">
-                    </Textfield>
+                    </Textfield><br/>
                     <Textfield
                         onChange={this.onChangeEmail.bind(this)}
                         value={this.state.appData.user.email}
                         label="Enter your email"
                         floatingLabel={true}
                         className="textfield">
-                    </Textfield>
+                    </Textfield><br/>
                     <Textfield
                         onChange={this.onChangePassword.bind(this)}
                         value={this.state.appData.user.password}
                         label="Enter your password"
                         floatingLabel={true}
-                        className="textfield">
-                    </Textfield>
-                <Button className="text-center" style={buttonStyle} raised={true} ripple={true} onClick={this.onClickSignup.bind(this)}>Signup</Button>
-                <p style={orStyle} className="text-center">- or -</p>
-                <p style={orStyle} className="text-center">Already a user! Signin now.</p>
-                <Button className="text-center" style={signupStyle} raised={true} ripple={true} onClick={this.onClickSignin.bind(this)}>Signin</Button>
+                        className="textfield"
+                        type="password">
+                    </Textfield><br/>
+                    <span className="signup-error-message text-center">{this.state.appData.errorMessages.signin.msg}</span>
+                    <Button className="text-center" style={buttonStyle} raised={true} ripple={true} onClick={this.onClickSignup.bind(this)}>Register</Button>
+                    <p style={orStyle} className="text-center">- or -</p>
+                    <Button className="text-center" style={signupStyle} raised={true} ripple={true} onClick={this.onClickSignin.bind(this)}>Already a user! Log In now</Button>
             </div>
         );
     }

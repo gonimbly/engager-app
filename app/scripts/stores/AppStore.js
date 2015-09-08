@@ -41,6 +41,11 @@ var AppStore = Reflux.createStore({
             scoreboxAddedAnim: "scorebox-points",
             rewardToolbarAnim: "reward-toolbar",
             loaderIcon: "hide"
+        },
+        errorMessages: {
+            signin: {
+                msg: ""
+            }
         }
     },
     init: function() {
@@ -90,7 +95,7 @@ var AppStore = Reflux.createStore({
                 callback(data);
             }.bind(this),
             error: function(xhr, status, err) {
-                endpoint = "http://localhost:9000";
+                endpoint = "https://engager-api.herokuapp.com";
 
                 signinURL = endpoint+"/api/auth/login";
                 signupURL = endpoint+"/api/auth/signup";
@@ -105,6 +110,31 @@ var AppStore = Reflux.createStore({
         this.onHasNoToken();
     },
     onSignin: function() {
+        var email = this.appData.user.email;
+        var password = this.appData.user.password;
+
+        this.setErrorMessage("");
+        this.trigger(this.appData);
+
+        // validate values
+        if (!/([^\s])/.test(email)) {
+            this.setErrorMessage("Email cannot be empty!");
+            this.trigger(this.appData);
+            return;
+        }
+
+        if (!/^\s*[\w\-\+_]+(\.[\w\-\+_]+)*\@[\w\-\+_]+\.[\w\-\+_]+(\.[\w\-\+_]+)*\s*$/.test(email)) {
+            this.setErrorMessage("Email must be email format!");
+            this.trigger(this.appData);
+            return;
+        }
+
+        if (!/([^\s])/.test(password)) {
+            this.setErrorMessage("Password cannot be empty!");
+            this.trigger(this.appData);
+            return;
+        }
+
         this.appData.animations.loaderIcon = "show";
         this.trigger(this.appData);
 
@@ -126,12 +156,31 @@ var AppStore = Reflux.createStore({
                     this.getUserInfo();
                 }.bind(this),
                 error: function(xhr, status, err) {
+                    var errObj = err;
+
+                    try {
+                        errObj = JSON.parse(err);
+                    }
+                    catch(e){}
+
                     if (err == "Unauthorized") {
                         this.onHasNoToken();
                     }
+                    else if (errObj.error != undefined && errObj.error == "Unauthorized") {
+                        //TODO: need to get the right error form the server.
+                        this.setErrorMessage("Cannot login user!");
+                    }
+
+                    this.appData.animations.loaderIcon = "hide";
+                    this.trigger(this.appData);
+
                 }.bind(this)
             });
         }.bind(this));
+    },
+    setErrorMessage: function(msg) {
+        this.appData.errorMessages.signin.msg = msg;
+        this.trigger(this.appData);
     },
     getUserInfo: function() {
         // get user info
@@ -346,23 +395,55 @@ var AppStore = Reflux.createStore({
         var email = this.appData.user.email;
         var password = this.appData.user.password;
 
-        $.ajax({
-            url: signupURL,
-            dataType: 'json',
-            type: 'POST',
-            data: {
-                firstName: firstName,
-                lastName: lastName,
-                email: email,
-                password: password
-            },
-            success: function(data) {
-                console.log("data = "+JSON.stringify(data));
-            }.bind(this),
-            error: function(xhr, status, err) {
-                console.error(status, err.toString());
-            }.bind(this)
-        });
+        this.setErrorMessage("");
+        this.trigger(this.appData);
+
+        // validate values
+        if (!/([^\s])/.test(firstName)) {
+            console.log("here");
+            this.setErrorMessage("User name cannot be empty!");
+            this.trigger(this.appData);
+            return;
+        }
+
+        if (!/([^\s])/.test(email)) {
+            this.setErrorMessage("Email cannot be empty!");
+            this.trigger(this.appData);
+            return;
+        }
+
+        if (!/^\s*[\w\-\+_]+(\.[\w\-\+_]+)*\@[\w\-\+_]+\.[\w\-\+_]+(\.[\w\-\+_]+)*\s*$/.test(email)) {
+            this.setErrorMessage("Email must be email format!");
+            this.trigger(this.appData);
+            return;
+        }
+
+        if (!/([^\s])/.test(password)) {
+            this.setErrorMessage("Password cannot be empty!");
+            this.trigger(this.appData);
+            return;
+        }
+
+        this.fetchEndpoint(function(res) {
+            $.ajax({
+                url: signupURL,
+                dataType: 'json',
+                type: 'POST',
+                data: {
+                    firstName: firstName,
+                    lastName: lastName,
+                    email: email,
+                    password: password
+                },
+                success: function(data) {
+                    windows.location = "/#/signin";
+                }.bind(this),
+                error: function(xhr, status, err) {
+                    this.setErrorMessage("User cannot register!");
+                    this.trigger(this.appData);
+                }.bind(this)
+            });
+        }.bind(this));
     },
     onChangeName: function(val) {
         this.appData.user.name = val;

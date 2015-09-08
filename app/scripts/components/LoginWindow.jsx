@@ -26,7 +26,7 @@ var titleStyle = {
 };
 
 var buttonStyle = {
-    marginTop: '10px',
+    marginTop: '30px',
     marginBottom: '10px',
     backgroundColor: '#71c04f',
     width: '300px',
@@ -40,7 +40,6 @@ var spinnerStyle = {
 };
 
 var signupStyle = {
-    marginTop: '10px',
     marginBottom: '10px',
     backgroundColor: '#1c1c1c',
     width: '300px',
@@ -49,6 +48,7 @@ var signupStyle = {
 
 var orStyle = {
     color: 'gray',
+    lineHeight: '30px'
 };
 
 var LoginWindow = React.createClass({
@@ -71,14 +71,14 @@ var LoginWindow = React.createClass({
     render: function() {
         return (
             <div style={loginStyle} className="text-center">
-                <h1 style={titleStyle} className="text-center">Engaged Signin</h1><br/>
+                <h1 style={titleStyle} className="text-center">Engager Log In</h1><br/>
                 <Textfield
                     onChange={this.onChangeEmail.bind(this)}
                     value={this.state.appData.user.email}
                     label="Enter your email"
                     floatingLabel={true}
                     className="textfield"
-                />
+                /><br/>
                 <Textfield
                     onChange={this.onChangePassword.bind(this)}
                     value={this.state.appData.user.password}
@@ -87,10 +87,10 @@ var LoginWindow = React.createClass({
                     className="textfield"
                     type="password"
                 /><br/>
-            <Button className="text-center" style={buttonStyle} raised={true} ripple={true} onClick={this.onClickSignin.bind(this)}>Signin</Button><br/>
-            <p style={orStyle} className="text-center">- or -</p><br/>
-            <p style={orStyle} className="text-center">Not a user! Signup now.</p><br/>
-            <Button className="text-center" style={signupStyle} raised={true} ripple={true} onClick={this.onClickSignup.bind(this)}>Signup</Button>
+            <span className="signin-error-message text-center">{this.state.appData.errorMessages.signin.msg}</span>
+            <Button className="text-center" style={buttonStyle} raised={true} ripple={true} onClick={this.onClickSignin.bind(this)}>Log In</Button><br/>
+            <p style={orStyle} className="text-center">- or -</p>
+            <Button className="text-center" style={signupStyle} raised={true} ripple={true} onClick={this.onClickSignup.bind(this)}>Not a user! Register now</Button>
             <Spinner style={spinnerStyle} spinnerName='three-bounce' className={this.state.appData.animations.loaderIcon}/>
             </div>
         );

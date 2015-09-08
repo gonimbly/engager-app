@@ -19,7 +19,7 @@ var panelStyle = {
     whiteSpace: 'nowrap',
     list: {
         overflowX: 'scroll',
-        width: 'auto',
+        width: '100%',
         listStyleType: 'none',
         margin: '0',
         padding: '0'
@@ -33,9 +33,11 @@ var msgStyle = {
     color: '#FFFFFF',
     position: 'absolute',
     top: '36%',
-    left: '25%',
+    left: '50%',
+    width: '180px',
     fontSize: '15px',
     opacity: '0.8',
+    marginLeft: '-60px',
 };
 
 var RewardsPanel = React.createClass({

@@ -3,6 +3,7 @@ var AppContainer = require('./AppContainer');
 var Router = require('react-router');
 var Reflux = require('reflux');
 var AppStore = require('../stores/AppStore');
+var Cookie = require('react-cookie');
 
 var MainWindow = React.createClass({
     mixins: [Router.Navigation,
@@ -10,7 +11,9 @@ var MainWindow = React.createClass({
              Reflux.connect(AppStore, 'appData')],
 
     render: function() {
-        if (!this.state.appData.user.isSignin) {
+        var token = Cookie.load('usertoken');
+
+        if (token == undefined || !this.state.appData.user.isSignin) {
             window.location = "/#/signin";
         }
 

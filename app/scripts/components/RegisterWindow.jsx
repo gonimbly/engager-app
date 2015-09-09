@@ -72,8 +72,6 @@ var RegisterWindow = React.createClass({
          UserActions.onChangePassword(value);
      },
      render: function() {
-         Cookie.remove('usertoken');
-
          return (
             <div style={loginStyle} className="text-center">
                 <h1 style={titleStyle} className="text-center">Engager Register</h1>

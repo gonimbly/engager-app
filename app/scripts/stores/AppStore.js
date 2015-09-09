@@ -181,7 +181,6 @@ var AppStore = Reflux.createStore({
     },
     setErrorMessage: function(msg) {
         this.appData.errorMessages.signin.msg = msg;
-        this.appData.user.password = "";
         this.trigger(this.appData);
     },
     getUserInfo: function() {
@@ -449,7 +448,7 @@ var AppStore = Reflux.createStore({
                     this.appData.user.token = data;
 
                     // save the token.
-                    //Cookie.save('usertoken', data);
+                    Cookie.save('usertoken', data);
 
                     this.getUserInfo();
                 }.bind(this),

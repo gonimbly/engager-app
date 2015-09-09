@@ -430,6 +430,9 @@ var AppStore = Reflux.createStore({
             return;
         }
 
+        this.appData.animations.loaderIcon = "show";
+        this.trigger(this.appData);
+
         this.fetchEndpoint(function(res) {
             $.ajax({
                 url: signupURL,

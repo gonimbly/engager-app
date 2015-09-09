@@ -96,6 +96,7 @@ var RegisterWindow = React.createClass({
                     <Button className="text-center" style={buttonStyle} raised={true} ripple={true} onClick={this.onClickSignup.bind(this)}>Register</Button>
                     <p style={orStyle} className="text-center">- or -</p>
                     <Button className="text-center" style={signupStyle} raised={true} ripple={true} onClick={this.onClickSignin.bind(this)}>Already a user! Log In now</Button>
+                    <Spinner style={spinnerStyle} spinnerName='three-bounce' className={this.state.appData.animations.loaderIcon}/>
             </div>
         );
     }

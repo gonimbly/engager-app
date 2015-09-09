@@ -6,6 +6,7 @@ var AppActions = require("../actions/AppActions");
 var UserActions = require("../actions/UserActions");
 var AppStore = require('../stores/AppStore');
 var Cookie = require('react-cookie');
+var Spinner = require('react-spinkit');
 
 var Textfield = ReactMDL.Textfield;
 var Button = ReactMDL.Button;
@@ -30,6 +31,12 @@ var buttonStyle = {
     backgroundColor: '#71c04f',
     width: '300px',
     color: '#FFFFFF',
+};
+
+var spinnerStyle = {
+    width: 'auto',
+    marginBottom: '20px',
+    marginTop: '20px',
 };
 
 var signupStyle = {

@@ -122,7 +122,7 @@ var QuestionItem = React.createClass({
                                     verticalAlign: 'middle',
                                 }}>
                                 <span style={{color: text, fontSize: '16px'}} className="wordwrap">
-                                    {question.text}
+                                    {question.text}?
                                 </span>
                             </td>
                             <td style={{

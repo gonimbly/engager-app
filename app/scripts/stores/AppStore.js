@@ -95,7 +95,7 @@ var AppStore = Reflux.createStore({
                 callback(data);
             }.bind(this),
             error: function(xhr, status, err) {
-                endpoint = "https://engager-api.herokuapp.com";
+                endpoint = "http://localhost:9000"; //"https://gonimbly-engager-api.herokuapp.com"; //"https://engager-api.herokuapp.com";
 
                 signinURL = endpoint+"/api/auth/login";
                 signupURL = endpoint+"/api/auth/signup";
@@ -148,6 +148,7 @@ var AppStore = Reflux.createStore({
                     password: this.appData.user.password
                 },
                 success: function(data) {
+                    this.appData.user.password = "";
                     this.appData.user.token = data;
 
                     // save the token.
@@ -180,6 +181,7 @@ var AppStore = Reflux.createStore({
     },
     setErrorMessage: function(msg) {
         this.appData.errorMessages.signin.msg = msg;
+        this.appData.user.password = "";
         this.trigger(this.appData);
     },
     getUserInfo: function() {
@@ -197,7 +199,7 @@ var AppStore = Reflux.createStore({
                 this.appData.user.id = data.id;
                 this.appData.user.email = data.email;
                 this.appData.user.name = data.first+" "+data.last;
-                this.appData.user.password = data.password;
+                //this.appData.user.password = data.password;
                 this.trigger(this.appData);
 
                 // get new questions
@@ -309,7 +311,6 @@ var AppStore = Reflux.createStore({
             success: function(data) {
                 this.appData.user.rewards.push(data);
                 this.trigger(this.appData);
-
             }.bind(this),
             error: function(xhr, status, err) {
                 console.error(status, err.toString());
@@ -325,10 +326,15 @@ var AppStore = Reflux.createStore({
                 "Authorization": "Bearer "+this.appData.user.token
             },
             success: function(data) {
-                this.appData.user.score = data.amount;
-                this.trigger(this.appData);
+                try {
+                    this.appData.user.score = data.amount;
+                    this.trigger(this.appData);
 
-                this.getRewardsInfo();
+                    this.getRewardsInfo();
+                }
+                catch(e) {
+                    this.setErrorMessage("Wallet cannot be null.");
+                }
             }.bind(this),
             error: function(xhr, status, err) {
                 console.error(status, err.toString());
@@ -427,7 +433,7 @@ var AppStore = Reflux.createStore({
         this.fetchEndpoint(function(res) {
             $.ajax({
                 url: signupURL,
-                dataType: 'json',
+                dataType: 'text',
                 type: 'POST',
                 data: {
                     firstName: firstName,
@@ -436,10 +442,17 @@ var AppStore = Reflux.createStore({
                     password: password
                 },
                 success: function(data) {
-                    windows.location = "/#/signin";
+                    this.appData.user.password = "";
+                    this.appData.user.token = data;
+
+                    // save the token.
+                    //Cookie.save('usertoken', data);
+
+                    this.getUserInfo();
                 }.bind(this),
                 error: function(xhr, status, err) {
-                    this.setErrorMessage("User cannot register!");
+                    var error = JSON.parse(xhr.responseText);
+                    this.setErrorMessage(error.error);
                     this.trigger(this.appData);
                 }.bind(this)
             });

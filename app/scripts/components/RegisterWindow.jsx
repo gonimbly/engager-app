@@ -5,6 +5,7 @@ var Reflux = require('reflux');
 var AppActions = require("../actions/AppActions");
 var UserActions = require("../actions/UserActions");
 var AppStore = require('../stores/AppStore');
+var Cookie = require('react-cookie');
 
 var Textfield = ReactMDL.Textfield;
 var Button = ReactMDL.Button;
@@ -64,6 +65,8 @@ var RegisterWindow = React.createClass({
          UserActions.onChangePassword(value);
      },
      render: function() {
+         Cookie.remove('usertoken');
+
          return (
             <div style={loginStyle} className="text-center">
                 <h1 style={titleStyle} className="text-center">Engager Register</h1>

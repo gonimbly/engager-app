@@ -69,6 +69,8 @@ var LoginWindow = React.createClass({
         UserActions.onChangePassword(value);
     },
     render: function() {
+        Cookie.remove('usertoken');
+        
         return (
             <div style={loginStyle} className="text-center">
                 <h1 style={titleStyle} className="text-center">Engager Log In</h1><br/>

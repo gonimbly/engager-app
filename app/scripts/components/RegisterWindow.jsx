@@ -57,6 +57,7 @@ var RegisterWindow = React.createClass({
              Reflux.connect(AppStore, 'appData')],
 
      onClickSignin: function() {
+         AppStore.setErrorMessage("");
          window.location = "/#/signin";
      },
      onClickSignup: function() {

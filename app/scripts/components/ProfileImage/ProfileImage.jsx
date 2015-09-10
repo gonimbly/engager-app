@@ -25,7 +25,7 @@ var ProfileImage = React.createClass({
         return (
             <div style={imageStyle}>
                 <button style={iconStyle} onClick={this.onSignout.bind(this)}>
-                    <img src='../../images/profile.png' style={imageStyle.image} className="img-rounded" />
+                    <img src='../../images/logout.png' style={imageStyle.image} />
                 </button>
             </div>
         );

@@ -18,7 +18,9 @@ var AppStore = Reflux.createStore({
         user: {
             id: "-1",
             email: "",
-            name: "",
+            first: "",
+            last: "",
+            fullName: "",
             score: 0,
             added: "",
             rewards: [],
@@ -157,30 +159,20 @@ var AppStore = Reflux.createStore({
                     this.getUserInfo();
                 }.bind(this),
                 error: function(xhr, status, err) {
-                    var errObj = err;
-
-                    try {
-                        errObj = JSON.parse(err);
-                    }
-                    catch(e){}
-
                     if (err == "Unauthorized") {
                         this.onHasNoToken();
                     }
-                    else if (errObj.error != undefined && errObj.error == "Unauthorized") {
-                        //TODO: need to get the right error form the server.
-                        this.setErrorMessage("Cannot login user!");
-                    }
 
-                    this.appData.animations.loaderIcon = "hide";
+                    var error = JSON.parse(xhr.responseText);
+                    this.setErrorMessage(error.error);
                     this.trigger(this.appData);
-
                 }.bind(this)
             });
         }.bind(this));
     },
     setErrorMessage: function(msg) {
         this.appData.errorMessages.signin.msg = msg;
+        this.appData.animations.loaderIcon = "hide";
         this.trigger(this.appData);
     },
     getUserInfo: function() {
@@ -197,7 +189,9 @@ var AppStore = Reflux.createStore({
                 this.appData.user.isSignin = true;
                 this.appData.user.id = data.id;
                 this.appData.user.email = data.email;
-                this.appData.user.name = data.first+" "+data.last;
+                this.appData.user.first = data.first;
+                this.appData.user.last = data.last;
+                this.appData.user.fullName = data.first+" "+data.last;
                 //this.appData.user.password = data.password;
                 this.trigger(this.appData);
 
@@ -300,7 +294,7 @@ var AppStore = Reflux.createStore({
                 "Authorization": "Bearer "+this.appData.user.token
             },
             data: {
-                user_name: this.appData.user.name,
+                user_name: this.appData.user.first+" "+this.appData.user.last,
                 value: question.rate,
                 points: question.points,
                 question_text: question.text,
@@ -395,8 +389,10 @@ var AppStore = Reflux.createStore({
         });
     },
     onSignup: function() {
-        var firstName = this.appData.user.name;
-        var lastName = this.appData.user.name;
+        var fullName = this.appData.user.fullName;
+        var words = fullName.split(/\s+/g,2);
+        var firstName = words[0];
+        var lastName = words[1] || "";
         var email = this.appData.user.email;
         var password = this.appData.user.password;
 
@@ -404,7 +400,7 @@ var AppStore = Reflux.createStore({
         this.trigger(this.appData);
 
         // validate values
-        if (!/([^\s])/.test(firstName)) {
+        if (!/([^\s])/.test(fullName)) {
             console.log("here");
             this.setErrorMessage("User name cannot be empty!");
             this.trigger(this.appData);
@@ -438,8 +434,8 @@ var AppStore = Reflux.createStore({
                 dataType: 'text',
                 type: 'POST',
                 data: {
-                    firstName: firstName,
-                    lastName: lastName,
+                    first: firstName,
+                    last: lastName,
                     email: email,
                     password: password
                 },
@@ -461,7 +457,11 @@ var AppStore = Reflux.createStore({
         }.bind(this));
     },
     onChangeName: function(val) {
-        this.appData.user.name = val;
+        this.appData.user.fullName = val;
+        var words = val.split(/\s+/g,2);
+        this.appData.user.first = words[0];
+        this.appData.user.last = words[1] || "";
+
         this.trigger(this.appData);
     },
     onChangeEmail: function(val) {
@@ -500,7 +500,7 @@ var AppStore = Reflux.createStore({
         setTimeout(function() {
             self.appData.animations.rewardToolbarAnim = "reward-toolbar";
             self.trigger(self.appData);
-        }, 3000);
+        }, 10000);
     },
     activeRewards: function() {
         for (var i = 0; i < this.appData.rewards.length; i++) {
@@ -552,7 +552,7 @@ var AppStore = Reflux.createStore({
             self.appData.animations.scoreboxAddedAnim = "scorebox-points";
 
             self.trigger(self.appData);
-        }, 3000);
+        }, 10000);
     },
     onScoreReturnToNormal: function() {
         this.appData.animations.scoreboxScoreAnim = "scorebox-score";

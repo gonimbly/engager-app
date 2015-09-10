@@ -60,6 +60,7 @@ var LoginWindow = React.createClass({
         UserActions.signin();
     },
     onClickSignup: function() {
+        AppStore.setErrorMessage("");
         window.location = "/#/signup";
     },
     onChangeEmail: function(value) {

@@ -13,7 +13,7 @@ var RewardClaimTooltip = React.createClass({
     render: function() {
         return (
             <div className={this.state.appData.animations.rewardToolbarAnim}>
-                <p style={{margin: '0px'}}>+ {this.state.appData.selectedReward.name} Credit!</p>
+                <p style={{margin: '0px'}}>+ {this.state.appData.selectedReward.name} Credit Copied to Clipboard!</p>
                 <CopyToClipboard style={{
                         margin: '0px',
                         backgroundColor: '#000000',

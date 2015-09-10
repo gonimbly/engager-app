@@ -8,5 +8,6 @@ app.get("/endpoint", function(req, res) {
 });
 
 app.use(express.static(__dirname + '/dist'));
-
-app.listen(process.env.PORT || 3000);
+var port = process.env.PORT || 3000;
+console.log('Listening on ' + port);
+app.listen(port);

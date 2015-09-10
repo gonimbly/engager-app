@@ -379,6 +379,8 @@ var AppStore = Reflux.createStore({
                 var userScore = this.appData.user.score;
                 this.appData.selectedReward.code = data.text;
                 this.appData.user.score = parseInt(userScore) - parseInt(cost);
+                this.appData.animations.rewardToolbarAnim = "reward-toolbar-added";
+
                 this.trigger(this.appData);
 
                 this.activeRewards();
@@ -392,7 +394,7 @@ var AppStore = Reflux.createStore({
         var fullName = this.appData.user.fullName;
         var words = fullName.split(/\s+/g,2);
         var firstName = words[0];
-        var lastName = words[1] || "";
+        var lastName = words[1] || firstName;
         var email = this.appData.user.email;
         var password = this.appData.user.password;
 
@@ -460,7 +462,7 @@ var AppStore = Reflux.createStore({
         this.appData.user.fullName = val;
         var words = val.split(/\s+/g,2);
         this.appData.user.first = words[0];
-        this.appData.user.last = words[1] || "";
+        this.appData.user.last = words[1] || words[0];
 
         this.trigger(this.appData);
     },
@@ -483,7 +485,6 @@ var AppStore = Reflux.createStore({
         this.trigger(this.appData);
     },
     claimReward: function(reward) {
-        this.appData.animations.rewardToolbarAnim = "reward-toolbar-added";
         this.appData.isRewardOpen = false;
 
         // move the reward to user's rewards

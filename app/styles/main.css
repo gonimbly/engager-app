@@ -345,7 +345,7 @@ body {
     z-index: 1000;
     border-radius: 2px;
     opacity: 0.75;
-    animation: scoreboxpointsanim 1s ease-in 10s;
+    animation: scoreboxpointsanim ease-in 10s;
 }
 
 @keyframes scoreboxanim {

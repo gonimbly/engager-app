@@ -1,8 +1,6 @@
 var React = require('react');
-
-var circlePhoto = {
-  "background-image": "url('https://randomuser.me/api/portraits/med/women/17.jpg')"
-};
+var Reflux = require('reflux');
+var AppStore = require('../../stores/AppStore');
 
 var addPhotoStyle = {
     width: '110px',
@@ -15,7 +13,11 @@ var addPhotoStyle = {
 };
 
 var CoverImage = React.createClass({
+  mixins: [Reflux.connect(AppStore, 'appData')],
   render: function() {
+    var circlePhoto = {
+      "background-image": "url('"+this.state.appData.user.picture_url+"')"
+    };
     return (
       <div style={addPhotoStyle.center}>
           <div  className="center-block" style={addPhotoStyle}>

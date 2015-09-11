@@ -16,17 +16,18 @@ var getRewardsURL;
 var AppStore = Reflux.createStore({
     appData: {
         user: {
-            id: "-1",
+            added: "",
             email: "",
             first: "",
-            last: "",
             fullName: "",
-            score: 0,
-            added: "",
-            rewards: [],
-            token: "",
+            id: "-1",
+            isSignin: false,
+            last: "",
             password: "",
-            isSignin: false
+            picture_url: "",
+            rewards: [],
+            score: 0,
+            token: ""
         },
         questions: {
             unanswered: [],
@@ -191,8 +192,8 @@ var AppStore = Reflux.createStore({
                 this.appData.user.email = data.email;
                 this.appData.user.first = data.first;
                 this.appData.user.last = data.last;
+                this.appData.user.picture_url = data.picture_url;
                 this.appData.user.fullName = data.first+" "+data.last;
-                //this.appData.user.password = data.password;
                 this.trigger(this.appData);
 
                 // get new questions

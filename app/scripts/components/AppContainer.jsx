@@ -15,7 +15,13 @@ var RewardClaimTooltip = require('./RewardClaimTooltip/RewardClaimTooltip');
 var Spinner = require('react-spinkit');
 
 var headerStyle = {
+    backgroundColor: '#81d05f',
     height: '200px'
+}
+
+var logoStyle = {
+    marginTop: '0',
+    position: 'absolute'
 };
 
 var AppContainer = React.createClass({
@@ -31,7 +37,11 @@ var AppContainer = React.createClass({
                   </div>
                   <div style={headerStyle}>
                       <div>
-                        
+                        <div style={logoStyle}>
+                          <a href="http://www.gonimbly.com/contact" target="blank">
+                            <img src="../../images/gonimbly_logo_white.png" width="100px" height="50px"/>
+                          </a>
+                        </div>
                       </div>
                       <RewardClaimTooltip />
                       <CoverImage />

@@ -4,6 +4,20 @@ body {
     color: #333;
 }
 
+.circle {
+  display: block;
+  width: 100px;
+  height: 100px;
+  margin: 1em auto;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center center;
+  border-radius: 99em;
+  -webkit-border-radius: 99em;
+  -moz-border-radius: 99em;
+  border: 1px solid gray;
+}
+
 .three-bounce .bounce1 {
     background-color: #71c04f;
 }

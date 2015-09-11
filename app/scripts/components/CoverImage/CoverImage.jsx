@@ -1,5 +1,9 @@
 var React = require('react');
 
+var circlePhoto = {
+  "background-image": "url('https://randomuser.me/api/portraits/med/women/17.jpg')"
+};
+
 var addPhotoStyle = {
     width: '110px',
     center: {
@@ -13,11 +17,9 @@ var addPhotoStyle = {
 var CoverImage = React.createClass({
   render: function() {
     return (
-      <div>
-          <div style={addPhotoStyle.center} className="center-block">
-              <a>
-                  <img src="../../images/addphoto.png" style={addPhotoStyle} />
-              </a>
+      <div style={addPhotoStyle.center}>
+          <div  className="center-block" style={addPhotoStyle}>
+            <div className="circle" style={circlePhoto}></div>
           </div>
       </div>
     );

@@ -15,7 +15,6 @@ var RewardClaimTooltip = require('./RewardClaimTooltip/RewardClaimTooltip');
 var Spinner = require('react-spinkit');
 
 var headerStyle = {
-    backgroundColor: '#81d05f',
     height: '200px'
 };
 
@@ -31,6 +30,9 @@ var AppContainer = React.createClass({
                       <Spinner spinnerName='three-bounce'/>
                   </div>
                   <div style={headerStyle}>
+                      <div>
+                        
+                      </div>
                       <RewardClaimTooltip />
                       <CoverImage />
                       <ProfileImage />

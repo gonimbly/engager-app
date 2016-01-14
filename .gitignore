@@ -5,3 +5,4 @@ test/temp
 app/vendor
 .tmp
 test/scripts/
+*.sublime-*

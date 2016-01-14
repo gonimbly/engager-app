@@ -1,8 +1,12 @@
+*.log
+.tmp
+/server/config/local.env.js
 .DS_Store
-node_modules
+node_modules/
 test/temp
 .sass-cache
 app/vendor
 .tmp
 test/scripts/
+dist
 *.sublime-*

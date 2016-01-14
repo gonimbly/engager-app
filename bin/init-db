@@ -1,0 +1,26 @@
+#!/usr/bin/env node
+'use strict';
+
+var fs = require('fs');
+var path = require('path');
+var knex = require('../db/knexpg');
+
+var filePath = path.join(__dirname, './init.sql');
+
+fs.readFile(filePath, 'utf8', function (err, data) {
+    if (err) {
+        console.log(err);
+    } 
+    else {
+        knex.schema.raw(data.toString("utf8"))
+            .then(function(msg) {
+                console.log('Postgres tables successfully initialized') ;
+                process.exit();
+            })
+            .catch(function(error) {
+                console.log('Error initializing Postgres tables initialized');
+                console.log(error);
+                process.exit(1);
+            });
+    }
+});

@@ -5,13 +5,11 @@ var Cookie = require('react-cookie');
 var AppActions = require("../actions/AppActions");
 var UserActions = require('../actions/UserActions')
 
-var endpoint = "NO_URL";
-
 // REST calls
-var signinURL;
-var signupURL;
-var getUserURL;
-var getRewardsURL;
+var signinURL = '/api/auth/login';
+var signupURL = '/api/auth/signup';
+var getUserURL = '/api/users';
+var getRewardsURL = '/api/rewards';
 
 var AppStore = Reflux.createStore({
     appData: {
@@ -81,34 +79,6 @@ var AppStore = Reflux.createStore({
     getInitialState: function(){
         return this.appData;
     },
-    fetchEndpoint: function(callback) {
-        $.ajax({
-            url: "/endpoint",
-            dataType: 'text',
-            type: 'GET',
-            success: function(data) {
-                data = JSON.parse(data);
-                endpoint = data.serverurl || "http://localhost:9000";
-
-                signinURL = endpoint+"/api/auth/login";
-                signupURL = endpoint+"/api/auth/signup";
-                getUserURL = endpoint+"/api/users";
-                getRewardsURL = endpoint+"/api/rewards";
-
-                callback(data);
-            }.bind(this),
-            error: function(xhr, status, err) {
-                endpoint = "http://localhost:9000"; //"https://gonimbly-engager-api.herokuapp.com"; //"https://engager-api.herokuapp.com";
-
-                signinURL = endpoint+"/api/auth/login";
-                signupURL = endpoint+"/api/auth/signup";
-                getUserURL = endpoint+"/api/users";
-                getRewardsURL = endpoint+"/api/rewards";
-
-                callback(null);
-            }.bind(this)
-        });
-    },
     onSignout: function() {
         this.onHasNoToken();
     },
@@ -141,35 +111,33 @@ var AppStore = Reflux.createStore({
         this.appData.animations.loaderIcon = "show";
         this.trigger(this.appData);
 
-        this.fetchEndpoint(function(res) {
-            $.ajax({
-                url: signinURL,
-                dataType: 'text',
-                type: 'POST',
-                data: {
-                    email: this.appData.user.email,
-                    password: this.appData.user.password
-                },
-                success: function(data) {
-                    this.appData.user.password = "";
-                    this.appData.user.token = data;
+        $.ajax({
+            url: signinURL,
+            dataType: 'text',
+            type: 'POST',
+            data: {
+                email: this.appData.user.email,
+                password: this.appData.user.password
+            },
+            success: function(data) {
+                this.appData.user.password = "";
+                this.appData.user.token = data;
 
-                    // save the token.
-                    Cookie.save('usertoken', data);
+                // save the token.
+                Cookie.save('usertoken', data);
 
-                    this.getUserInfo();
-                }.bind(this),
-                error: function(xhr, status, err) {
-                    if (err == "Unauthorized") {
-                        this.onHasNoToken();
-                    }
+                this.getUserInfo();
+            }.bind(this),
+            error: function(xhr, status, err) {
+                if (err == "Unauthorized") {
+                    this.onHasNoToken();
+                }
 
-                    var error = JSON.parse(xhr.responseText);
-                    this.setErrorMessage(error.error);
-                    this.trigger(this.appData);
-                }.bind(this)
-            });
-        }.bind(this));
+                var error = JSON.parse(xhr.responseText);
+                this.setErrorMessage(error.error);
+                this.trigger(this.appData);
+            }.bind(this)
+        });
     },
     setErrorMessage: function(msg) {
         this.appData.errorMessages.signin.msg = msg;
@@ -221,9 +189,7 @@ var AppStore = Reflux.createStore({
             this.appData.user.token = token;
             this.trigger(this.appData);
 
-            this.fetchEndpoint(function(res) {
-                this.getUserInfo();
-            }.bind(this));
+            this.getUserInfo();
         }
         else {
             this.onHasNoToken();
@@ -431,33 +397,31 @@ var AppStore = Reflux.createStore({
         this.appData.animations.loaderIcon = "show";
         this.trigger(this.appData);
 
-        this.fetchEndpoint(function(res) {
-            $.ajax({
-                url: signupURL,
-                dataType: 'text',
-                type: 'POST',
-                data: {
-                    first: firstName,
-                    last: lastName,
-                    email: email,
-                    password: password
-                },
-                success: function(data) {
-                    this.appData.user.password = "";
-                    this.appData.user.token = data;
+        $.ajax({
+            url: signupURL,
+            dataType: 'text',
+            type: 'POST',
+            data: {
+                first: firstName,
+                last: lastName,
+                email: email,
+                password: password
+            },
+            success: function(data) {
+                this.appData.user.password = "";
+                this.appData.user.token = data;
 
-                    // save the token.
-                    Cookie.save('usertoken', data);
+                // save the token.
+                Cookie.save('usertoken', data);
 
-                    this.getUserInfo();
-                }.bind(this),
-                error: function(xhr, status, err) {
-                    var error = JSON.parse(xhr.responseText);
-                    this.setErrorMessage(error.error);
-                    this.trigger(this.appData);
-                }.bind(this)
-            });
-        }.bind(this));
+                this.getUserInfo();
+            }.bind(this),
+            error: function(xhr, status, err) {
+                var error = JSON.parse(xhr.responseText);
+                this.setErrorMessage(error.error);
+                this.trigger(this.appData);
+            }.bind(this)
+        });
     },
     onChangeName: function(val) {
         this.appData.user.fullName = val;

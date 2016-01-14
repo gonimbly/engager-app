@@ -1,0 +1,37 @@
+#!/usr/bin/env node
+'use strict';
+
+var knex = require('../db/knexpg');
+var config = {
+    directory: './bin/migrations'
+};
+
+if( process.argv[2] === 'latest' ) {
+    knex.migrate.latest(config)
+        .then(function() {
+            console.log('Successfully migrated latest') ;
+            process.exit();
+        })
+        .catch(function(error) {
+            console.log('Error migrating Postgres');
+            console.log(error);
+            process.exit(1);
+        });
+    
+}
+else if( process.argv[2] === 'rollback' ) {
+    knex.migrate.rollback(config)
+        .then(function() {
+            console.log('Successfully migrated back') ;
+            process.exit();
+        })
+        .catch(function(error) {
+            console.log('Error migrating Postgres');
+            console.log(error);
+            process.exit(1);
+        });
+}
+else {
+    console.log('Please specify "latest" or "rollback"');
+    process.exit(1);
+}

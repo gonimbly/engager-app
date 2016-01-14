@@ -1,16 +1,16 @@
 var gulp = require('gulp');
+var open = require('open');
+var nodemon = require('nodemon');
+var debug = require('gulp-debug');
 var webpack = require('gulp-webpack');
-var nodemon = require('gulp-nodemon');
+var webserver = require('gulp-webserver');
 var _create = require('lodash.create');
 
 var webpackConfig = require('./webpack.config.js');
 var files = {
   main: './app/main.js',
-  scripts: [
-    './app/scripts/**/*.(js|jsx)',
-    './app/scripts/**/*.scss'
-  ],
-  index: './app/index.html'
+  scripts: 'app/scripts/**/*.*',
+  index: 'app/index.html'
 }
 
 // ***
@@ -47,12 +47,15 @@ gulp.task('watch-scripts', ['build-scripts'], function() {
 // ***
 // Main tasks
 // ***
+
 gulp.task('serve', ['watch-index', 'watch-scripts'], function() {
   return nodemon({
-    script: 'server.js',
+    script: 'server/server.js',
     env: {
-      'PORT': 9001,
-      'API_URL': 'https://localhost:9000'
+      'PORT': 9000
     }
+  })
+  .on('config:update', function() {
+    open('http://localhost:9000');
   });
 });

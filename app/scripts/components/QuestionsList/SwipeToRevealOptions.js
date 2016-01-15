@@ -3,141 +3,143 @@ var Rating = require('react-rating');
 var Swipeable = require('./Swipeable');
 
 var SwipeToRevealOptions = React.createClass({
-  displayName: "SwipeToRevealOptions",
+    displayName: "SwipeToRevealOptions",
 
-  propTypes: {
-    rightOptions: React.PropTypes.array,
-    leftOptions: React.PropTypes.array,
-    className: React.PropTypes.string,
-    actionThreshold: React.PropTypes.number,
-    visibilityThreshold: React.PropTypes.number,
-    transitionBackTimeout: React.PropTypes.number,
-    callActionWhenSwipingFarLeft: React.PropTypes.bool,
-    callActionWhenSwipingFarRight: React.PropTypes.bool,
-    closeOthers: React.PropTypes.func,
-    onRightClick: React.PropTypes.func,
-    onLeftClick: React.PropTypes.func,
-    onReveal: React.PropTypes.func,
-    maxItemWidth: React.PropTypes.number,
-    parentWidth: React.PropTypes.number,
-    contentBgColor: React.PropTypes.string,
-    isLeftActive: React.PropTypes.bool,
-    isRightActive: React.PropTypes.bool,
-    onRate: React.PropTypes.func,
-    onDismiss: React.PropTypes.func,
-    questionObj: React.PropTypes.object,
-    collapseDelay: React.PropTypes.number
-  },
+    propTypes: {
+      rightOptions: React.PropTypes.array,
+      leftOptions: React.PropTypes.array,
+      className: React.PropTypes.string,
+      actionThreshold: React.PropTypes.number,
+      visibilityThreshold: React.PropTypes.number,
+      transitionBackTimeout: React.PropTypes.number,
+      callActionWhenSwipingFarLeft: React.PropTypes.bool,
+      callActionWhenSwipingFarRight: React.PropTypes.bool,
+      closeOthers: React.PropTypes.func,
+      onRightClick: React.PropTypes.func,
+      onLeftClick: React.PropTypes.func,
+      onReveal: React.PropTypes.func,
+      maxItemWidth: React.PropTypes.number,
+      parentWidth: React.PropTypes.number,
+      contentBgColor: React.PropTypes.string,
+      isLeftActive: React.PropTypes.bool,
+      isRightActive: React.PropTypes.bool,
+      onRate: React.PropTypes.func,
+      onDismiss: React.PropTypes.func,
+      questionObj: React.PropTypes.object,
+      collapseDelay: React.PropTypes.number
+    },
 
-  getInitialState: function getInitialState() {
-    return {
-      delta: 0,
-      showRightButtons: false,
-      showLeftButtons: false,
-      swipingLeft: false,
-      swipingRight: false,
-      transitionBack: false,
-      action: null,
-      callActionWhenSwipingFarRight: false,
-      callActionWhenSwipingFarLeft: false
-    };
-  },
+    getInitialState: function getInitialState() {
+      return {
+        delta: 0,
+        showRightButtons: false,
+        showLeftButtons: false,
+        swipingLeft: false,
+        swipingRight: false,
+        transitionBack: false,
+        action: null,
+        callActionWhenSwipingFarRight: false,
+        callActionWhenSwipingFarLeft: false
+      };
+    },
 
-  getDefaultProps: function getDefaultProps() {
-    return {
-      rightOptions: [],
-      leftOptions: [],
-      className: "",
-      actionThreshold: 300,
-      visibilityThreshold: 50,
-      transitionBackTimeout: 400,
-      onRightClick: function onRightClick() {},
-      onLeftClick: function onLeftClick() {},
-      onReveal: function onReveal() {},
-      closeOthers: function closeOthers() {},
-      maxItemWidth: 120,
-      parentWidth: window.outerWidth || screen.width
-    };
-  },
+    getDefaultProps: function getDefaultProps() {
+      return {
+        rightOptions: [],
+        leftOptions: [],
+        className: "",
+        actionThreshold: 300,
+        visibilityThreshold: 50,
+        transitionBackTimeout: 400,
+        onRightClick: function onRightClick() {},
+        onLeftClick: function onLeftClick() {},
+        onReveal: function onReveal() {},
+        closeOthers: function closeOthers() {},
+        maxItemWidth: 120,
+        parentWidth: window.outerWidth || screen.width
+      };
+    },
 
-  onRate: function(rate) {
-      if (rate == undefined) {
-          return;
-      }
+    onRate: function(rate) {
+        if (rate == undefined) {
+            return;
+        }
 
-      this.props.onRate(rate, this.props.questionObj);
+        this.props.onRate(rate, this.props.questionObj);
 
-      setTimeout(this.transitionBack, this.props.collapseDelay);
-  },
+        setTimeout(this.transitionBack, this.props.collapseDelay);
+    },
 
-  onDismiss: function(question) {
-      this.props.onDismiss(question);
-      this.transitionBack();
-  },
+    onDismiss: function(question) {
+        this.props.onDismiss(question);
+        this.transitionBack();
+    },
 
-  render: function render() {
-      var q = this.props.questionObj;
+    render: function render() {
+        var q = this.props.questionObj;
 
-      var classes = this.props.className + " stro-container";
+        var classes = this.props.className + " stro-container";
 
-      if (this.state.transitionBack) {
-          classes += " transition-back";
-      }
+        if (this.state.transitionBack) {
+            classes += " transition-back";
+        }
 
-      if (this.state.showRightButtons) {
-          classes += " show-right-buttons";
-      }
+        if (this.state.showRightButtons) {
+            classes += " show-right-buttons";
+        }
 
-      if (this.state.showLeftButtons) {
-          classes += " show-left-buttons";
-      }
+        if (this.state.showLeftButtons) {
+            classes += " show-left-buttons";
+        }
 
-      return React.createElement("div", {
-              className: classes,
-              style: this.getContainerStyle()
-          },
-          React.createElement("div", {
-              className: "stro-left"
-          },
-          this.props.leftOptions.map(
-              (function (option, index) {
-                  return React.createElement("div", {
-                      className: "stro-button stro-left-button " + option["class"],
-                      style: this.getStyle("left", index),
-                  },
-                  <Rating
-                      full={"fa fa-star"}
-                      empty={"fa fa-star-o"}
-                      start={0}
-                      stop={5}
-                      initialRate={this.props.questionObj.rate}
-                      readonly={this.props.questionObj.rate ? true : false}
-                      onRate={this.onRate}/>
-              )
-          }).bind(this))),
-          React.createElement(Swipeable, {
-                  className: "stro-content",
-                  onSwipingLeft: this.swipingLeft,
-                  onClick: this.handleContentClick,
-                  onSwipingRight: this.swipingRight,
-                  delta: 15,
-                  onSwiped: this.swiped,
-                  style: {backgroundColor: this.props.contentBgColor}
-              },
-              this.props.children),
-          React.createElement("div", {
-              className: "stro-right"
-          },
-          this.props.rightOptions.map(
-              (function (option, index) {
-                  return React.createElement("div", {
-                      className: "stro-button stro-right-button text-center" + option["class"],
-                      onClick: this.onDismiss.bind(this, q),
-                      style: this.getStyle("right", index)
-                  },React.createElement("span", { style: this.getSpanStyle("right", index), dangerouslySetInnerHTML: { __html: "Dismiss" } }));
 
-          }).bind(this))));
-  },
+        var leftOptions = this.props.leftOptions.map(function (option, index) {
+          return (
+            <div className={'stro-button stro-left-button ' + option['class']}
+                 style={this.getStyle('left', index)}>
+                <Rating full={'fa fa-star'}
+                        empty={'fa fa-star-o'}
+                        start={0}
+                        stop={5}
+                        initialRate={this.props.questionObj.rate}
+                        readonly={this.props.questionObj.rate ? true : false}
+                        onRate={this.onRate}/>
+            </div>
+          );
+        }.bind(this));
+
+      var rightOptions = this.props.rightOptions.map(function (option, index) {
+          return (
+              <div className={'stro-button stro-right-button text-center' + option.class}
+                   onClick={this.onDismiss.bind(this, q)}
+                   style={this.getStyle("right", index)}>
+                  <span style={this.getSpanStyle("right", index)}
+                        dangerouslySetInnerHTML={{ __html: "Dismiss" }}></span>
+              </div>
+          );
+      }.bind(this));
+
+      return (
+        <div className={classes}
+             style={this.getContainerStyle()}>
+            <div className='stro-left'>
+                {leftOptions}
+            </div>
+            <Swipeable className='stro-content'
+                       onSwipingLeft={this.swipingLeft}
+                       onClick={this.handleContentClick}
+                       onSwipingRight={this.swipingRight}
+                       delta={15}
+                       onSwiped={this.swiped}
+                       style={{backgroundColor: this.props.contentBgColor}}>
+                {this.props.children}
+            </Swipeable>
+            <div className="stro-right">
+                {rightOptions}
+            </div>
+        </div>
+      );
+    },
 
   swipingLeft: function swipingLeft(event, delta) {
       if (this.swipingHandleStylesAndDelta(delta, "left")) {

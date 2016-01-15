@@ -1,5 +1,5 @@
 var React = require('react');
-var SwipeToRevealOptions = require('./SwipeRow');
+var SwipeToRevealOptions = require('./SwipeToRevealOptions');
 var Rating = require('react-rating');
 var Router = require('react-router');
 var Reflux = require('reflux');
@@ -24,14 +24,17 @@ var QuestionItem = React.createClass({
 
         question.rate = rate;
 
-        switch (this.props.rowType) {
-            case 1:
-                AppActions.answerQuestion(question, this.state.appData.user);
-            break;
-            case 3:
-                AppActions.answerDismissedQuestion(question, this.state.appData.user);
-            break;
-        }
+        // input delay to show user their action
+        setTimeout(function() {
+            switch (this.props.rowType) {
+                case 1:
+                    AppActions.answerQuestion(question, this.state.appData.user);
+                break;
+                case 3:
+                    AppActions.answerDismissedQuestion(question, this.state.appData.user);
+                break;
+            }
+        }.bind(this), 1000);
     },
 
     onDismiss: function(question) {
@@ -112,7 +115,8 @@ var QuestionItem = React.createClass({
                     isLeftActive={isRightActive}
                     onRate={this.onRate}
                     onDismiss={this.onDismiss}
-                    questionObj={question}>
+                    questionObj={question}
+                    collapseDelay={900}>
                     <table>
                         <tr>
                             <td style={{

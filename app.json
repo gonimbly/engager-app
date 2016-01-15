@@ -12,6 +12,6 @@
       }
   },
   "scripts": {
-    "postdeploy": "bin/init-db; bin/migrate latest"
+    "postdeploy": "bin/init-db"
   }
 }

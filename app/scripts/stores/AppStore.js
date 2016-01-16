@@ -282,7 +282,7 @@ var AppStore = Reflux.createStore({
         $.ajax({
             url: getUserURL+"/"+this.appData.user.id+"/answer",
             dataType: 'json',
-            type: 'PUT',
+            type: 'PATCH',
             headers: {
                 "Authorization": "Bearer "+this.appData.user.token
             },

@@ -54,7 +54,7 @@ exports.post = function(req, res) {
 	  	});
 };
 
-exports.put = function(req, res) {
+exports.patch = function(req, res) {
 	console.log('req.body',req.body);
 	console.log('req._user',req._user);
 	var updatedAnswer = req.body;

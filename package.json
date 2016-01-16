@@ -60,7 +60,8 @@
     "node": ">=0.10.0"
   },
   "scripts": {
-    "start": "./node_modules/gulp/bin/gulp.js serve",
+    "start": "node server/server.js",
+    "serve": "./node_modules/gulp/bin/gulp.js serve",
     "build": "./node_modules/gulp/bin/gulp.js build"
   }
 }

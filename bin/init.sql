@@ -86,8 +86,8 @@ INSERT INTO rewards (name, cost, description, created_at, updated_at) VALUES
     ('Lyft 50', 200, '$50 in Lyft credit',  now(), now()),
     ('Lyft 25', 100, '$25 in Lyft credit',  now(), now());
 
-INSERT INTO users (email, first, last, password, created_at, updated_at) VALUES
-    ('test@test.com', 'test', 'test2', 'nothing',  now(),  now());
+INSERT INTO users (email, first, last, password, picture_url, created_at, updated_at) VALUES
+    ('test@test.com', 'test', 'test2', 'nothing', 'https://randomuser.me/api/portraits/med/women/17.jpg', now(),  now());
 
 INSERT INTO wallets (user_id, amount, created_at, updated_at) VALUES
     (1, 50,  now(),  now());

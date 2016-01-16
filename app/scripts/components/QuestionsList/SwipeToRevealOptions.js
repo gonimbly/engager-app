@@ -102,7 +102,6 @@ var SwipeToRevealOptions = React.createClass({
                         start={0}
                         stop={5}
                         initialRate={this.props.questionObj.rate}
-                        readonly={this.props.questionObj.rate ? true : false}
                         onRate={this.onRate}/>
             </div>
           );

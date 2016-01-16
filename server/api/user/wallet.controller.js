@@ -5,11 +5,10 @@ var Wallet = require('../../../db/models/wallet');
 exports.get = function(req, res) {
 	Wallet.forge(req.params)
 		.fetch({
-			debug:true,
+			debug:false,
 			required:true
 		})
 		.then(function(model){
-			console.log('model',model);
 			res.json(model);
 		})
 		.catch(function(err){

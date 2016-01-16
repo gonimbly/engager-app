@@ -20,7 +20,10 @@ var QuestionItem = React.createClass({
     },
 
     onRate: function(rate, question) {
-        UserActions.increasePoints(question);
+        if(!question.rate) {
+            // increase points for first time rating
+            UserActions.increasePoints(question);
+        }
 
         question.rate = rate;
 
@@ -30,9 +33,14 @@ var QuestionItem = React.createClass({
                 case 1:
                     AppActions.answerQuestion(question, this.state.appData.user);
                 break;
+                case 2:
+                    AppActions.updateAnswer(question, this.state.appData.user);
+                break;
                 case 3:
                     AppActions.answerDismissedQuestion(question, this.state.appData.user);
                 break;
+                default :
+                    console.log('Unhandled row type:', this.props.rowType);
             }
         }.bind(this), 1000);
     },
@@ -111,7 +119,7 @@ var QuestionItem = React.createClass({
                     callActionWhenSwipingFarRight={swipe}
                     callActionWhenSwipingFarLeft={swipe}
                     contentBgColor={bg}
-                    isRightActive={swipe}
+                    isRightActive={true}
                     isLeftActive={isRightActive}
                     onRate={this.onRate}
                     onDismiss={this.onDismiss}

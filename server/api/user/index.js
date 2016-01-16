@@ -15,6 +15,7 @@ router.get('/:id/questions/new', questionController.getNew);
 router.get('/:id/questions/answered', questionController.getAnswered);
 router.get('/:id/questions/dismissed', questionController.getDismissed);
 router.post('/:id/answer', answerController.post);
+router.put('/:id/answer', answerController.put);
 router.get('/:user_id/wallet', walletController.get);
 
 module.exports = router;

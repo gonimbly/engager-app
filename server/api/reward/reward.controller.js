@@ -7,7 +7,7 @@ var Wallet = require('../../../db/models/wallet');
 exports.get = function(req, res) {
 	Rewards.forge()
 		.fetch({
-			debug:true,
+			debug:false,
 			required:true
 		})
 		.then(function(models){
@@ -39,14 +39,12 @@ exports.redeem = function(req, res) {
 		})
 		.fetch({require: true})
 		.then(function (wallet) {
-			console.log('wallet',wallet);
 			var amount = wallet.get("amount");
 			amount = parseInt(amount) - parseInt(redeem.amount);
 			wallet.set("amount", amount);
 			return wallet.save();
 		})
 		.then(function(){
-			console.log('code', code);
 			return res.json(code);
 		})
 		.catch(function(err){

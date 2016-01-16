@@ -6,8 +6,6 @@ var QuestionUser = require('../../../db/models/question_user');
 var Wallet = require('../../../db/models/wallet');
 
 exports.post = function(req, res) {
-	console.log('req.body',req.body);
-	console.log('req._user',req._user);
 	var answer = req.body;
 	var points = answer.points;
 	var user_id = req._user.id;
@@ -15,7 +13,7 @@ exports.post = function(req, res) {
 	delete answer.points;
 
    	Answer.forge()
-	   	.save(answer, {debug:true, required:true})
+	   	.save(answer, {debug:false, required:true})
 	  	.then(function(model){
 	  		//mark question as answered
 			QuestionUser.forge({
@@ -28,12 +26,10 @@ exports.post = function(req, res) {
 					res.status(400).send({error:"no question user found!"});
 				}
 				else {
-					console.log('qu',qu);
 					return Bromise.resolve().then(function(){
 						return qu.save({state:"answered"}, {patch:true});
 					})
 					.then(function(qu){
-						console.log('qu',qu);
 						return Wallet.forge({
 							user_id: answer.user_id
 						})
@@ -55,9 +51,32 @@ exports.post = function(req, res) {
 		  		console.error('err',err);
 		  		res.status(400).send({error:err.message});
 		  	});
-	  	})
-	  	.catch(function(err){
-	  		console.error('err',err);
-	  		res.status(400).send({error:err.message});
 	  	});
+};
+
+exports.put = function(req, res) {
+	console.log('req.body',req.body);
+	console.log('req._user',req._user);
+	var updatedAnswer = req.body;
+	var user_id = req._user.id;
+
+	Answer.forge({
+		user_id: user_id,
+		question_id: updatedAnswer.question_id
+	})
+	.fetch({
+		debug: false
+	})
+	.then(function(answer) {
+		answer.set('value', updatedAnswer.value);
+		return answer.save();
+	})
+	.then(function(answer) {
+		res.json(answer);
+	})
+	.catch(function(err){
+		console.error('err',err);
+		res.status(400).send({error:err.message});
+	});
+
 };

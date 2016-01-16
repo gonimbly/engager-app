@@ -62,6 +62,7 @@ var AppStore = Reflux.createStore({
         this.listenTo(AppActions.answerDismissedQuestion, this.onAnswerDismissedQuestion);
         this.listenTo(AppActions.dismissQuestion, this.onDismissQuestion);
         this.listenTo(AppActions.updateRewards, this.activeRewards);
+        this.listenTo(AppActions.updateAnswer, this.updateAnswer);
         this.listenTo(AppActions.openReward, this.openReward);
         this.listenTo(AppActions.claimReward, this.claimReward);
         this.listenTo(AppActions.closeReward, this.closeReward);
@@ -223,7 +224,7 @@ var AppStore = Reflux.createStore({
                 "Authorization": "Bearer "+this.appData.user.token
             },
             success: function(data) {
-                this.appData.questions.answered = data.questions;
+                this.appData.questions.answered = data;
 
                 // get new questions
                 this.getDismissedQuestions();
@@ -266,6 +267,27 @@ var AppStore = Reflux.createStore({
                 points: question.points,
                 question_text: question.text,
                 user_id: this.appData.user.id,
+                question_id: question.id
+            },
+            success: function(data) {
+                this.appData.user.rewards.push(data);
+                this.trigger(this.appData);
+            }.bind(this),
+            error: function(xhr, status, err) {
+                console.error(status, err.toString());
+            }.bind(this)
+        });
+    },
+    updateAnswer: function(question) {
+        $.ajax({
+            url: getUserURL+"/"+this.appData.user.id+"/answer",
+            dataType: 'json',
+            type: 'PUT',
+            headers: {
+                "Authorization": "Bearer "+this.appData.user.token
+            },
+            data: {
+                value: question.rate,
                 question_id: question.id
             },
             success: function(data) {

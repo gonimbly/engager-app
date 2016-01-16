@@ -7,6 +7,7 @@ var AppActions = Reflux.createActions([
     'answerDismissedQuestion',
     'dismissQuestion',
     'updateRewards',
+    'updateAnswer',
     'openReward',
     'closeReward',
     'claimReward'

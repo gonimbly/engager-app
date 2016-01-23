@@ -9,7 +9,7 @@ var _create = require('lodash.create');
 var webpackConfig = require('./webpack.config.js');
 var files = {
   main: './app/main.js',
-  scripts: 'app/scripts/**/*.*',
+  app: 'app/**/*.*',
   index: 'app/index.html'
 }
 
@@ -41,7 +41,7 @@ gulp.task('build-scripts', function() {
 });
 
 gulp.task('watch-scripts', ['build-scripts'], function() {
-  return gulp.watch(files.scripts, ['build-scripts']);
+  return gulp.watch(files.app, ['build-scripts']);
 });
 
 // ***

@@ -1,5 +1,5 @@
 var React = require('react');
-var AppContainer = require('./AppContainer');
+var AppContainer = require('./AppContainer/AppContainer');
 var Router = require('react-router');
 var Reflux = require('reflux');
 var AppStore = require('../stores/AppStore');

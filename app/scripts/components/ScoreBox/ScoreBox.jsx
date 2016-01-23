@@ -7,7 +7,7 @@ var UserActions = require('../../actions/UserActions');
 var Animate = require('rc-animate');
 
 var scoreBoxStyle = {
-    backgroundColor: '#14200f',
+    backgroundColor: 'rgba(0,0,0,0.3)',
     width: '100px',
     height: '100px',
     marginTop: '80px',

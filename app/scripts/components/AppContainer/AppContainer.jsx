@@ -13,14 +13,9 @@ var AppStore = require('../../stores/AppStore');
 var RewardPopup = require('../RewardPopup/RewardPopup');
 var RewardClaimTooltip = require('../RewardClaimTooltip/RewardClaimTooltip');
 var Spinner = require('react-spinkit');
-var logoImage = require('../../../images/gonimbly_logo_white.png');
+var logoImage = require('../../../images/gonimbly_logo.png');
 
 require('./AppContainer.scss');
-
-var logoStyle = {
-    marginTop: '0',
-    position: 'absolute'
-};
 
 var AppContainer = React.createClass({
     mixins: [Router.Navigation,
@@ -35,7 +30,7 @@ var AppContainer = React.createClass({
                   </div>
                   <div className='header'>
                       <div>
-                        <div style={logoStyle}>
+                        <div className='logo'>
                           <a href='http://www.gonimbly.com/contact' target='blank'>
                             <img src={logoImage} width='100px' height='50px'/>
                           </a>

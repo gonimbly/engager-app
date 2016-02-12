@@ -4,5 +4,12 @@
     background-color: #81d05f;
     height: 200px;
     background-position: center center;
+    position: relative;
+  }
+
+  .logo {
+    margin-top: 0;
+    margin-left: 10px;
+    position: absolute;
   }
 }

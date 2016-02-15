@@ -6,13 +6,7 @@ var AppStore = require('../../stores/AppStore');
 var UserActions = require('../../actions/UserActions');
 var Animate = require('rc-animate');
 
-var scoreBoxStyle = {
-    backgroundColor: 'rgba(0,0,0,0.3)',
-    width: '100px',
-    height: '100px',
-    marginTop: '80px',
-    position: 'absolute',
-};
+require('./ScoreBox.scss');
 
 var ScoreBox = React.createClass({
     mixins: [Router.Navigation,
@@ -22,7 +16,7 @@ var ScoreBox = React.createClass({
     render: function() {
         return (
             <div>
-              <div style={scoreBoxStyle}>
+              <div className='scorebox'>
                   <p className={this.state.appData.animations.scoreboxAddedAnim}>{this.state.appData.user.added}</p>
                   <p className={this.state.appData.animations.scoreboxScoreAnim}>{this.state.appData.user.score}</p>
                   <p className={this.state.appData.animations.scoreboxPtsAnim}>points</p>

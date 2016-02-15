@@ -8,7 +8,6 @@ body {
   display: block;
   width: 100px;
   height: 100px;
-  margin: 1em auto;
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center center;
@@ -272,61 +271,6 @@ body {
 .ReactModal__Content {
     border: none !important;
     overflow: hidden !important;
-}
-
-.scorebox-score {
-    color: #ffffff;
-    font-size: 32px;
-    font-weight: bold;
-    height: 10px;
-    margin-top: 30%;
-    text-align: center;
-}
-
-.scorebox-score-added {
-    color: #ffffff;
-    font-size: 32px;
-    font-weight: bold;
-    height: 10px;
-    margin-top: 30%;
-    text-align: center;
-    animation: scoreboxanim ease-in 4s;
-}
-
-.scorebox-text {
-    color: #ffffff;
-    height: 6px;
-    text-align: center;
-}
-
-.scorebox-text-added {
-    color: #FFFFFF;
-    height: 6px;
-    text-align: center;
-    animation: scoreboxanim ease-in 4s;
-}
-
-.scorebox-points {
-    position: absolute;
-    right: 0;
-    color: #FFFFFF;
-    font-weight: bold;
-    font-size: 17px;
-    margin-right: 10px;
-    margin-top: 6px;
-    opacity: 0;
-}
-
-.scorebox-points-added {
-    position: absolute;
-    right: 0;
-    color: #FFFFFF;
-    font-weight: bold;
-    font-size: 17px;
-    margin-right: 10px;
-    margin-top: 6px;
-    opacity: 0.75;
-    animation: scoreboxpointsanim ease-in 4s;
 }
 
 .reward-toolbar {

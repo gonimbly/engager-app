@@ -2,7 +2,7 @@ var React = require('react');
 var UserActions = require("../../actions/UserActions");
 
 var imageStyle = {
-    marginRight: '10px',
+    marginRight: '5px',
     marginTop: '10px',
     position: 'absolute',
     right: '0',

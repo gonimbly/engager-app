@@ -6,7 +6,7 @@ var addPhotoStyle = {
     width: '110px',
     center: {
         position: 'absolute',
-        top: '30px',
+        top: '45px',
         left: '50%',
         transform: 'translateX(-50%)'
     }

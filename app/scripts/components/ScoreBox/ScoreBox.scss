@@ -1,0 +1,62 @@
+.scorebox {
+  background-color: rgba(0,0,0,0.3);
+  width: 100px;
+  height: 100px;
+  margin-top: 80px;
+  position: absolute;
+}
+
+.scorebox-score {
+  color: #ffffff;
+  font-size: 32px;
+  font-weight: bold;
+  height: 10px;
+  text-align: center;
+  margin-top: 30%;
+}
+
+.scorebox-score-added {
+  color: #ffffff;
+  font-size: 32px;
+  font-weight: bold;
+  height: 10px;
+  margin-top: 30%;
+  text-align: center;
+  animation: scoreboxanim ease-in 4s;
+}
+
+.scorebox-text {
+  color: #ffffff;
+  height: 6px;
+  text-align: center;
+}
+
+.scorebox-text-added {
+  color: #FFFFFF;
+  height: 6px;
+  text-align: center;
+  animation: scoreboxanim ease-in 4s;
+}
+
+.scorebox-points {
+  position: absolute;
+  right: 0;
+  color: #FFFFFF;
+  font-weight: bold;
+  font-size: 17px;
+  margin-right: 10px;
+  margin-top: 6px;
+  opacity: 0;
+}
+
+.scorebox-points-added {
+  position: absolute;
+  right: 0;
+  color: #FFFFFF;
+  font-weight: bold;
+  font-size: 17px;
+  margin-right: 10px;
+  margin-top: 6px;
+  opacity: 0.75;
+  animation: scoreboxpointsanim ease-in 4s;
+}

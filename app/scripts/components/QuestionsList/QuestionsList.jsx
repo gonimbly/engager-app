@@ -16,12 +16,13 @@ var ListGroupItem = ReactBootstrap.ListGroupItem;
 var listContainerStyle = {
     width: '100%',
     position: 'relative',
-    top: '290px',
+    top: '280px',
     whiteSpace: 'nowrap',
     overflow: 'hidden',
     overflowY: 'scroll',
     bottom: '0',
     borderRadius: '0px',
+    borderTop: '5px solid #D3D3D5'
 };
 
 var itemStyle = {
@@ -43,7 +44,7 @@ var QuestionsList = React.createClass({
 
      render: function() {
         var windowHeight = this.state.window.height;
-        var listHeight = windowHeight - 290;
+        var listHeight = windowHeight - 280;
 
         listStyle.height = listHeight+"px";
         listStyle.borderRadius = '0px';

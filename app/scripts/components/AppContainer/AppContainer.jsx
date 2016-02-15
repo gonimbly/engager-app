@@ -13,7 +13,7 @@ var AppStore = require('../../stores/AppStore');
 var RewardPopup = require('../RewardPopup/RewardPopup');
 var RewardClaimTooltip = require('../RewardClaimTooltip/RewardClaimTooltip');
 var Spinner = require('react-spinkit');
-var logoImage = require('../../../images/gonimbly_logo.png');
+var logoImage = require('../../../images/gonimbly_logo_white.png');
 
 require('./AppContainer.scss');
 

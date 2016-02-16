@@ -1,5 +1,6 @@
 var React = require('react');
 var UserActions = require("../../actions/UserActions");
+var logoutImage = require('../../../images/logout.png');
 
 var imageStyle = {
     marginRight: '5px',
@@ -25,7 +26,7 @@ var ProfileImage = React.createClass({
         return (
             <div style={imageStyle}>
                 <button style={iconStyle} onClick={this.onSignout.bind(this)}>
-                    <img src='../../images/logout.png' style={imageStyle.image} />
+                    <img src={logoutImage} style={imageStyle.image} />
                 </button>
             </div>
         );

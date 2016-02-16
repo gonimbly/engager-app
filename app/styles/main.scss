@@ -1,7 +1,30 @@
+@font-face {
+  font-family: 'WhitneyHTF';
+  src: url('fonts/WhitneyHTF-Bold.eot?#iefix') format('embedded-opentype'),  url('fonts/WhitneyHTF-Bold.woff') format('woff'), url('fonts/WhitneyHTF-Bold.ttf')  format('truetype'), url('fonts/WhitneyHTF-Bold.svg#WhitneyHTF-Bold') format('svg');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'WhitneyHTF';
+  src: url('fonts/WhitneyHTF-SemiBold.eot?#iefix') format('embedded-opentype'),  url('fonts/WhitneyHTF-SemiBold.woff') format('woff'), url('fonts/WhitneyHTF-SemiBold.ttf')  format('truetype'), url('fonts/WhitneyHTF-SemiBold.svg#WhitneyHTF-Bold') format('svg');
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'WhitneyHTF';
+  src: url('fonts/WhitneyHTF-Book.eot?#iefix') format('embedded-opentype'),  url('fonts/WhitneyHTF-Book.woff') format('woff'), url('fonts/WhitneyHTF-Book.ttf')  format('truetype'), url('fonts/WhitneyHTF-Book.svg#WhitneyHTF-Bold') format('svg');
+  font-weight: 200;
+  font-style: normal;
+}
+
+
 body {
-    background: #d3d3d5;
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    color: #333;
+  background: white;
+  font-family: 'WhitneyHTF', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-weight: 200;
+  color: #333;
 }
 
 .circle {

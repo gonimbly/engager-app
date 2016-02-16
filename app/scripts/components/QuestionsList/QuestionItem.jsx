@@ -5,9 +5,12 @@ var Router = require('react-router');
 var Reflux = require('reflux');
 var _ = require('lodash');
 
-var UserActions = require("../../actions/UserActions");
-var AppActions = require("../../actions/AppActions");
+var UserActions = require('../../actions/UserActions');
+var AppActions = require('../../actions/AppActions');
 var AppStore = require('../../stores/AppStore');
+var checkImage = require('../../../images/check.png');
+
+require('./QuestionItem.scss');
 
 var QuestionItem = React.createClass({
     mixins: [Router.Navigation,
@@ -53,47 +56,25 @@ var QuestionItem = React.createClass({
         var question = this.props.question;
         var rowType = this.props.rowType;
 
-        var bg = "#f8f8fa";
-        var text = "#000000";
+        var bg = '#F8F8FA';
         var swipe = true;
         var isRightActive = swipe;
 
-        var pointsStyle = {
-            height: '80px',
-            width: '100%',
-            marginLeft: '20px',
-            marginRight: '20px',
-            right: '0px',
-            fontSize: '17px',
-            verticalAlign: 'middle',
-            color: '#71c04f'
-        };
-
-        var okStyle = {
-            height: '80px',
-            width: '100%',
-            marginLeft: '20px',
-            marginRight: '20px',
-            right: '0px',
-            fontSize: '17px',
-            verticalAlign: 'middle',
-            color: '#71c04f',
-        };
-
+        var questionItemClass;
         switch (rowType) {
             case 1: // unanswered
-                okStyle.display = "none";
+                questionItemClass = 'question-unanswered';
+
             break;
             case 2: // answered
-                bg = "#71c04f";
-                text = "#FFFFFF";
+                questionItemClass = 'question-answered';
+                bg = '#71c04f';
                 swipe = false;
-                pointsStyle.display = "none";
                 isRightActive = false;
             break;
             case 3: // dismissed
-                okStyle.display = "none";
-                bg = "#e9e7e7";
+                questionItemClass = 'question-dismissed';
+                bg = '#e9e7e7';
                 isRightActive = false;
             break;
         }
@@ -109,8 +90,10 @@ var QuestionItem = React.createClass({
             }],
         };
 
+        questionItemClass += ' question-item';
+
         return (
-            <div>
+            <div className={questionItemClass}>
                 <SwipeToRevealOptions
                     actionThreshold={300}
                     visibilityThreshold={50}
@@ -133,7 +116,7 @@ var QuestionItem = React.createClass({
                                     left: '0',
                                     verticalAlign: 'middle',
                                 }}>
-                                <span style={{color: text, fontSize: '16px'}} className="wordwrap">
+                                <span className='question-item-text wordwrap'>
                                     {question.text}?
                                 </span>
                             </td>
@@ -143,12 +126,12 @@ var QuestionItem = React.createClass({
                                     marginTop: '10px',
                                     verticalAlign: 'middle',
                                 }}>
-                                <span style={pointsStyle} className="text-center">
-                                    <label style={{paddingTop: '20px', marginBottom: '0px'}}>{question.points}</label>
-                                    <div style={{margin: '0px', lineHeight: '3px', fontSize: '10px'}}>pts</div>
+                                <span className='question-item-points text-center'>
+                                    <label>{question.points}</label>
+                                    <div className='points-copy'>pts</div>
                                 </span>
-                                <span style={okStyle} className="text-center">
-                                    <img src="../../../images/check.png" width="20px" height="16px"/>
+                                <span className='question-item-check text-center'>
+                                    <img src={checkImage} width='20px' height='16px'/>
                                 </span>
                             </td>
                         </tr>

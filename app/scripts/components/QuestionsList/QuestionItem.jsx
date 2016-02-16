@@ -96,7 +96,7 @@ var QuestionItem = React.createClass({
             <div className={questionItemClass}>
                 <SwipeToRevealOptions
                     actionThreshold={300}
-                    visibilityThreshold={50}
+                    visibilityThreshold={25}
                     leftOptions={item.leftOptions}
                     rightOptions={item.rightOptions}
                     callActionWhenSwipingFarRight={swipe}

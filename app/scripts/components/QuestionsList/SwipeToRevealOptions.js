@@ -3,127 +3,128 @@ var Rating = require('react-rating');
 var Swipeable = require('./Swipeable');
 
 var SwipeToRevealOptions = React.createClass({
-    displayName: "SwipeToRevealOptions",
+  displayName: "SwipeToRevealOptions",
 
-    propTypes: {
-      rightOptions: React.PropTypes.array,
-      leftOptions: React.PropTypes.array,
-      className: React.PropTypes.string,
-      actionThreshold: React.PropTypes.number,
-      visibilityThreshold: React.PropTypes.number,
-      transitionBackTimeout: React.PropTypes.number,
-      callActionWhenSwipingFarLeft: React.PropTypes.bool,
-      callActionWhenSwipingFarRight: React.PropTypes.bool,
-      closeOthers: React.PropTypes.func,
-      onRightClick: React.PropTypes.func,
-      onLeftClick: React.PropTypes.func,
-      onReveal: React.PropTypes.func,
-      maxItemWidth: React.PropTypes.number,
-      parentWidth: React.PropTypes.number,
-      contentBgColor: React.PropTypes.string,
-      isLeftActive: React.PropTypes.bool,
-      isRightActive: React.PropTypes.bool,
-      onRate: React.PropTypes.func,
-      onDismiss: React.PropTypes.func,
-      questionObj: React.PropTypes.object,
-      collapseDelay: React.PropTypes.number
-    },
+  propTypes: {
+    rightOptions: React.PropTypes.array,
+    leftOptions: React.PropTypes.array,
+    className: React.PropTypes.string,
+    actionThreshold: React.PropTypes.number,
+    visibilityThreshold: React.PropTypes.number,
+    transitionBackTimeout: React.PropTypes.number,
+    callActionWhenSwipingFarLeft: React.PropTypes.bool,
+    callActionWhenSwipingFarRight: React.PropTypes.bool,
+    closeOthers: React.PropTypes.func,
+    onRightClick: React.PropTypes.func,
+    onLeftClick: React.PropTypes.func,
+    onReveal: React.PropTypes.func,
+    maxItemWidth: React.PropTypes.number,
+    parentWidth: React.PropTypes.number,
+    contentBgColor: React.PropTypes.string,
+    isLeftActive: React.PropTypes.bool,
+    isRightActive: React.PropTypes.bool,
+    onRate: React.PropTypes.func,
+    onDismiss: React.PropTypes.func,
+    questionObj: React.PropTypes.object,
+    collapseDelay: React.PropTypes.number
+  },
 
-    getInitialState: function getInitialState() {
-      return {
-        delta: 0,
-        showRightButtons: false,
-        showLeftButtons: false,
-        swipingLeft: false,
-        swipingRight: false,
-        transitionBack: false,
-        action: null,
-        callActionWhenSwipingFarRight: false,
-        callActionWhenSwipingFarLeft: false
-      };
-    },
+  getInitialState: function getInitialState() {
+    return {
+      delta: 0,
+      showRightButtons: false,
+      showLeftButtons: false,
+      swipingLeft: false,
+      swipingRight: false,
+      transitionBack: false,
+      action: null,
+      callActionWhenSwipingFarRight: false,
+      callActionWhenSwipingFarLeft: false,
+      starsVisible: null
+    };
+  },
 
-    getDefaultProps: function getDefaultProps() {
-      return {
-        rightOptions: [],
-        leftOptions: [],
-        className: "",
-        actionThreshold: 300,
-        visibilityThreshold: 50,
-        transitionBackTimeout: 400,
-        onRightClick: function onRightClick() {},
-        onLeftClick: function onLeftClick() {},
-        onReveal: function onReveal() {},
-        closeOthers: function closeOthers() {},
-        maxItemWidth: 120,
-        parentWidth: window.outerWidth || screen.width
-      };
-    },
+  getDefaultProps: function getDefaultProps() {
+    return {
+      rightOptions: [],
+      leftOptions: [],
+      className: "",
+      actionThreshold: 300,
+      visibilityThreshold: 50,
+      transitionBackTimeout: 400,
+      onRightClick: function onRightClick() {},
+      onLeftClick: function onLeftClick() {},
+      onReveal: function onReveal() {},
+      closeOthers: function closeOthers() {},
+      maxItemWidth: 150,
+      parentWidth: window.outerWidth || screen.width
+    };
+  },
 
-    onRate: function(rate) {
-        if (rate == undefined) {
-            return;
-        }
+  onRate: function(rate) {
+      if (rate == undefined) {
+          return;
+      }
 
-        this.props.onRate(rate, this.props.questionObj);
+      this.props.onRate(rate, this.props.questionObj);
 
-        setTimeout(this.transitionBack, this.props.collapseDelay);
-    },
+      setTimeout(this.transitionBack, this.props.collapseDelay);
+  },
 
-    onDismiss: function(question) {
-        this.props.onDismiss(question);
-        this.transitionBack();
-    },
+  onDismiss: function(question) {
+      this.props.onDismiss(question);
+      this.transitionBack();
+  },
 
-    render: function render() {
-        var q = this.props.questionObj;
+  render: function render() {
+    var q = this.props.questionObj;
 
-        var classes = this.props.className + " stro-container";
+    var classes = this.props.className + " stro-swipe-container";
 
-        if (this.state.transitionBack) {
-            classes += " transition-back";
-        }
+    if (this.state.transitionBack) {
+        classes += " transition-back";
+    }
 
-        if (this.state.showRightButtons) {
-            classes += " show-right-buttons";
-        }
+    if (this.state.showRightButtons) {
+        classes += " show-right-buttons";
+    }
 
-        if (this.state.showLeftButtons) {
-            classes += " show-left-buttons";
-        }
+    if (this.state.showLeftButtons) {
+        classes += " show-left-buttons";
+    }
 
-
-        var leftOptions = this.props.leftOptions.map(function (option, index) {
-          return (
-            <div className={'stro-button stro-left-button ' + option['class']}
-                 style={this.getStyle('left', index)}>
-                <Rating full={'fa fa-star'}
-                        empty={'fa fa-star-o'}
-                        start={0}
-                        stop={5}
-                        initialRate={this.props.questionObj.rate}
-                        onRate={this.onRate}/>
-            </div>
-          );
-        }.bind(this));
-
-      var rightOptions = this.props.rightOptions.map(function (option, index) {
-          return (
-              <div className={'stro-button stro-right-button text-center' + option.class}
-                   onClick={this.onDismiss.bind(this, q)}
-                   style={this.getStyle("right", index)}>
-                  <span style={this.getSpanStyle("right", index)}
-                        dangerouslySetInnerHTML={{ __html: "Dismiss" }}></span>
-              </div>
-          );
-      }.bind(this));
-
+    var leftOptions = this.props.leftOptions.map(function (option, index) {
       return (
+        <div className={'stro-button stro-left-button ' + option['class']}>
+            <Rating full={'fa fa-star'}
+                    empty={'fa fa-star-o'}
+                    start={0}
+                    stop={5}
+                    initialRate={this.state.starsVisible}
+                    onRate={this.onRate}/>
+        </div>
+      );
+    }.bind(this));
+
+    var rightOptions = this.props.rightOptions.map(function (option, index) {
+        return (
+            <div className={'stro-button stro-right-button text-center' + option.class}
+                 onClick={this.onDismiss.bind(this, q)}>
+                <span dangerouslySetInnerHTML={{ __html: "Dismiss" }}></span>
+            </div>
+        );
+    }.bind(this));
+
+    return (
+      <div className='stro-container'>
+        <div className='stro-left'>
+            {leftOptions}
+        </div>
+        <div className="stro-right">
+            {rightOptions}
+        </div>
         <div className={classes}
              style={this.getContainerStyle()}>
-            <div className='stro-left'>
-                {leftOptions}
-            </div>
             <Swipeable className='stro-content'
                        onSwipingLeft={this.swipingLeft}
                        onClick={this.handleContentClick}
@@ -133,12 +134,10 @@ var SwipeToRevealOptions = React.createClass({
                        style={{backgroundColor: this.props.contentBgColor}}>
                 {this.props.children}
             </Swipeable>
-            <div className="stro-right">
-                {rightOptions}
-            </div>
         </div>
-      );
-    },
+      </div>
+    );
+  },
 
   swipingLeft: function swipingLeft(event, delta) {
       if (this.swipingHandleStylesAndDelta(delta, "left")) {
@@ -170,6 +169,15 @@ var SwipeToRevealOptions = React.createClass({
           return;
       }
 
+
+      var modDelta = delta % 30;
+      var starsVisible = Math.floor(delta / 30);
+      if(modDelta > this.props.visibilityThreshold) {
+        starsVisible++;
+      }
+
+      starsVisible = Math.min(starsVisible, 5);
+
       var action = null;
       if (delta > this.props.visibilityThreshold) {
           action = "leftVisible";
@@ -186,7 +194,8 @@ var SwipeToRevealOptions = React.createClass({
       this.setState({
           delta: delta,
           action: action,
-          swipingRight: true
+          swipingRight: true,
+          starsVisible: starsVisible
       });
   },
 
@@ -234,8 +243,15 @@ var SwipeToRevealOptions = React.createClass({
         this.setState({ showRightButtons: true });
         break;
       case "leftVisible":
-        this.props.onReveal("left");
-        this.setState({ showLeftButtons: true });
+        if(this.state.starsVisible > 0) {
+          // set the rating
+          this.props.onReveal("left");
+          this.setState({ showLeftButtons: true });
+          this.onRate(this.state.starsVisible);
+        } else {
+          // if user hasn't filled a whole star then transition back
+          this.transitionBack();
+        }
         break;
       case "leftAction":
         this.leftClick(this.props.leftOptions[0]);
@@ -284,74 +300,28 @@ var SwipeToRevealOptions = React.createClass({
 
   getContainerStyle: function getContainerStyle() {
     var itemWidth;
+    var delta = this.state.delta;
     if (this.state.delta === 0 && this.state.showRightButtons) {
       itemWidth = this.getItemWidth("right");
-      return translateStyle(-this.props.rightOptions.length * itemWidth, "px");
+      delta = -this.props.rightOptions.length * itemWidth;
     } else if (this.state.delta === 0 && this.state.showLeftButtons) {
       itemWidth = this.getItemWidth("left");
-      return translateStyle(this.props.leftOptions.length * itemWidth, "px");
+      delta = this.props.leftOptions.length * itemWidth;
+    } else if(delta > this.props.visibilityThreshold && !this.state.showLeftButtons) {
+      // swiping right
+      // limit distance container can travel
+      delta = Math.min(delta, this.props.maxItemWidth);
+    } else if(delta < -this.props.visibilityThreshold && !this.state.showRightButtons) {
+      //swiping left
+      // limit distance container can travel
+      delta = Math.max(delta, -this.props.maxItemWidth);
     }
-    return translateStyle(this.state.delta, "px");
+    return translateStyle(delta, "px");
   },
 
   getItemWidth: function getItemWidth(side) {
     var nbOptions = side === "left" ? this.props.leftOptions.length : this.props.rightOptions.length;
     return Math.min(this.props.parentWidth / (nbOptions + 1), this.props.maxItemWidth);
-  },
-
-  getStyle: function getStyle(side, index) {
-    var factor = side === "left" ? -1 : 1;
-    var nbOptions = side === "left" ? this.props.leftOptions.length : this.props.rightOptions.length;
-    var width = this.getItemWidth(side);
-    var transition;
-    var style;
-
-    if (this.state.transitionBack || (side === "left" && this.state.showLeftButtons || this.state.showRightButtons)) {
-      style = translateStyle(factor * index * width, "px");
-      return style;
-    }
-
-    var modifier = index * 1 / nbOptions;
-    var offset = -factor * modifier * this.state.delta;
-    if (Math.abs(this.state.delta) > this.props.actionThreshold && (side === "left" && this.props.callActionWhenSwipingFarRight || this.props.callActionWhenSwipingFarLeft) && index === nbOptions - 1) {
-      transition = "transform 0.15s ease-out";
-      offset = 0;
-    } else if (nbOptions * width < Math.abs(this.state.delta)) {
-      offset += factor * (Math.abs(this.state.delta) - nbOptions * width) * 0.85;
-    }
-    style = translateStyle(offset, "px");
-    if (transition) {
-      style.transition = transition;
-    }
-    return style;
-  },
-
-  getSpanStyle: function getSpanStyle(side, index) {
-    var width = this.getItemWidth(side);
-    var factor = side === "left" ? 1 : -1;
-    var nbOptions = side === "left" ? this.props.leftOptions.length : this.props.rightOptions.length;
-    var padding;
-    var style;
-
-    if (this.state.transitionBack || (side === "left" && this.state.showLeftButtons || this.state.showRightButtons)) {
-      style = translateStyle(0, "px", "-50%");
-      style.width = width;
-      return style;
-    }
-
-    if (Math.abs(this.state.delta) > this.props.actionThreshold && (side === "left" && this.props.callActionWhenSwipingFarRight || this.props.callActionWhenSwipingFarLeft) && index === nbOptions - 1) {
-      padding = 0;
-    } else if (nbOptions * width < Math.abs(this.state.delta)) {
-      padding += factor * (Math.abs(this.state.delta) - nbOptions * width) * 0.425;
-    }
-    style = translateStyle(padding, "px", "-50%");
-    style.width = width;
-    return style;
-  },
-
-  handleContentClick: function handleContentClick() {
-    this.props.closeOthers();
-    this.transitionBack();
   }
 });
 

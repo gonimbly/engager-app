@@ -1,4 +1,4 @@
-# Dreamforce 2015, Engager UI
+# Dreamforce 2015, Engager App
 
 [![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
 

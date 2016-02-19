@@ -9,7 +9,6 @@ var config = require('./config/environment');
 // Setup server
 var app = express();
 app.set('view engine', 'ejs');
-console.log(path.join(__dirname, '../app'));
 app.set('views', path.join(__dirname, '../app'));
 app.use(express.static('dist'));
 require('./config/express')(app);

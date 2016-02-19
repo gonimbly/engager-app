@@ -29,10 +29,7 @@ exports.redeem = function(req, res) {
 		return code.save({used:true}, {patch:true})
 	})
 	.then(function(code){
-		// mark as use
-		// code.set("used", true);
-		// code.save();
-		console.log('code',code);
+		
 		//decrement the wallet
 		return Wallet.forge({
 			user_id: redeem.user_id

@@ -67430,7 +67430,7 @@
 	            React.createElement("div", {className: questionItemClass}, 
 	                React.createElement(SwipeToRevealOptions, {
 	                    actionThreshold: 300, 
-	                    visibilityThreshold: 50, 
+	                    visibilityThreshold: 25, 
 	                    leftOptions: item.leftOptions, 
 	                    rightOptions: item.rightOptions, 
 	                    callActionWhenSwipingFarRight: swipe, 
@@ -67488,127 +67488,128 @@
 	var Swipeable = __webpack_require__(630);
 
 	var SwipeToRevealOptions = React.createClass({
-	    displayName: "SwipeToRevealOptions",
+	  displayName: "SwipeToRevealOptions",
 
-	    propTypes: {
-	      rightOptions: React.PropTypes.array,
-	      leftOptions: React.PropTypes.array,
-	      className: React.PropTypes.string,
-	      actionThreshold: React.PropTypes.number,
-	      visibilityThreshold: React.PropTypes.number,
-	      transitionBackTimeout: React.PropTypes.number,
-	      callActionWhenSwipingFarLeft: React.PropTypes.bool,
-	      callActionWhenSwipingFarRight: React.PropTypes.bool,
-	      closeOthers: React.PropTypes.func,
-	      onRightClick: React.PropTypes.func,
-	      onLeftClick: React.PropTypes.func,
-	      onReveal: React.PropTypes.func,
-	      maxItemWidth: React.PropTypes.number,
-	      parentWidth: React.PropTypes.number,
-	      contentBgColor: React.PropTypes.string,
-	      isLeftActive: React.PropTypes.bool,
-	      isRightActive: React.PropTypes.bool,
-	      onRate: React.PropTypes.func,
-	      onDismiss: React.PropTypes.func,
-	      questionObj: React.PropTypes.object,
-	      collapseDelay: React.PropTypes.number
-	    },
+	  propTypes: {
+	    rightOptions: React.PropTypes.array,
+	    leftOptions: React.PropTypes.array,
+	    className: React.PropTypes.string,
+	    actionThreshold: React.PropTypes.number,
+	    visibilityThreshold: React.PropTypes.number,
+	    transitionBackTimeout: React.PropTypes.number,
+	    callActionWhenSwipingFarLeft: React.PropTypes.bool,
+	    callActionWhenSwipingFarRight: React.PropTypes.bool,
+	    closeOthers: React.PropTypes.func,
+	    onRightClick: React.PropTypes.func,
+	    onLeftClick: React.PropTypes.func,
+	    onReveal: React.PropTypes.func,
+	    maxItemWidth: React.PropTypes.number,
+	    parentWidth: React.PropTypes.number,
+	    contentBgColor: React.PropTypes.string,
+	    isLeftActive: React.PropTypes.bool,
+	    isRightActive: React.PropTypes.bool,
+	    onRate: React.PropTypes.func,
+	    onDismiss: React.PropTypes.func,
+	    questionObj: React.PropTypes.object,
+	    collapseDelay: React.PropTypes.number
+	  },
 
-	    getInitialState: function getInitialState() {
-	      return {
-	        delta: 0,
-	        showRightButtons: false,
-	        showLeftButtons: false,
-	        swipingLeft: false,
-	        swipingRight: false,
-	        transitionBack: false,
-	        action: null,
-	        callActionWhenSwipingFarRight: false,
-	        callActionWhenSwipingFarLeft: false
-	      };
-	    },
+	  getInitialState: function getInitialState() {
+	    return {
+	      delta: 0,
+	      showRightButtons: false,
+	      showLeftButtons: false,
+	      swipingLeft: false,
+	      swipingRight: false,
+	      transitionBack: false,
+	      action: null,
+	      callActionWhenSwipingFarRight: false,
+	      callActionWhenSwipingFarLeft: false,
+	      starsVisible: null
+	    };
+	  },
 
-	    getDefaultProps: function getDefaultProps() {
-	      return {
-	        rightOptions: [],
-	        leftOptions: [],
-	        className: "",
-	        actionThreshold: 300,
-	        visibilityThreshold: 50,
-	        transitionBackTimeout: 400,
-	        onRightClick: function onRightClick() {},
-	        onLeftClick: function onLeftClick() {},
-	        onReveal: function onReveal() {},
-	        closeOthers: function closeOthers() {},
-	        maxItemWidth: 120,
-	        parentWidth: window.outerWidth || screen.width
-	      };
-	    },
+	  getDefaultProps: function getDefaultProps() {
+	    return {
+	      rightOptions: [],
+	      leftOptions: [],
+	      className: "",
+	      actionThreshold: 300,
+	      visibilityThreshold: 50,
+	      transitionBackTimeout: 400,
+	      onRightClick: function onRightClick() {},
+	      onLeftClick: function onLeftClick() {},
+	      onReveal: function onReveal() {},
+	      closeOthers: function closeOthers() {},
+	      maxItemWidth: 150,
+	      parentWidth: window.outerWidth || screen.width
+	    };
+	  },
 
-	    onRate: function(rate) {
-	        if (rate == undefined) {
-	            return;
-	        }
+	  onRate: function(rate) {
+	      if (rate == undefined) {
+	          return;
+	      }
 
-	        this.props.onRate(rate, this.props.questionObj);
+	      this.props.onRate(rate, this.props.questionObj);
 
-	        setTimeout(this.transitionBack, this.props.collapseDelay);
-	    },
+	      setTimeout(this.transitionBack, this.props.collapseDelay);
+	  },
 
-	    onDismiss: function(question) {
-	        this.props.onDismiss(question);
-	        this.transitionBack();
-	    },
+	  onDismiss: function(question) {
+	      this.props.onDismiss(question);
+	      this.transitionBack();
+	  },
 
-	    render: function render() {
-	        var q = this.props.questionObj;
+	  render: function render() {
+	    var q = this.props.questionObj;
 
-	        var classes = this.props.className + " stro-container";
+	    var classes = this.props.className + " stro-swipe-container";
 
-	        if (this.state.transitionBack) {
-	            classes += " transition-back";
-	        }
+	    if (this.state.transitionBack) {
+	        classes += " transition-back";
+	    }
 
-	        if (this.state.showRightButtons) {
-	            classes += " show-right-buttons";
-	        }
+	    if (this.state.showRightButtons) {
+	        classes += " show-right-buttons";
+	    }
 
-	        if (this.state.showLeftButtons) {
-	            classes += " show-left-buttons";
-	        }
+	    if (this.state.showLeftButtons) {
+	        classes += " show-left-buttons";
+	    }
 
-
-	        var leftOptions = this.props.leftOptions.map(function (option, index) {
-	          return (
-	            React.createElement("div", {className: 'stro-button stro-left-button ' + option['class'], 
-	                 style: this.getStyle('left', index)}, 
-	                React.createElement(Rating, {full: 'fa fa-star', 
-	                        empty: 'fa fa-star-o', 
-	                        start: 0, 
-	                        stop: 5, 
-	                        initialRate: this.props.questionObj.rate, 
-	                        onRate: this.onRate})
-	            )
-	          );
-	        }.bind(this));
-
-	      var rightOptions = this.props.rightOptions.map(function (option, index) {
-	          return (
-	              React.createElement("div", {className: 'stro-button stro-right-button text-center' + option.class, 
-	                   onClick: this.onDismiss.bind(this, q), 
-	                   style: this.getStyle("right", index)}, 
-	                  React.createElement("span", {style: this.getSpanStyle("right", index), 
-	                        dangerouslySetInnerHTML: { __html: "Dismiss"}})
-	              )
-	          );
-	      }.bind(this));
-
+	    var leftOptions = this.props.leftOptions.map(function (option, index) {
 	      return (
+	        React.createElement("div", {className: 'stro-button stro-left-button ' + option['class']}, 
+	            React.createElement(Rating, {full: 'fa fa-star', 
+	                    empty: 'fa fa-star-o', 
+	                    start: 0, 
+	                    stop: 5, 
+	                    initialRate: this.state.starsVisible, 
+	                    onRate: this.onRate})
+	        )
+	      );
+	    }.bind(this));
+
+	    var rightOptions = this.props.rightOptions.map(function (option, index) {
+	        return (
+	            React.createElement("div", {className: 'stro-button stro-right-button text-center' + option.class, 
+	                 onClick: this.onDismiss.bind(this, q)}, 
+	                React.createElement("span", {dangerouslySetInnerHTML: { __html: "Dismiss"}})
+	            )
+	        );
+	    }.bind(this));
+
+	    return (
+	      React.createElement("div", {className: "stro-container"}, 
+	        React.createElement("div", {className: "stro-left"}, 
+	            leftOptions
+	        ), 
+	        React.createElement("div", {className: "stro-right"}, 
+	            rightOptions
+	        ), 
 	        React.createElement("div", {className: classes, 
 	             style: this.getContainerStyle()}, 
-	            React.createElement("div", {className: "stro-left"}, 
-	                leftOptions
-	            ), 
 	            React.createElement(Swipeable, {className: "stro-content", 
 	                       onSwipingLeft: this.swipingLeft, 
 	                       onClick: this.handleContentClick, 
@@ -67617,13 +67618,11 @@
 	                       onSwiped: this.swiped, 
 	                       style: {backgroundColor: this.props.contentBgColor}}, 
 	                this.props.children
-	            ), 
-	            React.createElement("div", {className: "stro-right"}, 
-	                rightOptions
 	            )
 	        )
-	      );
-	    },
+	      )
+	    );
+	  },
 
 	  swipingLeft: function swipingLeft(event, delta) {
 	      if (this.swipingHandleStylesAndDelta(delta, "left")) {
@@ -67655,6 +67654,15 @@
 	          return;
 	      }
 
+
+	      var modDelta = delta % 30;
+	      var starsVisible = Math.floor(delta / 30);
+	      if(modDelta > this.props.visibilityThreshold) {
+	        starsVisible++;
+	      }
+
+	      starsVisible = Math.min(starsVisible, 5);
+
 	      var action = null;
 	      if (delta > this.props.visibilityThreshold) {
 	          action = "leftVisible";
@@ -67671,7 +67679,8 @@
 	      this.setState({
 	          delta: delta,
 	          action: action,
-	          swipingRight: true
+	          swipingRight: true,
+	          starsVisible: starsVisible
 	      });
 	  },
 
@@ -67719,8 +67728,15 @@
 	        this.setState({ showRightButtons: true });
 	        break;
 	      case "leftVisible":
-	        this.props.onReveal("left");
-	        this.setState({ showLeftButtons: true });
+	        if(this.state.starsVisible > 0) {
+	          // set the rating
+	          this.props.onReveal("left");
+	          this.setState({ showLeftButtons: true });
+	          this.onRate(this.state.starsVisible);
+	        } else {
+	          // if user hasn't filled a whole star then transition back
+	          this.transitionBack();
+	        }
 	        break;
 	      case "leftAction":
 	        this.leftClick(this.props.leftOptions[0]);
@@ -67769,74 +67785,28 @@
 
 	  getContainerStyle: function getContainerStyle() {
 	    var itemWidth;
+	    var delta = this.state.delta;
 	    if (this.state.delta === 0 && this.state.showRightButtons) {
 	      itemWidth = this.getItemWidth("right");
-	      return translateStyle(-this.props.rightOptions.length * itemWidth, "px");
+	      delta = -this.props.rightOptions.length * itemWidth;
 	    } else if (this.state.delta === 0 && this.state.showLeftButtons) {
 	      itemWidth = this.getItemWidth("left");
-	      return translateStyle(this.props.leftOptions.length * itemWidth, "px");
+	      delta = this.props.leftOptions.length * itemWidth;
+	    } else if(delta > this.props.visibilityThreshold && !this.state.showLeftButtons) {
+	      // swiping right
+	      // limit distance container can travel
+	      delta = Math.min(delta, this.props.maxItemWidth);
+	    } else if(delta < -this.props.visibilityThreshold && !this.state.showRightButtons) {
+	      //swiping left
+	      // limit distance container can travel
+	      delta = Math.max(delta, -this.props.maxItemWidth);
 	    }
-	    return translateStyle(this.state.delta, "px");
+	    return translateStyle(delta, "px");
 	  },
 
 	  getItemWidth: function getItemWidth(side) {
 	    var nbOptions = side === "left" ? this.props.leftOptions.length : this.props.rightOptions.length;
 	    return Math.min(this.props.parentWidth / (nbOptions + 1), this.props.maxItemWidth);
-	  },
-
-	  getStyle: function getStyle(side, index) {
-	    var factor = side === "left" ? -1 : 1;
-	    var nbOptions = side === "left" ? this.props.leftOptions.length : this.props.rightOptions.length;
-	    var width = this.getItemWidth(side);
-	    var transition;
-	    var style;
-
-	    if (this.state.transitionBack || (side === "left" && this.state.showLeftButtons || this.state.showRightButtons)) {
-	      style = translateStyle(factor * index * width, "px");
-	      return style;
-	    }
-
-	    var modifier = index * 1 / nbOptions;
-	    var offset = -factor * modifier * this.state.delta;
-	    if (Math.abs(this.state.delta) > this.props.actionThreshold && (side === "left" && this.props.callActionWhenSwipingFarRight || this.props.callActionWhenSwipingFarLeft) && index === nbOptions - 1) {
-	      transition = "transform 0.15s ease-out";
-	      offset = 0;
-	    } else if (nbOptions * width < Math.abs(this.state.delta)) {
-	      offset += factor * (Math.abs(this.state.delta) - nbOptions * width) * 0.85;
-	    }
-	    style = translateStyle(offset, "px");
-	    if (transition) {
-	      style.transition = transition;
-	    }
-	    return style;
-	  },
-
-	  getSpanStyle: function getSpanStyle(side, index) {
-	    var width = this.getItemWidth(side);
-	    var factor = side === "left" ? 1 : -1;
-	    var nbOptions = side === "left" ? this.props.leftOptions.length : this.props.rightOptions.length;
-	    var padding;
-	    var style;
-
-	    if (this.state.transitionBack || (side === "left" && this.state.showLeftButtons || this.state.showRightButtons)) {
-	      style = translateStyle(0, "px", "-50%");
-	      style.width = width;
-	      return style;
-	    }
-
-	    if (Math.abs(this.state.delta) > this.props.actionThreshold && (side === "left" && this.props.callActionWhenSwipingFarRight || this.props.callActionWhenSwipingFarLeft) && index === nbOptions - 1) {
-	      padding = 0;
-	    } else if (nbOptions * width < Math.abs(this.state.delta)) {
-	      padding += factor * (Math.abs(this.state.delta) - nbOptions * width) * 0.425;
-	    }
-	    style = translateStyle(padding, "px", "-50%");
-	    style.width = width;
-	    return style;
-	  },
-
-	  handleContentClick: function handleContentClick() {
-	    this.props.closeOthers();
-	    this.transitionBack();
 	  }
 	});
 
@@ -72527,7 +72497,7 @@
 
 
 	// module
-	exports.push([module.id, "@font-face {\n  font-family: 'WhitneyHTF';\n  src: url(" + __webpack_require__(712) + "?#iefix) format(\"embedded-opentype\"), url(" + __webpack_require__(713) + ") format(\"woff\"), url(" + __webpack_require__(714) + ") format(\"truetype\"), url(" + __webpack_require__(715) + "#WhitneyHTF-Bold) format(\"svg\");\n  font-weight: 400;\n  font-style: normal;\n}\n\n@font-face {\n  font-family: 'WhitneyHTF';\n  src: url(" + __webpack_require__(716) + "?#iefix) format(\"embedded-opentype\"), url(" + __webpack_require__(717) + ") format(\"woff\"), url(" + __webpack_require__(718) + ") format(\"truetype\"), url(" + __webpack_require__(719) + "#WhitneyHTF-Bold) format(\"svg\");\n  font-weight: 300;\n  font-style: normal;\n}\n\n@font-face {\n  font-family: 'WhitneyHTF';\n  src: url(" + __webpack_require__(720) + "?#iefix) format(\"embedded-opentype\"), url(" + __webpack_require__(721) + ") format(\"woff\"), url(" + __webpack_require__(722) + ") format(\"truetype\"), url(" + __webpack_require__(723) + "#WhitneyHTF-Bold) format(\"svg\");\n  font-weight: 200;\n  font-style: normal;\n}\n\nbody {\n  background: white;\n  font-family: 'WhitneyHTF', 'Helvetica Neue', Helvetica, Arial, sans-serif;\n  font-weight: 200;\n  color: #333;\n}\n\n.circle {\n  display: block;\n  width: 100px;\n  height: 100px;\n  background-size: cover;\n  background-repeat: no-repeat;\n  background-position: center center;\n  border-radius: 99em;\n  -webkit-border-radius: 99em;\n  -moz-border-radius: 99em;\n  border: 2px solid white;\n}\n\n.three-bounce .bounce1 {\n  background-color: #71c04f;\n}\n\n.three-bounce .bounce2 {\n  background-color: #71c04f;\n}\n\n.three-bounce .bounce3 {\n  background-color: #71c04f;\n}\n\n.signin-error-message {\n  color: #de3226;\n  font-size: 12px;\n  margin-top: 3px;\n}\n\n.signup-error-message {\n  color: #de3226;\n  font-size: 12px;\n  position: absolute;\n  margin-top: 3px;\n  width: 240px;\n  margin-left: -120px;\n  left: 50%;\n}\n\n.hero-unit {\n  margin: 50px auto 0 auto;\n  width: 300px;\n  font-size: 18px;\n  font-weight: 200;\n  line-height: 30px;\n  background-color: #eee;\n  border-radius: 6px;\n  padding: 60px;\n}\n\n.hero-unit h1 {\n  font-size: 60px;\n  line-height: 1;\n  letter-spacing: -1px;\n}\n\n.textfield {\n  width: 300px;\n  margin-left: 30px;\n  margin-right: 30px;\n  color: #1c1c1c;\n}\n\n.mdl-spinner__circle-clipper {\n  border-color: #71c04f;\n}\n\n.mdl-textfield--floating-label.is-focused .mdl-textfield__label, .mdl-textfield--floating-label.is-dirty .mdl-textfield__label {\n  color: #71c04f;\n}\n\n.mdl-textfield .mdl-js-textfield .mdl-textfield--floating-label .textfield .is-dirty .is-upgraded .is-focused {\n  border-color: #71c04f;\n}\n\n.wordwrap {\n  white-space: pre-wrap;\n  /* CSS3 */\n  white-space: -moz-pre-wrap;\n  /* Firefox */\n  white-space: -o-pre-wrap;\n  /* Opera 7 */\n  word-wrap: break-word;\n  /* IE */\n}\n\n.browsehappy {\n  margin: 0.2em 0;\n  background: #ccc;\n  color: #000;\n  padding: 0.2em 0;\n}\n\n.profile-image {\n  float: right;\n}\n\n.header-tabs-style {\n  background-color: #57c6ff;\n}\n\n.service-button-base {\n  width: 100px;\n  height: 55px;\n  background-color: transparent;\n  border: 1px solid #71c04f;\n  color: #71c04f;\n  margin: 12px 8px;\n  line-height: 16px;\n  text-align: left;\n  text-transform: none;\n  border-radius: 2px;\n  outline: 0;\n}\n\n.service-button-selected {\n  width: 100px;\n  height: 55px;\n  background-color: #71c04f;\n  border: 1px solid #71c04f;\n  margin: 12px 8px;\n  line-height: 16px;\n  text-align: left;\n  text-transform: none;\n  color: #ffffff;\n  outline: 0;\n  border-radius: 2px;\n}\n\n.rate-starts {\n  color: #71c04f;\n}\n\n.stro-container {\n  width: 300%;\n  margin-left: -100%;\n  position: relative;\n  height: 80px;\n}\n\n.stro-container.transition-back {\n  transition: all .4s ease;\n}\n\n.stro-left {\n  position: relative;\n  display: inline-block;\n  width: 33.33333333%;\n  height: 80px;\n  vertical-align: top;\n  background-color: #FFFFFF;\n}\n\n.stro-content {\n  position: relative;\n  display: inline-block;\n  width: 33.33333333%;\n  vertical-align: top;\n  background-color: #f8f8fa;\n  height: 80px;\n  padding-left: 10px;\n  text-align: left;\n  color: #000000;\n}\n\n.stro-content-selected {\n  position: relative;\n  display: inline-block;\n  width: 33.33333333%;\n  vertical-align: top;\n  background-color: #71c04f;\n  height: 80px;\n  padding-left: 10px;\n  text-align: left;\n  color: #FFFFFF;\n}\n\n.stro-right {\n  position: relative;\n  display: inline-block;\n  width: 33.33333333%;\n  height: 80px;\n  vertical-align: top;\n  background-color: #FFFFFF;\n}\n\n.stro-button {\n  position: absolute;\n  height: 100%;\n  width: 100%;\n}\n\n.stro-button span {\n  position: absolute;\n  top: 27px;\n  transform: translate(0, -50%);\n  display: block;\n}\n\n.stro-button.stro-right-button {\n  left: 0;\n}\n\n.stro-button.stro-right-button span {\n  left: 0;\n  text-align: center;\n  top: 40px;\n  font-size: 16px;\n}\n\n.stro-button.stro-left-button {\n  right: 0;\n}\n\n.stro-button.stro-left-button span {\n  right: 1px;\n  text-align: center;\n  font-size: 25px;\n  font-weight: bold;\n}\n\n.stro-container.show-right-buttons,\n.stro-container.show-left-buttons,\n.stro-container.show-right-buttons .stro-button,\n.stro-container.show-left-buttons .stro-button {\n  transition: all .3s ease;\n}\n\n.addedpoints-enter {\n  opacity: 0.01;\n}\n\n.addedpoints-enter.addedpoints-enter-active {\n  opacity: 1;\n  transition: opacity .5s ease-in;\n}\n\n.addedpoints-leave {\n  opacity: 1;\n}\n\n.addedpoints-leave.addedpoints-leave-active {\n  opacity: 0.01;\n  transition: opacity .5s ease-in;\n}\n\n.addedpoints-appear {\n  opacity: 0.01;\n  transition: opacity .5s ease-in;\n}\n\n.addedpoints-appear.addedpoints-appear-active {\n  opacity: 1;\n}\n\n.ReactModal__Overlay--after-open {\n  background-color: rgba(0, 0, 0, 0.8) !important;\n}\n\n.ReactModal__Content--after-open {\n  height: 16em;\n  margin-top: 40%;\n  border-radius: 4px;\n  padding: 0px !important;\n}\n\n.ReactModal__Content {\n  border: none !important;\n  overflow: hidden !important;\n}\n\n.reward-toolbar {\n  position: absolute;\n  color: #FFFFFF;\n  background-color: #000000;\n  opacity: 0.75;\n  padding-left: 10px;\n  padding-top: 0px;\n  padding-bottom: 0px;\n  padding-right: 10px;\n  top: 45px;\n  right: 20px;\n  z-index: 1000;\n  border-radius: 2px;\n  opacity: 0;\n}\n\n.reward-toolbar-added {\n  position: absolute;\n  color: #FFFFFF;\n  background-color: #000000;\n  opacity: 0.75;\n  padding-left: 10px;\n  padding-top: 0px;\n  padding-bottom: 0px;\n  padding-right: 10px;\n  top: 45px;\n  right: 20px;\n  z-index: 1000;\n  border-radius: 2px;\n  opacity: 0.75;\n  animation: scoreboxpointsanim ease-in 10s;\n}\n\n@keyframes scoreboxanim {\n  0%, 100% {\n    color: #FFFFFF;\n  }\n  25%, 50%, 75% {\n    color: #71c04f;\n  }\n}\n\n@keyframes scoreboxpointsanim {\n  0% {\n    opacity: 0.1;\n    transform: translate(0px, -12px);\n  }\n  5%, 10%, 15%, 20%, 25%, 30%, 35%, 40%, 45%, 50%, 55%, 60%, 65%, 75%, 85%, 90%, 95%, 100% {\n    opacity: 0.75;\n    transform: translate(0px, 0px);\n  }\n}\n\n@-moz-keyframes scoreboxpointsanim {\n  0% {\n    opacity: 0.1;\n    -moz-transform: translate(0px, -12px);\n  }\n  5%, 10%, 15%, 20%, 25%, 30%, 35%, 40%, 45%, 50%, 55%, 60%, 65%, 75%, 85%, 95%, 100% {\n    opacity: 0.75;\n    -moz-transform: translate(0px, 0px);\n  }\n}\n\n@-webkit-keyframes scoreboxpointsanim {\n  0% {\n    opacity: 0.1;\n    -webkit-transform: translate(0px, -12px);\n  }\n  5%, 10%, 15%, 20%, 25%, 30%, 35%, 40%, 45%, 50%, 55%, 60%, 65%, 75%, 85%, 95%, 100% {\n    opacity: 0.75;\n    -webkit-transform: translate(0px, 0px);\n  }\n}\n\n@-o-keyframes scoreboxpointsanim {\n  0% {\n    opacity: 0.1;\n    -o-transform: translate(0px, -12px);\n  }\n  5%, 10%, 15%, 20%, 25%, 30%, 35%, 40%, 45%, 50%, 55%, 60%, 65%, 75%, 85%, 95%, 100% {\n    opacity: 0.75;\n    -o-transform: translate(0px, 0px);\n  }\n}\n\n@-ms-keyframes scoreboxpointsanim {\n  0% {\n    opacity: 0.1;\n    -ms-transform: translate(0px, -12px);\n  }\n  5%, 10%, 15%, 20%, 25%, 30%, 35%, 40%, 45%, 50%, 55%, 60%, 65%, 75%, 85%, 95%, 100% {\n    opacity: 0.75;\n    -ms-transform: translate(0px, 0px);\n  }\n}\n", ""]);
+	exports.push([module.id, "@font-face {\n  font-family: 'WhitneyHTF';\n  src: url(" + __webpack_require__(712) + "?#iefix) format(\"embedded-opentype\"), url(" + __webpack_require__(713) + ") format(\"woff\"), url(" + __webpack_require__(714) + ") format(\"truetype\"), url(" + __webpack_require__(715) + "#WhitneyHTF-Bold) format(\"svg\");\n  font-weight: 400;\n  font-style: normal;\n}\n\n@font-face {\n  font-family: 'WhitneyHTF';\n  src: url(" + __webpack_require__(716) + "?#iefix) format(\"embedded-opentype\"), url(" + __webpack_require__(717) + ") format(\"woff\"), url(" + __webpack_require__(718) + ") format(\"truetype\"), url(" + __webpack_require__(719) + "#WhitneyHTF-Bold) format(\"svg\");\n  font-weight: 300;\n  font-style: normal;\n}\n\n@font-face {\n  font-family: 'WhitneyHTF';\n  src: url(" + __webpack_require__(720) + "?#iefix) format(\"embedded-opentype\"), url(" + __webpack_require__(721) + ") format(\"woff\"), url(" + __webpack_require__(722) + ") format(\"truetype\"), url(" + __webpack_require__(723) + "#WhitneyHTF-Bold) format(\"svg\");\n  font-weight: 200;\n  font-style: normal;\n}\n\nbody {\n  background: white;\n  font-family: 'WhitneyHTF', 'Helvetica Neue', Helvetica, Arial, sans-serif;\n  font-weight: 200;\n  color: #333;\n}\n\n.circle {\n  display: block;\n  width: 100px;\n  height: 100px;\n  background-size: cover;\n  background-repeat: no-repeat;\n  background-position: center center;\n  border-radius: 99em;\n  -webkit-border-radius: 99em;\n  -moz-border-radius: 99em;\n  border: 2px solid white;\n}\n\n.three-bounce .bounce1 {\n  background-color: #71c04f;\n}\n\n.three-bounce .bounce2 {\n  background-color: #71c04f;\n}\n\n.three-bounce .bounce3 {\n  background-color: #71c04f;\n}\n\n.signin-error-message {\n  color: #de3226;\n  font-size: 12px;\n  margin-top: 3px;\n}\n\n.signup-error-message {\n  color: #de3226;\n  font-size: 12px;\n  position: absolute;\n  margin-top: 3px;\n  width: 240px;\n  margin-left: -120px;\n  left: 50%;\n}\n\n.hero-unit {\n  margin: 50px auto 0 auto;\n  width: 300px;\n  font-size: 18px;\n  font-weight: 200;\n  line-height: 30px;\n  background-color: #eee;\n  border-radius: 6px;\n  padding: 60px;\n}\n\n.hero-unit h1 {\n  font-size: 60px;\n  line-height: 1;\n  letter-spacing: -1px;\n}\n\n.textfield {\n  width: 300px;\n  margin-left: 30px;\n  margin-right: 30px;\n  color: #1c1c1c;\n}\n\n.mdl-spinner__circle-clipper {\n  border-color: #71c04f;\n}\n\n.mdl-textfield--floating-label.is-focused .mdl-textfield__label, .mdl-textfield--floating-label.is-dirty .mdl-textfield__label {\n  color: #71c04f;\n}\n\n.mdl-textfield .mdl-js-textfield .mdl-textfield--floating-label .textfield .is-dirty .is-upgraded .is-focused {\n  border-color: #71c04f;\n}\n\n.wordwrap {\n  white-space: pre-wrap;\n  /* CSS3 */\n  white-space: -moz-pre-wrap;\n  /* Firefox */\n  white-space: -o-pre-wrap;\n  /* Opera 7 */\n  word-wrap: break-word;\n  /* IE */\n}\n\n.browsehappy {\n  margin: 0.2em 0;\n  background: #ccc;\n  color: #000;\n  padding: 0.2em 0;\n}\n\n.profile-image {\n  float: right;\n}\n\n.header-tabs-style {\n  background-color: #57c6ff;\n}\n\n.service-button-base {\n  width: 100px;\n  height: 55px;\n  background-color: transparent;\n  border: 1px solid #71c04f;\n  color: #71c04f;\n  margin: 12px 8px;\n  line-height: 16px;\n  text-align: left;\n  text-transform: none;\n  border-radius: 2px;\n  outline: 0;\n}\n\n.service-button-selected {\n  width: 100px;\n  height: 55px;\n  background-color: #71c04f;\n  border: 1px solid #71c04f;\n  margin: 12px 8px;\n  line-height: 16px;\n  text-align: left;\n  text-transform: none;\n  color: #ffffff;\n  outline: 0;\n  border-radius: 2px;\n}\n\n.rate-starts {\n  color: #71c04f;\n  padding-left: 5px;\n}\n\n.stro-container {\n  position: relative;\n}\n\n.stro-swipe-container {\n  width: 100%;\n  position: relative;\n  height: 80px;\n  z-index: 2;\n}\n\n.stro-swipe-container.transition-back {\n  transition: all .4s ease;\n}\n\n.stro-left {\n  position: absolute;\n  left: 0;\n  top: 0;\n  width: 150px;\n  height: 100%;\n  vertical-align: top;\n  background-color: #FFFFFF;\n  z-index: 1;\n}\n\n.stro-content {\n  position: relative;\n  display: inline-block;\n  width: 100%;\n  vertical-align: top;\n  background-color: #f8f8fa;\n  height: 80px;\n  padding-left: 10px;\n  text-align: left;\n  color: #000000;\n}\n\n.stro-content-selected {\n  position: relative;\n  display: inline-block;\n  width: 120px;\n  vertical-align: top;\n  background-color: #71c04f;\n  height: 80px;\n  padding-left: 10px;\n  text-align: left;\n  color: #FFFFFF;\n}\n\n.stro-right {\n  position: absolute;\n  right: 0;\n  top: 0;\n  width: 150px;\n  height: 80px;\n  vertical-align: top;\n  background-color: #FFFFFF;\n  z-index: 1;\n}\n\n.stro-button {\n  position: absolute;\n  height: 100%;\n  width: 100%;\n}\n\n.stro-button span {\n  position: absolute;\n  top: 27px;\n  transform: translate(0, -50%);\n  display: block;\n}\n\n.stro-button.stro-right-button {\n  left: 0;\n}\n\n.stro-button.stro-right-button span {\n  text-align: center;\n  top: 40px;\n  font-size: 16px;\n  width: 100%;\n}\n\n.stro-button.stro-left-button {\n  right: 0;\n}\n\n.stro-button.stro-left-button span {\n  text-align: center;\n  font-size: 25px;\n  font-weight: bold;\n  margin-right: 6px;\n}\n\n.stro-swipe-container.show-right-buttons,\n.stro-swipe-container.show-left-buttons,\n.stro-swipe-container.show-right-buttons .stro-button,\n.stro-swipe-container.show-left-buttons .stro-button {\n  transition: all .3s ease;\n}\n\n.addedpoints-enter {\n  opacity: 0.01;\n}\n\n.addedpoints-enter.addedpoints-enter-active {\n  opacity: 1;\n  transition: opacity .5s ease-in;\n}\n\n.addedpoints-leave {\n  opacity: 1;\n}\n\n.addedpoints-leave.addedpoints-leave-active {\n  opacity: 0.01;\n  transition: opacity .5s ease-in;\n}\n\n.addedpoints-appear {\n  opacity: 0.01;\n  transition: opacity .5s ease-in;\n}\n\n.addedpoints-appear.addedpoints-appear-active {\n  opacity: 1;\n}\n\n.ReactModal__Overlay {\n  z-index: 99;\n}\n\n.ReactModal__Overlay--after-open {\n  background-color: rgba(0, 0, 0, 0.8) !important;\n}\n\n.ReactModal__Content--after-open {\n  height: 16em;\n  margin-top: 40%;\n  border-radius: 4px;\n  padding: 0px !important;\n}\n\n.ReactModal__Content {\n  border: none !important;\n  overflow: hidden !important;\n}\n\n.reward-toolbar {\n  position: absolute;\n  color: #FFFFFF;\n  background-color: #000000;\n  opacity: 0.75;\n  padding-left: 10px;\n  padding-top: 0px;\n  padding-bottom: 0px;\n  padding-right: 10px;\n  top: 45px;\n  right: 20px;\n  z-index: 1000;\n  border-radius: 2px;\n  opacity: 0;\n}\n\n.reward-toolbar-added {\n  position: absolute;\n  color: #FFFFFF;\n  background-color: #000000;\n  opacity: 0.75;\n  padding-left: 10px;\n  padding-top: 0px;\n  padding-bottom: 0px;\n  padding-right: 10px;\n  top: 45px;\n  right: 20px;\n  z-index: 1000;\n  border-radius: 2px;\n  opacity: 0.75;\n  animation: scoreboxpointsanim ease-in 10s;\n}\n\n@keyframes scoreboxanim {\n  0%, 100% {\n    color: #FFFFFF;\n  }\n  25%, 50%, 75% {\n    color: #71c04f;\n  }\n}\n\n@keyframes scoreboxpointsanim {\n  0% {\n    opacity: 0.1;\n    transform: translate(0px, -12px);\n  }\n  5%, 10%, 15%, 20%, 25%, 30%, 35%, 40%, 45%, 50%, 55%, 60%, 65%, 75%, 85%, 90%, 95%, 100% {\n    opacity: 0.75;\n    transform: translate(0px, 0px);\n  }\n}\n\n@-moz-keyframes scoreboxpointsanim {\n  0% {\n    opacity: 0.1;\n    -moz-transform: translate(0px, -12px);\n  }\n  5%, 10%, 15%, 20%, 25%, 30%, 35%, 40%, 45%, 50%, 55%, 60%, 65%, 75%, 85%, 95%, 100% {\n    opacity: 0.75;\n    -moz-transform: translate(0px, 0px);\n  }\n}\n\n@-webkit-keyframes scoreboxpointsanim {\n  0% {\n    opacity: 0.1;\n    -webkit-transform: translate(0px, -12px);\n  }\n  5%, 10%, 15%, 20%, 25%, 30%, 35%, 40%, 45%, 50%, 55%, 60%, 65%, 75%, 85%, 95%, 100% {\n    opacity: 0.75;\n    -webkit-transform: translate(0px, 0px);\n  }\n}\n\n@-o-keyframes scoreboxpointsanim {\n  0% {\n    opacity: 0.1;\n    -o-transform: translate(0px, -12px);\n  }\n  5%, 10%, 15%, 20%, 25%, 30%, 35%, 40%, 45%, 50%, 55%, 60%, 65%, 75%, 85%, 95%, 100% {\n    opacity: 0.75;\n    -o-transform: translate(0px, 0px);\n  }\n}\n\n@-ms-keyframes scoreboxpointsanim {\n  0% {\n    opacity: 0.1;\n    -ms-transform: translate(0px, -12px);\n  }\n  5%, 10%, 15%, 20%, 25%, 30%, 35%, 40%, 45%, 50%, 55%, 60%, 65%, 75%, 85%, 95%, 100% {\n    opacity: 0.75;\n    -ms-transform: translate(0px, 0px);\n  }\n}\n", ""]);
 
 	// exports
 

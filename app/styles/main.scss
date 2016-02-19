@@ -155,36 +155,43 @@ body {
 }
 
 .rate-starts {
-    color: #71c04f;
+  color: #71c04f;
+  padding-left: 5px;
 }
 
 .dismiss-button {
 }
 
 .stro-container {
-  width: 300%;
-  margin-left: -100% ;
   position: relative;
-  height: 80px;
 }
 
-.stro-container.transition-back {
+.stro-swipe-container {
+  width: 100%;
+  position: relative;
+  height: 80px;
+  z-index: 2;
+}
+
+.stro-swipe-container.transition-back {
   transition: all .4s ease;
 }
 
 .stro-left {
-    position: relative;
-    display: inline-block;
-    width: 33.33333333%;
-    height: 80px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 150px;
+    height: 100%;
     vertical-align: top;
     background-color: #FFFFFF;
+    z-index: 1;
 }
 
 .stro-content {
     position: relative;
     display: inline-block;
-    width: 33.33333333%;
+    width: 100%;
     vertical-align: top;
     background-color: #f8f8fa;
     height: 80px;
@@ -196,7 +203,7 @@ body {
 .stro-content-selected {
     position: relative;
     display: inline-block;
-    width: 33.33333333%;
+    width: 120px;
     vertical-align: top;
     background-color: #71c04f;
     height: 80px;
@@ -206,12 +213,14 @@ body {
 }
 
 .stro-right {
-  position: relative;
-  display: inline-block;
-  width: 33.33333333%;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 150px;
   height: 80px;
   vertical-align: top;
   background-color: #FFFFFF;
+  z-index: 1;
 }
 
 .stro-button {
@@ -231,25 +240,25 @@ body {
   left: 0;
 }
 .stro-button.stro-right-button span {
-  left: 0;
   text-align: center;
   top: 40px;
   font-size: 16px;
+  width: 100%;
 }
 .stro-button.stro-left-button {
   right: 0;
 }
 .stro-button.stro-left-button span {
-  right: 1px;
   text-align: center;
   font-size: 25px;
   font-weight: bold;
+  margin-right: 6px;
 }
 
-.stro-container.show-right-buttons,
-.stro-container.show-left-buttons,
-.stro-container.show-right-buttons .stro-button,
-.stro-container.show-left-buttons .stro-button{
+.stro-swipe-container.show-right-buttons,
+.stro-swipe-container.show-left-buttons,
+.stro-swipe-container.show-right-buttons .stro-button,
+.stro-swipe-container.show-left-buttons .stro-button{
   transition: all .3s ease;
 }
 
@@ -278,6 +287,10 @@ body {
 
 .addedpoints-appear.addedpoints-appear-active {
     opacity: 1;
+}
+
+.ReactModal__Overlay {
+    z-index: 99;
 }
 
 .ReactModal__Overlay--after-open {

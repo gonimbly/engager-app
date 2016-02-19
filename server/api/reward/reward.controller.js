@@ -42,13 +42,15 @@ exports.redeem = function(req, res) {
 			return wallet.save();
 		})
 		.then(function(){
+			return Reward.redeem(user, reward);
+		})
+		.then(function(){
 			return res.json(code);
 		})
 		.catch(function(err){
 			console.error('err',err);
 			res.status(400).send({error:err.message});
 		});
-
 	})
 	.catch(function(err){
 		res.status(400).send({error:err.message});

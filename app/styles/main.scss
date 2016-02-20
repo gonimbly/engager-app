@@ -19,18 +19,28 @@
   font-style: normal;
 }
 
+html {
+  height: 100%;
+  overflow: hidden;
+}
 
 body {
   background: white;
   font-family: 'WhitneyHTF', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-weight: 200;
   color: #333;
+  overflow: hidden;
+  height: 100%;
+}
+
+#content, .App {
+  height: 100%;
 }
 
 .circle {
   display: block;
-  width: 100px;
-  height: 100px;
+  width: 100%;
+  height: 100%;
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center center;

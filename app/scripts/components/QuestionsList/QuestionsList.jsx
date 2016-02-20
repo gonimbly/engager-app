@@ -1,53 +1,57 @@
 var React = require('react');
 var ReactBootstrap = require('react-bootstrap');
-var OnResize = require("react-window-mixins").OnResize;
+var OnResize = require('react-window-mixins').OnResize;
 var Router = require('react-router');
 var Reflux = require('reflux');
 var _ = require('lodash');
 var Rating = require('react-rating');
 
+require('./QuestionsList.scss');
+
 var AppStore = require('../../stores/AppStore');
-var UserActions = require("../../actions/UserActions");
+var UserActions = require('../../actions/UserActions');
 var QuestionItem = require('./QuestionItem');
 
 var ListGroup = ReactBootstrap.ListGroup;
 var ListGroupItem = ReactBootstrap.ListGroupItem;
 
-var listContainerStyle = {
-    width: '100%',
-    position: 'relative',
-    top: '280px',
-    whiteSpace: 'nowrap',
-    overflow: 'hidden',
-    overflowY: 'scroll',
-    bottom: '0',
-    borderRadius: '0px',
-    borderTop: '5px solid #D3D3D5'
-};
-
-var itemStyle = {
-    listStyle: 'none',
-    marginLeft: '0',
-    marginBottom: '3px'
-};
-
-var listStyle = {
-    listStyleType: 'none',
-    margin: '0',
-    padding: '0',
-};
-
 var QuestionsList = React.createClass({
     mixins: [OnResize, Router.Navigation,
 			 Router.State,
              Reflux.connect(AppStore, 'appData')],
-
+     propTypes: {
+        listY: React.PropTypes.number
+     },
+     style: {
+        container: {
+            backgroundColor: 'white',
+            width: '100%',
+            height: '100%',
+            whiteSpace: 'nowrap',
+            overflowX: 'hidden',
+            overflowY: 'scroll',
+            bottom: '0',
+            borderRadius: '0px',
+            borderTop: '1px solid white'
+        },
+        list: {
+            listStyleType: 'none',
+            margin: '0',
+            padding: '0'
+        },
+        listItem: {
+            listStyle: 'none',
+            marginLeft: '0',
+            marginBottom: '3px'
+        }
+     },
      render: function() {
+        var style = this.style;
         var windowHeight = this.state.window.height;
-        var listHeight = windowHeight - 280;
-
-        listStyle.height = listHeight+"px";
-        listStyle.borderRadius = '0px';
+        var container = document.getElementsByClassName('question-list-container');
+        if(container && container[0]) {
+          style.container.height = (windowHeight - container[0].offsetTop) + 'px';
+        }
 
         var questions = this.state.appData.questions.unanswered;
         var answered = this.state.appData.questions.answered;
@@ -55,7 +59,7 @@ var QuestionsList = React.createClass({
 
         var unansweredList = _.map(questions, function(question) {
             return (
-                <li key={question.id} style={itemStyle}>
+                <li key={question.id} style={style.listItem}>
                     <QuestionItem question={question} rowType={1} />
                 </li>
             )
@@ -63,7 +67,7 @@ var QuestionsList = React.createClass({
 
         var answeredList = _.map(answered, function(answer) {
             return (
-                <li key={answer.id} style={itemStyle}>
+                <li key={answer.id} style={style.listItem}>
                     <QuestionItem question={answer} rowType={2} />
                 </li>
             )
@@ -71,15 +75,15 @@ var QuestionsList = React.createClass({
 
         var dismissedList = _.map(dismissed, function(question) {
             return (
-                <li key={question.id} style={itemStyle}>
+                <li key={question.id} style={style.listItem}>
                     <QuestionItem question={question} rowType={3} />
                 </li>
             )
         }.bind(this));
 
         return (
-            <div style={listContainerStyle}>
-                <ul style={listStyle}>
+            <div className='question-list-container' style={style.container}>
+                <ul style={style.list}>
                     {unansweredList}
                     {dismissedList}
                     {answeredList}

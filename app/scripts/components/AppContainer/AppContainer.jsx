@@ -6,47 +6,44 @@ var Modal = require('react-modal');
 var ProfileImage = require('../ProfileImage/ProfileImage');
 var ScoreBox = require('../ScoreBox/ScoreBox');
 var CoverImage = require('../CoverImage/CoverImage');
-var RewardsPanel = require('../RewardsPanel/RewardsPanel');
+var RewardInfo = require('../RewardInfo/RewardInfo');
 var QuestionsList = require('../QuestionsList/QuestionsList');
 var AppActions = require('../../actions/AppActions');
 var AppStore = require('../../stores/AppStore');
 var RewardPopup = require('../RewardPopup/RewardPopup');
 var RewardClaimTooltip = require('../RewardClaimTooltip/RewardClaimTooltip');
 var Spinner = require('react-spinkit');
-var logoImage = require('../../../images/gonimbly_logo_white.png');
+var logoImage = require('../../../images/GoNimbly_Horizontal_75.svg');
 
 require('./AppContainer.scss');
 
 var AppContainer = React.createClass({
-    mixins: [Router.Navigation,
-			 Router.State,
-             Reflux.connect(AppStore, 'appData')],
+  mixins: [Router.Navigation,
+           Router.State,
+           Reflux.connect(AppStore, 'appData')],
 
-    render: function() {
-        return (
-              <div className='app-container'>
-                  <div style={{position: 'absolute', top: '60%', left: '45%', zIndex: '1000'}} className={this.state.appData.loadingInfo}>
-                      <Spinner spinnerName='three-bounce'/>
-                  </div>
-                  <div className='header'>
-                      <div>
-                        <div className='logo'>
-                          <a href='http://www.gonimbly.com/contact' target='blank'>
-                            <img src={logoImage} width='100px' height='50px'/>
-                          </a>
-                        </div>
-                      </div>
-                      <RewardClaimTooltip />
-                      <CoverImage />
-                      <ProfileImage />
-                      <ScoreBox />
-                      <RewardsPanel />
-                      <QuestionsList />
-                  </div>
-                  <RewardPopup />
-              </div>
-        );
-    }
+  render: function() {
+    return (
+      <div className='app-container'>
+        <div style={{position: 'absolute', top: '60%', left: '45%', zIndex: '1000'}} className={this.state.appData.loadingInfo}>
+            <Spinner spinnerName='three-bounce'/>
+        </div>
+        <div className='header'>
+          <div className='logo'>
+            <a href='http://www.gonimbly.com/contact' target='blank'>
+              <img src={logoImage} height='30px' alt="Go Nimbly" />
+            </a>
+          </div>
+          <RewardClaimTooltip />
+          <CoverImage />
+          <ProfileImage />
+          <RewardInfo />
+        </div>
+        <QuestionsList />
+        <RewardPopup />
+      </div>
+    );
+  }
 });
 
 module.exports = AppContainer;

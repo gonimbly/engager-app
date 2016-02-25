@@ -23,24 +23,34 @@ var AppContainer = React.createClass({
            Reflux.connect(AppStore, 'appData')],
 
   render: function() {
-    return (
-      <div className='app-container'>
+    if(this.state.appData.loadingInfo) {
+      app= (
         <div style={{position: 'absolute', top: '60%', left: '45%', zIndex: '1000'}} className={this.state.appData.loadingInfo}>
             <Spinner spinnerName='three-bounce'/>
         </div>
-        <div className='header'>
-          <div className='logo'>
-            <a href='http://www.gonimbly.com/contact' target='blank'>
-              <img src={logoImage} height='30px' alt="Go Nimbly" />
-            </a>
+      );
+    } else {
+      app = (
+        <div>
+          <div className='header'>
+            <div className='logo'>
+              <a href='http://www.gonimbly.com/contact' target='blank'>
+                <img src={logoImage} height='30px' alt="Go Nimbly" />
+              </a>
+            </div>
+            <RewardClaimTooltip />
+            <CoverImage />
+            <ProfileImage />
+            <RewardInfo />
           </div>
-          <RewardClaimTooltip />
-          <CoverImage />
-          <ProfileImage />
-          <RewardInfo />
+          <QuestionsList />
+          <RewardPopup />
         </div>
-        <QuestionsList />
-        <RewardPopup />
+      );
+    }
+    return (
+      <div className='app-container'>
+        {app}
       </div>
     );
   }

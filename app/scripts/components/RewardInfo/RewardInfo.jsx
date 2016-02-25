@@ -1,12 +1,14 @@
 var React = require('react');
 var Radium = require('radium');
+var Reflux = require('reflux');
+var ReactMDL = require('react-mdl');
+var Button = ReactMDL.Button;
+
+var AppStore = require('../../stores/AppStore');
+var AppActions = require('../../actions/AppActions');
 
 var RewardInfo = React.createClass({
-  PropTypes:{
-    reward: React.PropTypes.object.isRequired,
-    onClick: React.PropTypes.func.isRequired
-  },
-
+  mixins: [Reflux.connect(AppStore, 'appData')],
   onClick: function(reward){
     this.props.onClick(reward);
   },
@@ -14,11 +16,19 @@ var RewardInfo = React.createClass({
   style: {
     lineContainer: {
       color: 'white',
-      textAlign: 'center',
-      paddingBottom: '15px'
+      textAlign: 'center'
     },
     allLines: {
       textAlign: 'center'
+    },
+    lineRedeem: {
+      fontSize: '14px',
+      marginBottom: '10px'
+    },
+    buttonRedeem: {
+      backgroundColor: '#71c04f',
+      color: '#FFFFFF',
+      marginBottom: '10px'
     },
     line1: {
       fontSize: '20px',
@@ -27,17 +37,44 @@ var RewardInfo = React.createClass({
     },
     line2: {
       fontSize: '14px'
+    },
+    line3: {
+      backgroundColor: '#B0D579',
+      color: '#3B3B3A',
+      textAlign: 'center',
+      paddingTop: '7px',
+      paddingBottom: '3px',
+      fontWeight: '300'
     }
   },
 
   render: function() {
-    var reward = this.props.reward;
+    var lines;
     var style = this.style;
+    var reward = this.state.appData.rewards[0];
+    var pointsRemaining = reward.cost - this.state.appData.user.score;
+    if(pointsRemaining <= 0) {
+      lines = (
+        <div>
+          <div style={[style.allLines, style.lineRedeem]}>You unlocked free Uber Credit!</div>
+          <Button className="text-center" style={style.buttonRedeem} raised={true} ripple={true} onClick={AppActions.openReward.bind(this, reward)}>Redeem</Button>
+        </div>
+      );
+    } else {
+      lines = (
+        <div>
+          <div style={[style.allLines, style.line1]}>{pointsRemaining} points</div>
+          <div style={[style.allLines, style.line2]}>to earn free Uber credit.</div>
+          <div style={style.line3}>
+            Answer the questions below to earn points.
+          </div>
+        </div>
+      );
+    }
 
     return (
       <div style={style.lineContainer}>
-        <div style={[style.allLines, style.line1]}>50 points</div>
-        <div style={[style.allLines, style.line2]}>till you unlock free Uber credit.</div>
+        {lines}
       </div>
     );
   }

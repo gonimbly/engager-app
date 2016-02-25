@@ -55,7 +55,7 @@ var RewardsPanel = React.createClass({
         var list = _.map(rewards, function(reward){
             var method = function(){};
 
-            if (reward.className === "service-button-selected") {
+            if (reward.purchasable) {
                 method = this.clickReward;
             }
 

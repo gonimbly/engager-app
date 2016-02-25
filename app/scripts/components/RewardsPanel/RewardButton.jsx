@@ -13,10 +13,10 @@ var RewardButton = React.createClass({
 
     render: function() {
         var reward = this.props.reward;
-
+        var className = reward.purchasable ? 'service-button-selected' : null;
         return (
             <span>
-                <button className={reward.className} onClick={this.onClick.bind(this, reward)}>
+                <button className={className} onClick={this.onClick.bind(this, reward)}>
                     <span><strong>{reward.name}</strong></span>
                     <br/>
                     <span style={{fontWeight: "200"}}>{reward.cost}pts</span>

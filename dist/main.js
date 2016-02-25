@@ -26648,7 +26648,7 @@
 	            var userScore = this.appData.user.score;
 
 	            if (el.cost <= userScore) {
-	                el.className = "service-button-selected";
+	                el.purchasable = true;
 	            }
 	        }
 
@@ -40667,7 +40667,7 @@
 	    lineContainer: {
 	      color: 'white',
 	      textAlign: 'center',
-	      paddingBottom: '20px'
+	      paddingBottom: '15px'
 	    },
 	    allLines: {
 	      textAlign: 'center'
@@ -59560,7 +59560,6 @@
 	    mixins: [Router.Navigation,
 	             Router.State,
 	             Reflux.connect(AppStore, 'appData')],
-
 	    onClickSignin: function() {
 	        UserActions.signin();
 	    },
@@ -59579,24 +59578,22 @@
 	            React.createElement("div", {style: loginStyle, className: "text-center"}, 
 	                React.createElement("h1", {style: titleStyle, className: "text-center"}, "Engager Log In"), React.createElement("br", null), 
 	                React.createElement(Textfield, {
-	                    onChange: this.onChangeEmail.bind(this), 
-	                    value: this.state.appData.user.email, 
+	                    onChange: this.onChangeEmail, 
 	                    label: "Enter your email", 
 	                    floatingLabel: true, 
 	                    className: "textfield"}
 	                ), React.createElement("br", null), 
 	                React.createElement(Textfield, {
-	                    onChange: this.onChangePassword.bind(this), 
-	                    value: this.state.appData.user.password, 
+	                    onChange: this.onChangePassword, 
 	                    label: "Enter your password", 
 	                    floatingLabel: true, 
 	                    className: "textfield", 
 	                    type: "password"}
 	                ), React.createElement("br", null), 
 	            React.createElement("span", {className: "signin-error-message text-center"}, this.state.appData.errorMessages.signin.msg), 
-	            React.createElement(Button, {className: "text-center", style: buttonStyle, raised: true, ripple: true, onClick: this.onClickSignin.bind(this)}, "Log In"), React.createElement("br", null), 
+	            React.createElement(Button, {className: "text-center", style: buttonStyle, raised: true, ripple: true, onClick: this.onClickSignin}, "Log In"), React.createElement("br", null), 
 	            React.createElement("p", {style: orStyle, className: "text-center"}, "- or -"), 
-	            React.createElement(Button, {className: "text-center", style: signupStyle, raised: true, ripple: true, onClick: this.onClickSignup.bind(this)}, "Not a user! Register now"), 
+	            React.createElement(Button, {className: "text-center", style: signupStyle, raised: true, ripple: true, onClick: this.onClickSignup}, "Not a user! Register now"), 
 	            React.createElement(Spinner, {style: spinnerStyle, spinnerName: "three-bounce", className: this.state.appData.animations.loaderIcon})
 	            )
 	        );

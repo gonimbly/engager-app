@@ -15,7 +15,7 @@ var RewardInfo = React.createClass({
     lineContainer: {
       color: 'white',
       textAlign: 'center',
-      paddingBottom: '20px'
+      paddingBottom: '15px'
     },
     allLines: {
       textAlign: 'center'

@@ -55,7 +55,6 @@ var LoginWindow = React.createClass({
     mixins: [Router.Navigation,
              Router.State,
              Reflux.connect(AppStore, 'appData')],
-
     onClickSignin: function() {
         UserActions.signin();
     },
@@ -74,24 +73,22 @@ var LoginWindow = React.createClass({
             <div style={loginStyle} className="text-center">
                 <h1 style={titleStyle} className="text-center">Engager Log In</h1><br/>
                 <Textfield
-                    onChange={this.onChangeEmail.bind(this)}
-                    value={this.state.appData.user.email}
+                    onChange={this.onChangeEmail}
                     label="Enter your email"
                     floatingLabel={true}
                     className="textfield"
                 /><br/>
                 <Textfield
-                    onChange={this.onChangePassword.bind(this)}
-                    value={this.state.appData.user.password}
+                    onChange={this.onChangePassword}
                     label="Enter your password"
                     floatingLabel={true}
                     className="textfield"
                     type="password"
                 /><br/>
             <span className="signin-error-message text-center">{this.state.appData.errorMessages.signin.msg}</span>
-            <Button className="text-center" style={buttonStyle} raised={true} ripple={true} onClick={this.onClickSignin.bind(this)}>Log In</Button><br/>
+            <Button className="text-center" style={buttonStyle} raised={true} ripple={true} onClick={this.onClickSignin}>Log In</Button><br/>
             <p style={orStyle} className="text-center">- or -</p>
-            <Button className="text-center" style={signupStyle} raised={true} ripple={true} onClick={this.onClickSignup.bind(this)}>Not a user! Register now</Button>
+            <Button className="text-center" style={signupStyle} raised={true} ripple={true} onClick={this.onClickSignup}>Not a user! Register now</Button>
             <Spinner style={spinnerStyle} spinnerName='three-bounce' className={this.state.appData.animations.loaderIcon}/>
             </div>
         );

@@ -69,10 +69,10 @@ INSERT INTO questions (text, points, created_at, updated_at) VALUES
     ('How likely are you to endorse Go Nimbly', 25, now(), now());
 
 INSERT INTO codes (dollar_value, reward_id, text, used, created_at, updated_at) VALUES
-    (50, 1, 'AAA-PGH-DDD', FALSE, now(),now()),
-    (25, 2, 'BBB-PPP-000', FALSE, now(),now()),
-    (50, 3, 'CCC-PGH-DDD', FALSE, now(),now()),
-    (25, 4, 'DDD-PPP-000', FALSE, now(),now());
+    (25, 1, 'AAA-PGH-DDD', FALSE, now(),now()),
+    (25, 1, 'BBB-PPP-000', FALSE, now(),now()),
+    (25, 1, 'CCC-PGH-DDD', FALSE, now(),now()),
+    (25, 1, 'DDD-PPP-000', FALSE, now(),now());
 
 INSERT INTO questions_users (question_id, state, user_id) VALUES
     (1, 'new', 1),
@@ -81,10 +81,7 @@ INSERT INTO questions_users (question_id, state, user_id) VALUES
     (4, 'new', 1);
 
 INSERT INTO rewards (name, cost, description, created_at, updated_at) VALUES
-    ('Uber 50', 200, '$50 in Uber credit',  now(), now()),
     ('Uber 25', 100, '$25 in Uber credit',  now(), now()),
-    ('Lyft 50', 200, '$50 in Lyft credit',  now(), now()),
-    ('Lyft 25', 100, '$25 in Lyft credit',  now(), now());
 
 INSERT INTO users (email, first, last, password, picture_url, created_at, updated_at) VALUES
     ('test@test.com', 'test', 'test2', 'nothing', 'https://randomuser.me/api/portraits/med/women/17.jpg', now(),  now());

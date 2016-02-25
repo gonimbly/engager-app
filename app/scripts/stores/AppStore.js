@@ -496,7 +496,7 @@ var AppStore = Reflux.createStore({
             var userScore = this.appData.user.score;
 
             if (el.cost <= userScore) {
-                el.className = "service-button-selected";
+                el.purchasable = true;
             }
         }
 

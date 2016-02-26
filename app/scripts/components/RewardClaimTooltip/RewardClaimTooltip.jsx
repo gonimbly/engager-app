@@ -20,7 +20,7 @@ var RewardClaimTooltip = React.createClass({
                         padding: '0px',
                         border: 'none',
                         outline: '0'
-                    }} text={this.state.appData.selectedReward.code}>
+                    }} text={this.state.appData.selectedReward.code || ''}>
                         {this.state.appData.selectedReward.code}
                 </CopyToClipboard>
             </div>

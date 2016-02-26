@@ -81,7 +81,7 @@ INSERT INTO questions_users (question_id, state, user_id) VALUES
     (4, 'new', 1);
 
 INSERT INTO rewards (name, cost, description, created_at, updated_at) VALUES
-    ('Uber 25', 100, '$25 in Uber credit',  now(), now()),
+    ('Uber 25', 100, '$25 in Uber credit',  now(), now());
 
 INSERT INTO users (email, first, last, password, picture_url, created_at, updated_at) VALUES
     ('test@test.com', 'test', 'test2', 'nothing', 'https://randomuser.me/api/portraits/med/women/17.jpg', now(),  now());

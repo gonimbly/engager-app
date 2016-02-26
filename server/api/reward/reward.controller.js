@@ -36,9 +36,9 @@ exports.redeem = function(req, res) {
 		})
 		.fetch({require: true})
 		.then(function (wallet) {
-			var amount = wallet.get("amount");
+			var amount = wallet.get('amount');
 			amount = parseInt(amount) - parseInt(redeem.amount);
-			wallet.set("amount", amount);
+			wallet.set('amount', amount);
 			return wallet.save();
 		})
 		.then(function(){

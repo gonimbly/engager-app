@@ -68,7 +68,7 @@ var QuestionItem = React.createClass({
             break;
             case 2: // answered
                 questionItemClass = 'question-answered';
-                bg = '#71c04f';
+                bg = '#B0D579';
                 swipe = false;
                 isRightActive = false;
             break;

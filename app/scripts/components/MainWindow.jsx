@@ -17,11 +17,7 @@ var MainWindow = React.createClass({
             window.location = "/#/signin";
         }
 
-        return (
-            <div>
-                <AppContainer />
-            </div>
-        );
+        return <AppContainer />;
     }
 });
 

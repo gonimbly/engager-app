@@ -34,6 +34,7 @@ var AppStore = Reflux.createStore({
         },
         isRewardOpen: false,
         selectedReward: {},
+        redeemedReward: null,
         rewards: [],
         loadingInfo: "show",
         animations: {
@@ -357,9 +358,8 @@ var AppStore = Reflux.createStore({
             },
             success: function(data) {
                 var userScore = this.appData.user.score;
-                this.appData.selectedReward.code = data.text;
+                this.appData.redeemedReward = this.appData.selectedReward;
                 this.appData.user.score = parseInt(userScore) - parseInt(reward.cost);
-                this.appData.animations.rewardToolbarAnim = "reward-toolbar-added";
 
                 this.trigger(this.appData);
 

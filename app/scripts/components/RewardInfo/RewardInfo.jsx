@@ -36,7 +36,8 @@ var RewardInfo = React.createClass({
       lineHeight: '20px'
     },
     line2: {
-      fontSize: '14px'
+      fontSize: '14px',
+      paddingBottom: '10px'
     },
     line3: {
       backgroundColor: '#B0D579',
@@ -61,13 +62,23 @@ var RewardInfo = React.createClass({
         </div>
       );
     } else {
+      var helpText;
+      if(this.state.appData.redeemedReward) {
+        helpText = (
+          <div style={style.line3}>We just sent {this.state.appData.selectedReward.description} <br />to your email!</div>
+        );
+      } else {
+        helpText = (
+          <div style={style.line3}>
+            Answer the questions below to earn points.
+          </div>
+        );
+      }
       lines = (
         <div>
           <div style={[style.allLines, style.line1]}>{pointsRemaining} points</div>
           <div style={[style.allLines, style.line2]}>to earn free Uber credit.</div>
-          <div style={style.line3}>
-            Answer the questions below to earn points.
-          </div>
+          {helpText}
         </div>
       );
     }

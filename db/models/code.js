@@ -11,6 +11,7 @@ var User = require('./user');
 var model = bookshelf.Model.extend({
   tableName: 'codes',
   hasTimestamps: true,
+  
   question: function() {
     return this.belongsTo(Question);
   },
@@ -21,18 +22,20 @@ var model = bookshelf.Model.extend({
   sendEmail: function(redeemBody) {
     if(this.emailConfigured()){
       return Bromise.resolve().then(function(){
-        var mailgun = new Mailgun(CONFIG_EMAIL.api_key);
+        return User.forge({id:redeemBody.user_id}).fetch();
+      })
+      .then(function(user){
+        var mailgun = require('mailgun-js')({apiKey: CONFIG_EMAIL.api_key, domain: CONFIG_EMAIL.domain});
         var text = CONFIG_EMAIL.text + '\n\n code goes here';
-        var to = user.email + ',' + CONFIG_EMAIL.additional;
+        var to = user.get('email');
 
-        mailgun.sendText(CONFIG_EMAIL.from, to, CONFIG_EMAIL.subject, text, CONFIG_EMAIL.domain, {}, function (error) {
-          if (error) {
-            console.log('message sent error:',error);
-          }
-          else {
-            console.log('message sent');
-          }
-        });
+        var data = {
+          from: CONFIG_EMAIL.from,
+          to: to,
+          subject: CONFIG_EMAIL.subject,
+          text: text
+        };
+        return mailgun.messages().send(data);
       });
     }
     else {
@@ -41,7 +44,7 @@ var model = bookshelf.Model.extend({
   },
 
   emailConfigured: function(){
-    return CONFIG_EMAIL.from && CONFIG_EMAIL.addresses && CONFIG_EMAIL.domain && CONFIG_EMAIL.text && CONFIG_EMAIL.subject;
+    return CONFIG_EMAIL.api_key && CONFIG_EMAIL.from && CONFIG_EMAIL.domain && CONFIG_EMAIL.text && CONFIG_EMAIL.subject;
   }
 });
 

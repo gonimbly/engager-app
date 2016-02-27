@@ -8,7 +8,7 @@ var email = {
   api_key : process.env.MAILGUN_API_KEY,
   domain : process.env.EMAIL_DOMAIN,
   from : process.env.EMAIL_FROM,
-  additional : process.env.EMAIL_ADDITIONAL,
+  additional_bcc : process.env.EMAIL_ADDITIONAL_BCC,
   text : process.env.EMAIL_TEXT,
   subject : process.env.EMAIL_SUBJECT
 };

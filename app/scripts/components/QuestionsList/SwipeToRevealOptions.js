@@ -39,8 +39,7 @@ var SwipeToRevealOptions = React.createClass({
       transitionBack: false,
       action: null,
       callActionWhenSwipingFarRight: false,
-      callActionWhenSwipingFarLeft: false,
-      starsVisible: null
+      callActionWhenSwipingFarLeft: false
     };
   },
 
@@ -94,16 +93,12 @@ var SwipeToRevealOptions = React.createClass({
     }
 
     var leftOptions = this.props.leftOptions.map(function (option, index) {
+      var classes = option.className;
       return (
-        <div className={'stro-button stro-left-button ' + option['class']}
-             key={index}>
-            <Rating full={'fa fa-star'}
-                    empty={'fa fa-star-o'}
-                    start={0}
-                    stop={5}
-                    initialRate={this.state.starsVisible}
-                    onRate={this.onRate}/>
-        </div>
+        <a className={classes}
+           key={index}>
+          {option.content}
+        </a>
       );
     }.bind(this));
 
@@ -171,15 +166,6 @@ var SwipeToRevealOptions = React.createClass({
           return;
       }
 
-
-      var modDelta = delta % 30;
-      var starsVisible = Math.floor(delta / 30);
-      if(modDelta > this.props.visibilityThreshold) {
-        starsVisible++;
-      }
-
-      starsVisible = Math.min(starsVisible, 5);
-
       var action = null;
       if (delta > this.props.visibilityThreshold) {
           action = "leftVisible";
@@ -196,8 +182,7 @@ var SwipeToRevealOptions = React.createClass({
       this.setState({
           delta: delta,
           action: action,
-          swipingRight: true,
-          starsVisible: starsVisible
+          swipingRight: true
       });
   },
 
@@ -245,15 +230,9 @@ var SwipeToRevealOptions = React.createClass({
         this.setState({ showRightButtons: true });
         break;
       case "leftVisible":
-        if(this.state.starsVisible > 0) {
-          // set the rating
-          this.props.onReveal("left");
-          this.setState({ showLeftButtons: true });
-          this.onRate(this.state.starsVisible);
-        } else {
-          // if user hasn't filled a whole star then transition back
-          this.transitionBack();
-        }
+        // set the rating
+        this.props.onReveal("left");
+        this.setState({ showLeftButtons: true });
         break;
       case "leftAction":
         this.leftClick(this.props.leftOptions[0]);

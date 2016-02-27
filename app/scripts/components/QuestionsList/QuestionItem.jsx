@@ -79,11 +79,40 @@ var QuestionItem = React.createClass({
             break;
         }
 
+        var angryFace = (<span className='icon icon-angry'></span>);
+        var frustratedFace = (<span className='icon'>😕</span>);
+        var contentFace = (<span className='icon'>🙂</span>);
+        var happyFace = (<span className='icon'>😃</span>);
+        var loveFace = (<span className='icon'>😍</span>);
+
         var item = {
-            leftOptions: [{
-                content: null,
-                class: 'rate-starts'
-            }],
+            leftOptions: [
+                {
+                    content: '😡',
+                    className: 'icon rating-icon',
+                    selectedClass: 'icon-selected'
+                }, 
+                {
+                    content: '😕',
+                    className: 'icon rating-icon',
+                    selectedClass: 'icon-selected'
+                }, 
+                {
+                    content: '🙂',
+                    className: 'icon rating-icon',
+                    selectedClass: 'icon-selected'
+                }, 
+                {
+                    content: '😃',
+                    className: 'icon rating-icon',
+                    selectedClass: 'icon-selected'
+                }, 
+                {
+                    content: '😍',
+                    className: 'icon rating-icon',
+                    selectedClass: 'icon-selected'
+                }
+            ],
             rightOptions: [{
                 content: null,
                 class: 'dismiss-button'

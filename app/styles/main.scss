@@ -19,6 +19,51 @@
   font-style: normal;
 }
 
+/*
+-----------------------------------
+Emoji - natural display for the web
+-----------------------------------
+These font face definitions allows to display emoji glyphs intermingled with 
+arbitrary characters outside emoji unicode blocks.
+Usage
+-----
+<p style="font-family: emoji;">
+You can mix text with em😶ji glyphs, like this one 💓, 
+WITHOUT wrapping into any HTML tag. 💕
+</p>
+Known Limitations
+-----------------
+- See https://developer.mozilla.org/en-US/docs/Web/CSS/unicode-range 
+  for unicode-range CSS descriptor compatibility.
+Have fun!
+*/
+
+@font-face {
+  font-family: emoji;
+  
+  /* Fonts for text outside emoji blocks */
+  src: local('Droid Sans Mono'),
+       local('Lucida Console'),
+       local('Arial Monospaced'),
+       local(Arial);
+}
+
+@font-face {
+  font-family: emoji;
+
+  src: local('Apple Color Emoji'),
+       local('Android Emoji'),
+       local('Segoe UI'),
+       local(EmojiSymbols),
+       local(Symbola),
+       url('fonts/Symbola-Emoji.eot?#iefix') format('embedded-opentype'),
+       url('fonts/Symbola-Emoji.woff') format('woff'),
+       url('fonts/Symbola-Emoji.ttf') format('truetype');
+
+  /* Emoji unicode blocks */
+  unicode-range: U+1F300-1F5FF, U+1F600-1F64F, U+1F680-1F6FF, U+2600-26FF;
+}
+
 html {
   height: 100%;
   overflow: hidden;
@@ -164,11 +209,6 @@ body {
     border-radius: 2px;
 }
 
-.rate-starts {
-  color: #71c04f;
-  padding-left: 5px;
-}
-
 .dismiss-button {
 }
 
@@ -191,7 +231,7 @@ body {
     position: absolute;
     left: 0;
     top: 0;
-    width: 150px;
+    width: 75%;
     height: 100%;
     vertical-align: top;
     background-color: #FFFFFF;
@@ -260,8 +300,6 @@ body {
 }
 .stro-button.stro-left-button span {
   text-align: center;
-  font-size: 25px;
-  font-weight: bold;
   margin-right: 6px;
 }
 
@@ -350,6 +388,19 @@ body {
     border-radius: 2px;
     opacity: 0.75;
     animation: scoreboxpointsanim ease-in 10s;
+}
+
+.icon {
+  color: #000;
+  font-size: 20px;
+  display: inline-block;
+  line-height: 1;
+  font-family: emoji;
+
+  &.rating-icon {
+    float: left;
+    margin-right: 20px;
+  }
 }
 
 @keyframes scoreboxanim {

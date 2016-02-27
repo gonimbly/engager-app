@@ -33,7 +33,7 @@ exports.redeem = function(req, res) {
           return wallet.save();
         })
         .then(function(user){
-          return code.sendEmail(body);
+          return code.sendEmail(body, code.get('text'));
         })
         .then(function(){
           return res.json(code);

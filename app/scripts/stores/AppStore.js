@@ -34,6 +34,7 @@ var AppStore = Reflux.createStore({
         },
         isRewardOpen: false,
         selectedReward: {},
+        redeemedReward: null,
         rewards: [],
         loadingInfo: "show",
         animations: {
@@ -179,7 +180,7 @@ var AppStore = Reflux.createStore({
         Cookie.remove('usertoken');
         this.appData.user.isSignin = false;
         this.appData.user.token = "";
-        this.appData.loadingInfo = "show";
+        this.appData.loadingInfo = true;
         this.trigger(this.appData);
     },
     onLoadToken: function() {
@@ -269,10 +270,6 @@ var AppStore = Reflux.createStore({
                 user_id: this.appData.user.id,
                 question_id: question.id
             },
-            success: function(data) {
-                this.appData.user.rewards.push(data);
-                this.trigger(this.appData);
-            }.bind(this),
             error: function(xhr, status, err) {
                 console.error(status, err.toString());
             }.bind(this)
@@ -290,10 +287,6 @@ var AppStore = Reflux.createStore({
                 value: question.rate,
                 question_id: question.id
             },
-            success: function(data) {
-                this.appData.user.rewards.push(data);
-                this.trigger(this.appData);
-            }.bind(this),
             error: function(xhr, status, err) {
                 console.error(status, err.toString());
             }.bind(this)
@@ -338,7 +331,7 @@ var AppStore = Reflux.createStore({
 
                 this.appData.rewards = data;
                 this.appData.animations.loaderIcon = "hide";
-                this.appData.loadingInfo = "hide";
+                this.appData.loadingInfo = false;
                 this.trigger(this.appData);
 
                 this.activeRewards();
@@ -364,11 +357,9 @@ var AppStore = Reflux.createStore({
                 amount: reward.cost
             },
             success: function(data) {
-                var cost = reward.cost;
                 var userScore = this.appData.user.score;
-                this.appData.selectedReward.code = data.text;
-                this.appData.user.score = parseInt(userScore) - parseInt(cost);
-                this.appData.animations.rewardToolbarAnim = "reward-toolbar-added";
+                this.appData.redeemedReward = this.appData.selectedReward;
+                this.appData.user.score = parseInt(userScore) - parseInt(reward.cost);
 
                 this.trigger(this.appData);
 
@@ -474,11 +465,6 @@ var AppStore = Reflux.createStore({
     claimReward: function(reward) {
         this.appData.isRewardOpen = false;
 
-        // move the reward to user's rewards
-        var i = _.indexOf(this.appData.rewards, reward);
-        this.appData.rewards.splice(i, 1);
-        this.appData.user.rewards.push(reward);
-
         this.trigger(this.appData);
 
         this.redeemReward(reward);
@@ -496,7 +482,7 @@ var AppStore = Reflux.createStore({
             var userScore = this.appData.user.score;
 
             if (el.cost <= userScore) {
-                el.className = "service-button-selected";
+                el.purchasable = true;
             }
         }
 

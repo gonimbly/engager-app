@@ -1,15 +1,19 @@
 .app-container {
+  height: 100%;
+  overflow: hidden;
+
   .header {
     background-image: url('../../../images/sf_day.jpg');
-    background-color: #81d05f;
-    height: 200px;
-    background-position: center center;
+    background-position: center bottom;
+    background-size: cover;
     position: relative;
   }
 
   .logo {
-    margin-top: 0;
-    margin-left: 10px;
-    position: absolute;
+    margin-bottom: 20px;
+    text-align: center;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    background-color: white;
   }
 }

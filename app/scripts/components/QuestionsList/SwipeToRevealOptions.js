@@ -95,7 +95,8 @@ var SwipeToRevealOptions = React.createClass({
 
     var leftOptions = this.props.leftOptions.map(function (option, index) {
       return (
-        <div className={'stro-button stro-left-button ' + option['class']}>
+        <div className={'stro-button stro-left-button ' + option['class']}
+             key={index}>
             <Rating full={'fa fa-star'}
                     empty={'fa fa-star-o'}
                     start={0}
@@ -109,7 +110,8 @@ var SwipeToRevealOptions = React.createClass({
     var rightOptions = this.props.rightOptions.map(function (option, index) {
         return (
             <div className={'stro-button stro-right-button text-center' + option.class}
-                 onClick={this.onDismiss.bind(this, q)}>
+                 onClick={this.onDismiss.bind(this, q)}
+                 key={index}>
                 <span dangerouslySetInnerHTML={{ __html: "Dismiss" }}></span>
             </div>
         );

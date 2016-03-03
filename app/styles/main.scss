@@ -227,15 +227,17 @@ body {
   transition: all .4s ease;
 }
 
-.stro-left {
+.stro-left, .stro-right {
     position: absolute;
     left: 0;
     top: 0;
-    width: 75%;
+    width: 100%;
     height: 100%;
     vertical-align: top;
     background-color: #FFFFFF;
     z-index: 1;
+    opacity: 0;
+    transition: .25s linear opacity;
 }
 
 .stro-content {
@@ -260,17 +262,6 @@ body {
     padding-left: 10px;
     text-align: left;
     color: #FFFFFF
-}
-
-.stro-right {
-  position: absolute;
-  right: 0;
-  top: 0;
-  width: 150px;
-  height: 80px;
-  vertical-align: top;
-  background-color: #FFFFFF;
-  z-index: 1;
 }
 
 .stro-button {

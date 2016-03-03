@@ -57779,6 +57779,7 @@
 	    },
 
 	    onDismiss: function(question) {
+	        console.log('onDismiss');
 	        AppActions.dismissQuestion(question);
 	    },
 
@@ -57809,64 +57810,59 @@
 	            break;
 	        }
 
-	        var angryFace = (React.createElement("span", {className: "icon icon-angry"}));
-	        var frustratedFace = (React.createElement("span", {className: "icon"}, "😕"));
-	        var contentFace = (React.createElement("span", {className: "icon"}, "🙂"));
-	        var happyFace = (React.createElement("span", {className: "icon"}, "😃"));
-	        var loveFace = (React.createElement("span", {className: "icon"}, "😍"));
-
-	        var item = {
-	            leftOptions: [
-	                {
-	                    content: '😡',
-	                    className: 'icon rating-icon',
-	                    selectedClass: 'icon-selected'
-	                }, 
-	                {
-	                    content: '😕',
-	                    className: 'icon rating-icon',
-	                    selectedClass: 'icon-selected'
-	                }, 
-	                {
-	                    content: '🙂',
-	                    className: 'icon rating-icon',
-	                    selectedClass: 'icon-selected'
-	                }, 
-	                {
-	                    content: '😃',
-	                    className: 'icon rating-icon',
-	                    selectedClass: 'icon-selected'
-	                }, 
-	                {
-	                    content: '😍',
-	                    className: 'icon rating-icon',
-	                    selectedClass: 'icon-selected'
-	                }
-	            ],
-	            rightOptions: [{
-	                content: null,
-	                class: 'dismiss-button'
-	            }],
+	        var icons = ['😡','😕','🙂','😃','😍'];
+	        var leftIcons = _.map(icons, function(icon, index) {
+	            var classes = 'icon';
+	            return (
+	                React.createElement("a", {className: classes, 
+	                   key: index}, 
+	                  icon
+	                )
+	            );
+	        });
+	        var leftStyle = {
+	            width: '100%',
+	            height: '100%',
+	            display: 'flex',
+	            alignItems: 'center',
+	            justifyContent: 'space-around',
+	            paddingLeft: '15px',
+	            paddingRight: '15px'
 	        };
+	        var leftChildren = (
+	            React.createElement("div", {style: leftStyle}, 
+	                leftIcons
+	            )
+	        );
+
+	        var rightStyle = {
+	            width: '100%',
+	            height: '100%'
+	        };
+	        var rightChildren = (
+	            React.createElement("div", {className: 'stro-button stro-right-button text-center dismiss-button', 
+	                 onClick: this.onDismiss.bind(this, question), 
+	                 style: rightStyle}, 
+	                React.createElement("span", null, "I do not want to answer this right now.")
+	            )
+	        );
 
 	        questionItemClass += ' question-item';
 
 	        return (
 	            React.createElement("div", {className: questionItemClass}, 
-	                React.createElement(SwipeToRevealOptions, {
-	                    actionThreshold: 300, 
-	                    visibilityThreshold: 25, 
-	                    leftOptions: item.leftOptions, 
-	                    rightOptions: item.rightOptions, 
-	                    callActionWhenSwipingFarRight: swipe, 
-	                    callActionWhenSwipingFarLeft: swipe, 
-	                    contentBgColor: bg, 
-	                    isRightActive: true, 
-	                    isLeftActive: isRightActive, 
-	                    onRate: this.onRate, 
-	                    onDismiss: this.onDismiss, 
-	                    questionObj: question, 
-	                    collapseDelay: 900}, 
+	                React.createElement(SwipeToRevealOptions, {actionThreshold: 300, 
+	                                      visibilityThreshold: 25, 
+	                                      leftChildren: leftChildren, 
+	                                      rightChildren: rightChildren, 
+	                                      callActionWhenSwipingFarRight: swipe, 
+	                                      callActionWhenSwipingFarLeft: swipe, 
+	                                      contentBgColor: bg, 
+	                                      isRightActive: true, 
+	                                      isLeftActive: isRightActive, 
+	                                      onRate: this.onRate, 
+	                                      questionObj: question, 
+	                                      collapseDelay: 900}, 
 	                    React.createElement("table", null, 
 	                        React.createElement("tr", null, 
 	                            React.createElement("td", {style: {
@@ -57916,8 +57912,14 @@
 	  displayName: "SwipeToRevealOptions",
 
 	  propTypes: {
-	    rightOptions: React.PropTypes.array,
-	    leftOptions: React.PropTypes.array,
+	    leftChildren: React.PropTypes.oneOfType([
+	      React.PropTypes.element,
+	      React.PropTypes.array
+	    ]).isRequired,
+	    rightChildren: React.PropTypes.oneOfType([
+	      React.PropTypes.element,
+	      React.PropTypes.array
+	    ]).isRequired,
 	    className: React.PropTypes.string,
 	    actionThreshold: React.PropTypes.number,
 	    visibilityThreshold: React.PropTypes.number,
@@ -57934,7 +57936,6 @@
 	    isLeftActive: React.PropTypes.bool,
 	    isRightActive: React.PropTypes.bool,
 	    onRate: React.PropTypes.func,
-	    onDismiss: React.PropTypes.func,
 	    questionObj: React.PropTypes.object,
 	    collapseDelay: React.PropTypes.number
 	  },
@@ -57955,17 +57956,17 @@
 
 	  getDefaultProps: function getDefaultProps() {
 	    return {
-	      rightOptions: [],
-	      leftOptions: [],
+	      rightChildren: [],
+	      leftChildren: [],
 	      className: "",
 	      actionThreshold: 300,
-	      visibilityThreshold: 50,
+	      visibilityThreshold: 0,
 	      transitionBackTimeout: 400,
 	      onRightClick: function onRightClick() {},
 	      onLeftClick: function onLeftClick() {},
 	      onReveal: function onReveal() {},
 	      closeOthers: function closeOthers() {},
-	      maxItemWidth: 150,
+	      maxItemWidth: window.screen.width,
 	      parentWidth: window.outerWidth || screen.width
 	    };
 	  },
@@ -57980,14 +57981,7 @@
 	      setTimeout(this.transitionBack, this.props.collapseDelay);
 	  },
 
-	  onDismiss: function(question) {
-	      this.props.onDismiss(question);
-	      this.transitionBack();
-	  },
-
 	  render: function render() {
-	    var q = this.props.questionObj;
-
 	    var classes = this.props.className + " stro-swipe-container";
 
 	    if (this.state.transitionBack) {
@@ -58002,51 +57996,49 @@
 	        classes += " show-left-buttons";
 	    }
 
-	    var leftOptions = this.props.leftOptions.map(function (option, index) {
-	      var classes = option.className;
-	      return (
-	        React.createElement("a", {className: classes, 
-	           key: index}, 
-	          option.content
-	        )
-	      );
-	    }.bind(this));
-
-	    var rightOptions = this.props.rightOptions.map(function (option, index) {
-	        return (
-	            React.createElement("div", {className: 'stro-button stro-right-button text-center' + option.class, 
-	                 onClick: this.onDismiss.bind(this, q), 
-	                 key: index}, 
-	                React.createElement("span", {dangerouslySetInnerHTML: { __html: "Dismiss"}})
-	            )
-	        );
-	    }.bind(this));
+	    var leftOpacity, rightOpacity;
+	    var screenWidth = window.screen.width;
+	    if(this.state.showLeftButtons) {
+	      leftOpacity = 1;
+	      rightOpacity = 0;
+	    } else if(this.state.showRightButtons) {
+	      leftOpacity = 0;
+	      rightOpacity = 1;
+	    } else {
+	      leftOpacity = this.state.delta / screenWidth;
+	      rightOpacity = -this.state.delta / screenWidth;
+	    }
 
 	    return (
 	      React.createElement("div", {className: "stro-container"}, 
-	        React.createElement("div", {className: "stro-left"}, 
-	            leftOptions
-	        ), 
-	        React.createElement("div", {className: "stro-right"}, 
-	            rightOptions
-	        ), 
-	        React.createElement("div", {className: classes, 
-	             style: this.getContainerStyle()}, 
-	            React.createElement(Swipeable, {className: "stro-content", 
-	                       onSwipingLeft: this.swipingLeft, 
-	                       onClick: this.handleContentClick, 
-	                       onSwipingRight: this.swipingRight, 
-	                       delta: 15, 
-	                       onSwiped: this.swiped, 
-	                       style: {backgroundColor: this.props.contentBgColor}}, 
-	                this.props.children
-	            )
+	        React.createElement(Swipeable, {onSwipingLeft: this.swipingLeft, 
+	                   onSwipingRight: this.swipingRight, 
+	                   delta: 15, 
+	                   onSwiped: this.swiped}, 
+	          React.createElement("div", {className: "stro-left", 
+	               style: {opacity: leftOpacity}, 
+	               onClick: this.transitionBack}, 
+	              this.props.leftChildren
+	          ), 
+	          React.createElement("div", {className: "stro-right", 
+	               style: {opacity: rightOpacity}, 
+	               onClick: this.transitionBack}, 
+	              this.props.rightChildren
+	          ), 
+	          React.createElement("div", {className: classes, 
+	               style: this.getContainerStyle()}, 
+	               React.createElement("div", {className: "stro-content", 
+	                    style: {backgroundColor: this.props.contentBgColor}}, 
+	                  this.props.children
+	              )
+	          )
 	        )
 	      )
 	    );
 	  },
 
 	  swipingLeft: function swipingLeft(event, delta) {
+	    console.log('swipingLeft');
 	      if (this.swipingHandleStylesAndDelta(delta, "left")) {
 	          return;
 	      }
@@ -58072,6 +58064,7 @@
 	  },
 
 	  swipingRight: function swipingRight(event, delta) {
+	    console.log('swipingRight');
 	      if (this.swipingHandleStylesAndDelta(delta, "right")) {
 	          return;
 	      }
@@ -58111,12 +58104,6 @@
 	      if (this.state.transitionBack) {
 	          return true;
 	      }
-	      if (direction === "right") {
-	          return !this.props.leftOptions.length && !this.state.showRightButtons || this.state.showLeftButtons && !this.props.callActionWhenSwipingFarRight;
-	      }
-	      else {
-	          return !this.props.rightOptions.length && !this.state.showLeftButtons || this.state.showRightButtons && !this.props.callActionWhenSwipingFarLeft;
-	      }
 	  },
 
 	  shouldTransitionBack: function shouldTransitionBack(direction) {
@@ -58143,12 +58130,6 @@
 	        // set the rating
 	        this.props.onReveal("left");
 	        this.setState({ showLeftButtons: true });
-	        break;
-	      case "leftAction":
-	        this.leftClick(this.props.leftOptions[0]);
-	        break;
-	      case "rightAction":
-	        this.rightClick(this.props.rightOptions[this.props.rightOptions.length - 1]);
 	        break;
 	    }
 	    this.setState({
@@ -58179,6 +58160,7 @@
 	  },
 
 	  transitionBack: function transitionBack() {
+	    console.log('this.transitionBack');
 	      this.setState({
 	          showLeftButtons: false,
 	          showRightButtons: false,
@@ -58192,12 +58174,13 @@
 	  getContainerStyle: function getContainerStyle() {
 	    var itemWidth;
 	    var delta = this.state.delta;
+	    var screenWidth = window.screen.width;
 	    if (this.state.delta === 0 && this.state.showRightButtons) {
 	      itemWidth = this.getItemWidth("right");
-	      delta = -this.props.rightOptions.length * itemWidth;
+	      delta = -screenWidth;
 	    } else if (this.state.delta === 0 && this.state.showLeftButtons) {
 	      itemWidth = this.getItemWidth("left");
-	      delta = this.props.leftOptions.length * itemWidth;
+	      delta = screenWidth;
 	    } else if(delta > this.props.visibilityThreshold && !this.state.showLeftButtons) {
 	      // swiping right
 	      // limit distance container can travel
@@ -58211,8 +58194,7 @@
 	  },
 
 	  getItemWidth: function getItemWidth(side) {
-	    var nbOptions = side === "left" ? this.props.leftOptions.length : this.props.rightOptions.length;
-	    return Math.min(this.props.parentWidth / (nbOptions + 1), this.props.maxItemWidth);
+	    return Math.min(this.props.parentWidth / (window.screen.width + 1), this.props.maxItemWidth);
 	  }
 	});
 
@@ -59535,7 +59517,7 @@
 
 
 	// module
-	exports.push([module.id, "@charset \"UTF-8\";\n@font-face {\n  font-family: 'WhitneyHTF';\n  src: url(" + __webpack_require__(511) + "?#iefix) format(\"embedded-opentype\"), url(" + __webpack_require__(512) + ") format(\"woff\"), url(" + __webpack_require__(513) + ") format(\"truetype\"), url(" + __webpack_require__(514) + "#WhitneyHTF-Bold) format(\"svg\");\n  font-weight: 400;\n  font-style: normal;\n}\n\n@font-face {\n  font-family: 'WhitneyHTF';\n  src: url(" + __webpack_require__(515) + "?#iefix) format(\"embedded-opentype\"), url(" + __webpack_require__(516) + ") format(\"woff\"), url(" + __webpack_require__(517) + ") format(\"truetype\"), url(" + __webpack_require__(518) + "#WhitneyHTF-Bold) format(\"svg\");\n  font-weight: 300;\n  font-style: normal;\n}\n\n@font-face {\n  font-family: 'WhitneyHTF';\n  src: url(" + __webpack_require__(519) + "?#iefix) format(\"embedded-opentype\"), url(" + __webpack_require__(520) + ") format(\"woff\"), url(" + __webpack_require__(521) + ") format(\"truetype\"), url(" + __webpack_require__(522) + "#WhitneyHTF-Bold) format(\"svg\");\n  font-weight: 200;\n  font-style: normal;\n}\n\n/*\n-----------------------------------\nEmoji - natural display for the web\n-----------------------------------\nThese font face definitions allows to display emoji glyphs intermingled with \narbitrary characters outside emoji unicode blocks.\nUsage\n-----\n<p style=\"font-family: emoji;\">\nYou can mix text with em😶ji glyphs, like this one 💓, \nWITHOUT wrapping into any HTML tag. 💕\n</p>\nKnown Limitations\n-----------------\n- See https://developer.mozilla.org/en-US/docs/Web/CSS/unicode-range \n  for unicode-range CSS descriptor compatibility.\nHave fun!\n*/\n@font-face {\n  font-family: emoji;\n  /* Fonts for text outside emoji blocks */\n  src: local(\"Droid Sans Mono\"), local(\"Lucida Console\"), local(\"Arial Monospaced\"), local(Arial);\n}\n\n@font-face {\n  font-family: emoji;\n  src: local(\"Apple Color Emoji\"), local(\"Android Emoji\"), local(\"Segoe UI\"), local(EmojiSymbols), local(Symbola), url(" + __webpack_require__(523) + "?#iefix) format(\"embedded-opentype\"), url(" + __webpack_require__(524) + ") format(\"woff\"), url(" + __webpack_require__(525) + ") format(\"truetype\");\n  /* Emoji unicode blocks */\n  unicode-range: U+1F300-1F5FF, U+1F600-1F64F, U+1F680-1F6FF, U+2600-26FF;\n}\n\nhtml {\n  height: 100%;\n  overflow: hidden;\n}\n\nbody {\n  background: white;\n  font-family: 'WhitneyHTF', 'Helvetica Neue', Helvetica, Arial, sans-serif;\n  font-weight: 200;\n  color: #333;\n  overflow: hidden;\n  height: 100%;\n}\n\n#content, .App {\n  height: 100%;\n}\n\n.circle {\n  display: block;\n  width: 100%;\n  height: 100%;\n  background-size: cover;\n  background-repeat: no-repeat;\n  background-position: center center;\n  border-radius: 99em;\n  -webkit-border-radius: 99em;\n  -moz-border-radius: 99em;\n  border: 2px solid white;\n}\n\n.three-bounce .bounce1 {\n  background-color: #71c04f;\n}\n\n.three-bounce .bounce2 {\n  background-color: #71c04f;\n}\n\n.three-bounce .bounce3 {\n  background-color: #71c04f;\n}\n\n.signin-error-message {\n  color: #de3226;\n  font-size: 12px;\n  margin-top: 3px;\n}\n\n.signup-error-message {\n  color: #de3226;\n  font-size: 12px;\n  position: absolute;\n  margin-top: 3px;\n  width: 240px;\n  margin-left: -120px;\n  left: 50%;\n}\n\n.hero-unit {\n  margin: 50px auto 0 auto;\n  width: 300px;\n  font-size: 18px;\n  font-weight: 200;\n  line-height: 30px;\n  background-color: #eee;\n  border-radius: 6px;\n  padding: 60px;\n}\n\n.hero-unit h1 {\n  font-size: 60px;\n  line-height: 1;\n  letter-spacing: -1px;\n}\n\n.textfield {\n  width: 300px;\n  margin-left: 30px;\n  margin-right: 30px;\n  color: #1c1c1c;\n}\n\n.mdl-spinner__circle-clipper {\n  border-color: #71c04f;\n}\n\n.mdl-textfield--floating-label.is-focused .mdl-textfield__label, .mdl-textfield--floating-label.is-dirty .mdl-textfield__label {\n  color: #71c04f;\n}\n\n.mdl-textfield .mdl-js-textfield .mdl-textfield--floating-label .textfield .is-dirty .is-upgraded .is-focused {\n  border-color: #71c04f;\n}\n\n.wordwrap {\n  white-space: pre-wrap;\n  /* CSS3 */\n  white-space: -moz-pre-wrap;\n  /* Firefox */\n  white-space: -o-pre-wrap;\n  /* Opera 7 */\n  word-wrap: break-word;\n  /* IE */\n}\n\n.browsehappy {\n  margin: 0.2em 0;\n  background: #ccc;\n  color: #000;\n  padding: 0.2em 0;\n}\n\n.profile-image {\n  float: right;\n}\n\n.header-tabs-style {\n  background-color: #57c6ff;\n}\n\n.service-button-base {\n  width: 100px;\n  height: 55px;\n  background-color: transparent;\n  border: 1px solid #71c04f;\n  color: #71c04f;\n  margin: 12px 8px;\n  line-height: 16px;\n  text-align: left;\n  text-transform: none;\n  border-radius: 2px;\n  outline: 0;\n}\n\n.service-button-selected {\n  width: 100px;\n  height: 55px;\n  background-color: #71c04f;\n  border: 1px solid #71c04f;\n  margin: 12px 8px;\n  line-height: 16px;\n  text-align: left;\n  text-transform: none;\n  color: #ffffff;\n  outline: 0;\n  border-radius: 2px;\n}\n\n.stro-container {\n  position: relative;\n}\n\n.stro-swipe-container {\n  width: 100%;\n  position: relative;\n  height: 80px;\n  z-index: 2;\n}\n\n.stro-swipe-container.transition-back {\n  transition: all .4s ease;\n}\n\n.stro-left {\n  position: absolute;\n  left: 0;\n  top: 0;\n  width: 75%;\n  height: 100%;\n  vertical-align: top;\n  background-color: #FFFFFF;\n  z-index: 1;\n}\n\n.stro-content {\n  position: relative;\n  display: inline-block;\n  width: 100%;\n  vertical-align: top;\n  background-color: #f8f8fa;\n  height: 80px;\n  padding-left: 10px;\n  text-align: left;\n  color: #000000;\n}\n\n.stro-content-selected {\n  position: relative;\n  display: inline-block;\n  width: 120px;\n  vertical-align: top;\n  background-color: #71c04f;\n  height: 80px;\n  padding-left: 10px;\n  text-align: left;\n  color: #FFFFFF;\n}\n\n.stro-right {\n  position: absolute;\n  right: 0;\n  top: 0;\n  width: 150px;\n  height: 80px;\n  vertical-align: top;\n  background-color: #FFFFFF;\n  z-index: 1;\n}\n\n.stro-button {\n  position: absolute;\n  height: 100%;\n  width: 100%;\n}\n\n.stro-button span {\n  position: absolute;\n  top: 27px;\n  transform: translate(0, -50%);\n  display: block;\n}\n\n.stro-button.stro-right-button {\n  left: 0;\n}\n\n.stro-button.stro-right-button span {\n  text-align: center;\n  top: 40px;\n  font-size: 16px;\n  width: 100%;\n}\n\n.stro-button.stro-left-button {\n  right: 0;\n}\n\n.stro-button.stro-left-button span {\n  text-align: center;\n  margin-right: 6px;\n}\n\n.stro-swipe-container.show-right-buttons,\n.stro-swipe-container.show-left-buttons,\n.stro-swipe-container.show-right-buttons .stro-button,\n.stro-swipe-container.show-left-buttons .stro-button {\n  transition: all .3s ease;\n}\n\n.addedpoints-enter {\n  opacity: 0.01;\n}\n\n.addedpoints-enter.addedpoints-enter-active {\n  opacity: 1;\n  transition: opacity .5s ease-in;\n}\n\n.addedpoints-leave {\n  opacity: 1;\n}\n\n.addedpoints-leave.addedpoints-leave-active {\n  opacity: 0.01;\n  transition: opacity .5s ease-in;\n}\n\n.addedpoints-appear {\n  opacity: 0.01;\n  transition: opacity .5s ease-in;\n}\n\n.addedpoints-appear.addedpoints-appear-active {\n  opacity: 1;\n}\n\n.ReactModal__Overlay {\n  z-index: 99;\n}\n\n.ReactModal__Overlay--after-open {\n  background-color: rgba(0, 0, 0, 0.8) !important;\n}\n\n.ReactModal__Content--after-open {\n  height: 16em;\n  margin-top: 40%;\n  border-radius: 4px;\n  padding: 0px !important;\n}\n\n.ReactModal__Content {\n  border: none !important;\n  overflow: hidden !important;\n}\n\n.reward-toolbar {\n  position: absolute;\n  color: #FFFFFF;\n  background-color: #000000;\n  opacity: 0.75;\n  padding-left: 10px;\n  padding-top: 0px;\n  padding-bottom: 0px;\n  padding-right: 10px;\n  top: 45px;\n  right: 20px;\n  z-index: 1000;\n  border-radius: 2px;\n  opacity: 0;\n}\n\n.reward-toolbar-added {\n  position: absolute;\n  color: #FFFFFF;\n  background-color: #000000;\n  opacity: 0.75;\n  padding-left: 10px;\n  padding-top: 0px;\n  padding-bottom: 0px;\n  padding-right: 10px;\n  top: 45px;\n  right: 20px;\n  z-index: 1000;\n  border-radius: 2px;\n  opacity: 0.75;\n  animation: scoreboxpointsanim ease-in 10s;\n}\n\n.icon {\n  color: #000;\n  font-size: 20px;\n  display: inline-block;\n  line-height: 1;\n  font-family: emoji;\n}\n\n.icon.rating-icon {\n  float: left;\n  margin-right: 20px;\n}\n\n@keyframes scoreboxanim {\n  0%, 100% {\n    color: #FFFFFF;\n  }\n  25%, 50%, 75% {\n    color: #71c04f;\n  }\n}\n\n@keyframes scoreboxpointsanim {\n  0% {\n    opacity: 0.1;\n    transform: translate(0px, -12px);\n  }\n  5%, 10%, 15%, 20%, 25%, 30%, 35%, 40%, 45%, 50%, 55%, 60%, 65%, 75%, 85%, 90%, 95%, 100% {\n    opacity: 0.75;\n    transform: translate(0px, 0px);\n  }\n}\n\n@-moz-keyframes scoreboxpointsanim {\n  0% {\n    opacity: 0.1;\n    -moz-transform: translate(0px, -12px);\n  }\n  5%, 10%, 15%, 20%, 25%, 30%, 35%, 40%, 45%, 50%, 55%, 60%, 65%, 75%, 85%, 95%, 100% {\n    opacity: 0.75;\n    -moz-transform: translate(0px, 0px);\n  }\n}\n\n@-webkit-keyframes scoreboxpointsanim {\n  0% {\n    opacity: 0.1;\n    -webkit-transform: translate(0px, -12px);\n  }\n  5%, 10%, 15%, 20%, 25%, 30%, 35%, 40%, 45%, 50%, 55%, 60%, 65%, 75%, 85%, 95%, 100% {\n    opacity: 0.75;\n    -webkit-transform: translate(0px, 0px);\n  }\n}\n\n@-o-keyframes scoreboxpointsanim {\n  0% {\n    opacity: 0.1;\n    -o-transform: translate(0px, -12px);\n  }\n  5%, 10%, 15%, 20%, 25%, 30%, 35%, 40%, 45%, 50%, 55%, 60%, 65%, 75%, 85%, 95%, 100% {\n    opacity: 0.75;\n    -o-transform: translate(0px, 0px);\n  }\n}\n\n@-ms-keyframes scoreboxpointsanim {\n  0% {\n    opacity: 0.1;\n    -ms-transform: translate(0px, -12px);\n  }\n  5%, 10%, 15%, 20%, 25%, 30%, 35%, 40%, 45%, 50%, 55%, 60%, 65%, 75%, 85%, 95%, 100% {\n    opacity: 0.75;\n    -ms-transform: translate(0px, 0px);\n  }\n}\n", ""]);
+	exports.push([module.id, "@charset \"UTF-8\";\n@font-face {\n  font-family: 'WhitneyHTF';\n  src: url(" + __webpack_require__(511) + "?#iefix) format(\"embedded-opentype\"), url(" + __webpack_require__(512) + ") format(\"woff\"), url(" + __webpack_require__(513) + ") format(\"truetype\"), url(" + __webpack_require__(514) + "#WhitneyHTF-Bold) format(\"svg\");\n  font-weight: 400;\n  font-style: normal;\n}\n\n@font-face {\n  font-family: 'WhitneyHTF';\n  src: url(" + __webpack_require__(515) + "?#iefix) format(\"embedded-opentype\"), url(" + __webpack_require__(516) + ") format(\"woff\"), url(" + __webpack_require__(517) + ") format(\"truetype\"), url(" + __webpack_require__(518) + "#WhitneyHTF-Bold) format(\"svg\");\n  font-weight: 300;\n  font-style: normal;\n}\n\n@font-face {\n  font-family: 'WhitneyHTF';\n  src: url(" + __webpack_require__(519) + "?#iefix) format(\"embedded-opentype\"), url(" + __webpack_require__(520) + ") format(\"woff\"), url(" + __webpack_require__(521) + ") format(\"truetype\"), url(" + __webpack_require__(522) + "#WhitneyHTF-Bold) format(\"svg\");\n  font-weight: 200;\n  font-style: normal;\n}\n\n/*\n-----------------------------------\nEmoji - natural display for the web\n-----------------------------------\nThese font face definitions allows to display emoji glyphs intermingled with \narbitrary characters outside emoji unicode blocks.\nUsage\n-----\n<p style=\"font-family: emoji;\">\nYou can mix text with em😶ji glyphs, like this one 💓, \nWITHOUT wrapping into any HTML tag. 💕\n</p>\nKnown Limitations\n-----------------\n- See https://developer.mozilla.org/en-US/docs/Web/CSS/unicode-range \n  for unicode-range CSS descriptor compatibility.\nHave fun!\n*/\n@font-face {\n  font-family: emoji;\n  /* Fonts for text outside emoji blocks */\n  src: local(\"Droid Sans Mono\"), local(\"Lucida Console\"), local(\"Arial Monospaced\"), local(Arial);\n}\n\n@font-face {\n  font-family: emoji;\n  src: local(\"Apple Color Emoji\"), local(\"Android Emoji\"), local(\"Segoe UI\"), local(EmojiSymbols), local(Symbola), url(" + __webpack_require__(523) + "?#iefix) format(\"embedded-opentype\"), url(" + __webpack_require__(524) + ") format(\"woff\"), url(" + __webpack_require__(525) + ") format(\"truetype\");\n  /* Emoji unicode blocks */\n  unicode-range: U+1F300-1F5FF, U+1F600-1F64F, U+1F680-1F6FF, U+2600-26FF;\n}\n\nhtml {\n  height: 100%;\n  overflow: hidden;\n}\n\nbody {\n  background: white;\n  font-family: 'WhitneyHTF', 'Helvetica Neue', Helvetica, Arial, sans-serif;\n  font-weight: 200;\n  color: #333;\n  overflow: hidden;\n  height: 100%;\n}\n\n#content, .App {\n  height: 100%;\n}\n\n.circle {\n  display: block;\n  width: 100%;\n  height: 100%;\n  background-size: cover;\n  background-repeat: no-repeat;\n  background-position: center center;\n  border-radius: 99em;\n  -webkit-border-radius: 99em;\n  -moz-border-radius: 99em;\n  border: 2px solid white;\n}\n\n.three-bounce .bounce1 {\n  background-color: #71c04f;\n}\n\n.three-bounce .bounce2 {\n  background-color: #71c04f;\n}\n\n.three-bounce .bounce3 {\n  background-color: #71c04f;\n}\n\n.signin-error-message {\n  color: #de3226;\n  font-size: 12px;\n  margin-top: 3px;\n}\n\n.signup-error-message {\n  color: #de3226;\n  font-size: 12px;\n  position: absolute;\n  margin-top: 3px;\n  width: 240px;\n  margin-left: -120px;\n  left: 50%;\n}\n\n.hero-unit {\n  margin: 50px auto 0 auto;\n  width: 300px;\n  font-size: 18px;\n  font-weight: 200;\n  line-height: 30px;\n  background-color: #eee;\n  border-radius: 6px;\n  padding: 60px;\n}\n\n.hero-unit h1 {\n  font-size: 60px;\n  line-height: 1;\n  letter-spacing: -1px;\n}\n\n.textfield {\n  width: 300px;\n  margin-left: 30px;\n  margin-right: 30px;\n  color: #1c1c1c;\n}\n\n.mdl-spinner__circle-clipper {\n  border-color: #71c04f;\n}\n\n.mdl-textfield--floating-label.is-focused .mdl-textfield__label, .mdl-textfield--floating-label.is-dirty .mdl-textfield__label {\n  color: #71c04f;\n}\n\n.mdl-textfield .mdl-js-textfield .mdl-textfield--floating-label .textfield .is-dirty .is-upgraded .is-focused {\n  border-color: #71c04f;\n}\n\n.wordwrap {\n  white-space: pre-wrap;\n  /* CSS3 */\n  white-space: -moz-pre-wrap;\n  /* Firefox */\n  white-space: -o-pre-wrap;\n  /* Opera 7 */\n  word-wrap: break-word;\n  /* IE */\n}\n\n.browsehappy {\n  margin: 0.2em 0;\n  background: #ccc;\n  color: #000;\n  padding: 0.2em 0;\n}\n\n.profile-image {\n  float: right;\n}\n\n.header-tabs-style {\n  background-color: #57c6ff;\n}\n\n.service-button-base {\n  width: 100px;\n  height: 55px;\n  background-color: transparent;\n  border: 1px solid #71c04f;\n  color: #71c04f;\n  margin: 12px 8px;\n  line-height: 16px;\n  text-align: left;\n  text-transform: none;\n  border-radius: 2px;\n  outline: 0;\n}\n\n.service-button-selected {\n  width: 100px;\n  height: 55px;\n  background-color: #71c04f;\n  border: 1px solid #71c04f;\n  margin: 12px 8px;\n  line-height: 16px;\n  text-align: left;\n  text-transform: none;\n  color: #ffffff;\n  outline: 0;\n  border-radius: 2px;\n}\n\n.stro-container {\n  position: relative;\n}\n\n.stro-swipe-container {\n  width: 100%;\n  position: relative;\n  height: 80px;\n  z-index: 2;\n}\n\n.stro-swipe-container.transition-back {\n  transition: all .4s ease;\n}\n\n.stro-left, .stro-right {\n  position: absolute;\n  left: 0;\n  top: 0;\n  width: 100%;\n  height: 100%;\n  vertical-align: top;\n  background-color: #FFFFFF;\n  z-index: 1;\n  opacity: 0;\n  transition: .25s linear opacity;\n}\n\n.stro-content {\n  position: relative;\n  display: inline-block;\n  width: 100%;\n  vertical-align: top;\n  background-color: #f8f8fa;\n  height: 80px;\n  padding-left: 10px;\n  text-align: left;\n  color: #000000;\n}\n\n.stro-content-selected {\n  position: relative;\n  display: inline-block;\n  width: 120px;\n  vertical-align: top;\n  background-color: #71c04f;\n  height: 80px;\n  padding-left: 10px;\n  text-align: left;\n  color: #FFFFFF;\n}\n\n.stro-button {\n  position: absolute;\n  height: 100%;\n  width: 100%;\n}\n\n.stro-button span {\n  position: absolute;\n  top: 27px;\n  transform: translate(0, -50%);\n  display: block;\n}\n\n.stro-button.stro-right-button {\n  left: 0;\n}\n\n.stro-button.stro-right-button span {\n  text-align: center;\n  top: 40px;\n  font-size: 16px;\n  width: 100%;\n}\n\n.stro-button.stro-left-button {\n  right: 0;\n}\n\n.stro-button.stro-left-button span {\n  text-align: center;\n  margin-right: 6px;\n}\n\n.stro-swipe-container.show-right-buttons,\n.stro-swipe-container.show-left-buttons,\n.stro-swipe-container.show-right-buttons .stro-button,\n.stro-swipe-container.show-left-buttons .stro-button {\n  transition: all .3s ease;\n}\n\n.addedpoints-enter {\n  opacity: 0.01;\n}\n\n.addedpoints-enter.addedpoints-enter-active {\n  opacity: 1;\n  transition: opacity .5s ease-in;\n}\n\n.addedpoints-leave {\n  opacity: 1;\n}\n\n.addedpoints-leave.addedpoints-leave-active {\n  opacity: 0.01;\n  transition: opacity .5s ease-in;\n}\n\n.addedpoints-appear {\n  opacity: 0.01;\n  transition: opacity .5s ease-in;\n}\n\n.addedpoints-appear.addedpoints-appear-active {\n  opacity: 1;\n}\n\n.ReactModal__Overlay {\n  z-index: 99;\n}\n\n.ReactModal__Overlay--after-open {\n  background-color: rgba(0, 0, 0, 0.8) !important;\n}\n\n.ReactModal__Content--after-open {\n  height: 16em;\n  margin-top: 40%;\n  border-radius: 4px;\n  padding: 0px !important;\n}\n\n.ReactModal__Content {\n  border: none !important;\n  overflow: hidden !important;\n}\n\n.reward-toolbar {\n  position: absolute;\n  color: #FFFFFF;\n  background-color: #000000;\n  opacity: 0.75;\n  padding-left: 10px;\n  padding-top: 0px;\n  padding-bottom: 0px;\n  padding-right: 10px;\n  top: 45px;\n  right: 20px;\n  z-index: 1000;\n  border-radius: 2px;\n  opacity: 0;\n}\n\n.reward-toolbar-added {\n  position: absolute;\n  color: #FFFFFF;\n  background-color: #000000;\n  opacity: 0.75;\n  padding-left: 10px;\n  padding-top: 0px;\n  padding-bottom: 0px;\n  padding-right: 10px;\n  top: 45px;\n  right: 20px;\n  z-index: 1000;\n  border-radius: 2px;\n  opacity: 0.75;\n  animation: scoreboxpointsanim ease-in 10s;\n}\n\n.icon {\n  color: #000;\n  font-size: 20px;\n  display: inline-block;\n  line-height: 1;\n  font-family: emoji;\n}\n\n.icon.rating-icon {\n  float: left;\n  margin-right: 20px;\n}\n\n@keyframes scoreboxanim {\n  0%, 100% {\n    color: #FFFFFF;\n  }\n  25%, 50%, 75% {\n    color: #71c04f;\n  }\n}\n\n@keyframes scoreboxpointsanim {\n  0% {\n    opacity: 0.1;\n    transform: translate(0px, -12px);\n  }\n  5%, 10%, 15%, 20%, 25%, 30%, 35%, 40%, 45%, 50%, 55%, 60%, 65%, 75%, 85%, 90%, 95%, 100% {\n    opacity: 0.75;\n    transform: translate(0px, 0px);\n  }\n}\n\n@-moz-keyframes scoreboxpointsanim {\n  0% {\n    opacity: 0.1;\n    -moz-transform: translate(0px, -12px);\n  }\n  5%, 10%, 15%, 20%, 25%, 30%, 35%, 40%, 45%, 50%, 55%, 60%, 65%, 75%, 85%, 95%, 100% {\n    opacity: 0.75;\n    -moz-transform: translate(0px, 0px);\n  }\n}\n\n@-webkit-keyframes scoreboxpointsanim {\n  0% {\n    opacity: 0.1;\n    -webkit-transform: translate(0px, -12px);\n  }\n  5%, 10%, 15%, 20%, 25%, 30%, 35%, 40%, 45%, 50%, 55%, 60%, 65%, 75%, 85%, 95%, 100% {\n    opacity: 0.75;\n    -webkit-transform: translate(0px, 0px);\n  }\n}\n\n@-o-keyframes scoreboxpointsanim {\n  0% {\n    opacity: 0.1;\n    -o-transform: translate(0px, -12px);\n  }\n  5%, 10%, 15%, 20%, 25%, 30%, 35%, 40%, 45%, 50%, 55%, 60%, 65%, 75%, 85%, 95%, 100% {\n    opacity: 0.75;\n    -o-transform: translate(0px, 0px);\n  }\n}\n\n@-ms-keyframes scoreboxpointsanim {\n  0% {\n    opacity: 0.1;\n    -ms-transform: translate(0px, -12px);\n  }\n  5%, 10%, 15%, 20%, 25%, 30%, 35%, 40%, 45%, 50%, 55%, 60%, 65%, 75%, 85%, 95%, 100% {\n    opacity: 0.75;\n    -ms-transform: translate(0px, 0px);\n  }\n}\n", ""]);
 
 	// exports
 

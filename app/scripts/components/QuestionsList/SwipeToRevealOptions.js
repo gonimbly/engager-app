@@ -6,13 +6,11 @@ var SwipeToRevealOptions = React.createClass({
   displayName: "SwipeToRevealOptions",
 
   propTypes: {
-    rightOptions: React.PropTypes.shape({
-      width: React.PropTypes.number
-    }).isRequired,
-    leftOptions: React.PropTypes.shape({
-      width: React.PropTypes.number
-    }).isRequired,
     leftChildren: React.PropTypes.oneOfType([
+      React.PropTypes.element,
+      React.PropTypes.array
+    ]).isRequired,
+    rightChildren: React.PropTypes.oneOfType([
       React.PropTypes.element,
       React.PropTypes.array
     ]).isRequired,
@@ -54,21 +52,15 @@ var SwipeToRevealOptions = React.createClass({
     return {
       rightChildren: [],
       leftChildren: [],
-      leftOptions: {
-        width: 150
-      },
-      rightOptions: {
-        width: 150
-      },
       className: "",
       actionThreshold: 300,
-      visibilityThreshold: 50,
+      visibilityThreshold: 0,
       transitionBackTimeout: 400,
       onRightClick: function onRightClick() {},
       onLeftClick: function onLeftClick() {},
       onReveal: function onReveal() {},
       closeOthers: function closeOthers() {},
-      maxItemWidth: 150,
+      maxItemWidth: window.screen.width,
       parentWidth: window.outerWidth || screen.width
     };
   },
@@ -98,29 +90,43 @@ var SwipeToRevealOptions = React.createClass({
         classes += " show-left-buttons";
     }
 
+    var leftOpacity, rightOpacity;
+    var screenWidth = window.screen.width;
+    if(this.state.showLeftButtons) {
+      leftOpacity = 1;
+      rightOpacity = 0;
+    } else if(this.state.showRightButtons) {
+      leftOpacity = 0;
+      rightOpacity = 1;
+    } else {
+      leftOpacity = this.state.delta / screenWidth;
+      rightOpacity = -this.state.delta / screenWidth;
+    }
+
     return (
       <div className='stro-container'>
-        <div className='stro-left'
-             style={{width: this.props.leftOptions.width}}
-             onClick={this.transitionBack}>
-            {this.props.leftChildren}
-        </div>
-        <div className="stro-right"
-             style={{width: this.props.rightOptions.width}}
-             onClick={this.transitionBack}>
-            {this.props.rightChildren}
-        </div>
-        <div className={classes}
-             style={this.getContainerStyle()}>
-            <Swipeable className='stro-content'
-                       onSwipingLeft={this.swipingLeft}
-                       onSwipingRight={this.swipingRight}
-                       delta={15}
-                       onSwiped={this.swiped}
-                       style={{backgroundColor: this.props.contentBgColor}}>
-                {this.props.children}
-            </Swipeable>
-        </div>
+        <Swipeable onSwipingLeft={this.swipingLeft}
+                   onSwipingRight={this.swipingRight}
+                   delta={15}
+                   onSwiped={this.swiped}>
+          <div className='stro-left'
+               style={{opacity: leftOpacity}}
+               onClick={this.transitionBack}>
+              {this.props.leftChildren}
+          </div>
+          <div className="stro-right"
+               style={{opacity: rightOpacity}}
+               onClick={this.transitionBack}>
+              {this.props.rightChildren}
+          </div>
+          <div className={classes}
+               style={this.getContainerStyle()}>
+               <div className="stro-content"
+                    style={{backgroundColor: this.props.contentBgColor}}>
+                  {this.props.children}
+              </div>
+          </div>
+        </Swipeable>
       </div>
     );
   },
@@ -262,12 +268,13 @@ var SwipeToRevealOptions = React.createClass({
   getContainerStyle: function getContainerStyle() {
     var itemWidth;
     var delta = this.state.delta;
+    var screenWidth = window.screen.width;
     if (this.state.delta === 0 && this.state.showRightButtons) {
       itemWidth = this.getItemWidth("right");
-      delta = -this.props.rightOptions.width;
+      delta = -screenWidth;
     } else if (this.state.delta === 0 && this.state.showLeftButtons) {
       itemWidth = this.getItemWidth("left");
-      delta = this.props.leftOptions.width;
+      delta = screenWidth;
     } else if(delta > this.props.visibilityThreshold && !this.state.showLeftButtons) {
       // swiping right
       // limit distance container can travel
@@ -281,8 +288,7 @@ var SwipeToRevealOptions = React.createClass({
   },
 
   getItemWidth: function getItemWidth(side) {
-    var nbOptions = side === "left" ? this.props.leftOptions.width : this.props.rightOptions.width;
-    return Math.min(this.props.parentWidth / (nbOptions + 1), this.props.maxItemWidth);
+    return Math.min(this.props.parentWidth / (window.screen.width + 1), this.props.maxItemWidth);
   }
 });
 

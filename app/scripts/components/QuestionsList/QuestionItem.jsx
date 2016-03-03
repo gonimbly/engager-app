@@ -81,7 +81,7 @@ var QuestionItem = React.createClass({
         }
 
         var icons = ['😡','😕','🙂','😃','😍'];
-        var leftChildren = _.map(icons, function(icon, index) {
+        var leftIcons = _.map(icons, function(icon, index) {
             var classes = 'icon';
             return (
                 <a className={classes}
@@ -90,19 +90,32 @@ var QuestionItem = React.createClass({
                 </a>
             );
         });
-        var rightChildren = (
-            <div className={'stro-button stro-right-button text-center dismiss-button'}
-                 onClick={this.onDismiss.bind(this, question)}>
-                <span dangerouslySetInnerHTML={{ __html: "Dismiss" }}></span>
+        var leftStyle = {
+            width: '100%',
+            height: '100%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-around',
+            paddingLeft: '15px',
+            paddingRight: '15px'
+        };
+        var leftChildren = (
+            <div style={leftStyle}>
+                {leftIcons}
             </div>
         );
 
-        var leftOptions = {
-            width: 220
-        }
-        var rightOptions = {
-            width: 100
-        }
+        var rightStyle = {
+            width: '100%',
+            height: '100%'
+        };
+        var rightChildren = (
+            <div className={'stro-button stro-right-button text-center dismiss-button'}
+                 onClick={this.onDismiss.bind(this, question)}
+                 style={rightStyle}>
+                <span>I do not want to answer this right now.</span>
+            </div>
+        );
 
         questionItemClass += ' question-item';
 
@@ -110,8 +123,6 @@ var QuestionItem = React.createClass({
             <div className={questionItemClass}>
                 <SwipeToRevealOptions actionThreshold={300}
                                       visibilityThreshold={25}
-                                      leftOptions={leftOptions}
-                                      rightOptions={rightOptions}
                                       leftChildren={leftChildren}
                                       rightChildren={rightChildren}
                                       callActionWhenSwipingFarRight={swipe}

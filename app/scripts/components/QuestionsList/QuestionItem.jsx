@@ -49,6 +49,7 @@ var QuestionItem = React.createClass({
     },
 
     onDismiss: function(question) {
+        console.log('onDismiss');
         AppActions.dismissQuestion(question);
     },
 
@@ -79,64 +80,48 @@ var QuestionItem = React.createClass({
             break;
         }
 
-        var angryFace = (<span className='icon icon-angry'></span>);
-        var frustratedFace = (<span className='icon'>😕</span>);
-        var contentFace = (<span className='icon'>🙂</span>);
-        var happyFace = (<span className='icon'>😃</span>);
-        var loveFace = (<span className='icon'>😍</span>);
+        var icons = ['😡','😕','🙂','😃','😍'];
+        var leftChildren = _.map(icons, function(icon, index) {
+            var classes = 'icon';
+            return (
+                <a className={classes}
+                   key={index}>
+                  {icon}
+                </a>
+            );
+        });
+        var rightChildren = (
+            <div className={'stro-button stro-right-button text-center dismiss-button'}
+                 onClick={this.onDismiss.bind(this, question)}>
+                <span dangerouslySetInnerHTML={{ __html: "Dismiss" }}></span>
+            </div>
+        );
 
-        var item = {
-            leftOptions: [
-                {
-                    content: '😡',
-                    className: 'icon rating-icon',
-                    selectedClass: 'icon-selected'
-                }, 
-                {
-                    content: '😕',
-                    className: 'icon rating-icon',
-                    selectedClass: 'icon-selected'
-                }, 
-                {
-                    content: '🙂',
-                    className: 'icon rating-icon',
-                    selectedClass: 'icon-selected'
-                }, 
-                {
-                    content: '😃',
-                    className: 'icon rating-icon',
-                    selectedClass: 'icon-selected'
-                }, 
-                {
-                    content: '😍',
-                    className: 'icon rating-icon',
-                    selectedClass: 'icon-selected'
-                }
-            ],
-            rightOptions: [{
-                content: null,
-                class: 'dismiss-button'
-            }],
-        };
+        var leftOptions = {
+            width: 220
+        }
+        var rightOptions = {
+            width: 100
+        }
 
         questionItemClass += ' question-item';
 
         return (
             <div className={questionItemClass}>
-                <SwipeToRevealOptions
-                    actionThreshold={300}
-                    visibilityThreshold={25}
-                    leftOptions={item.leftOptions}
-                    rightOptions={item.rightOptions}
-                    callActionWhenSwipingFarRight={swipe}
-                    callActionWhenSwipingFarLeft={swipe}
-                    contentBgColor={bg}
-                    isRightActive={true}
-                    isLeftActive={isRightActive}
-                    onRate={this.onRate}
-                    onDismiss={this.onDismiss}
-                    questionObj={question}
-                    collapseDelay={900}>
+                <SwipeToRevealOptions actionThreshold={300}
+                                      visibilityThreshold={25}
+                                      leftOptions={leftOptions}
+                                      rightOptions={rightOptions}
+                                      leftChildren={leftChildren}
+                                      rightChildren={rightChildren}
+                                      callActionWhenSwipingFarRight={swipe}
+                                      callActionWhenSwipingFarLeft={swipe}
+                                      contentBgColor={bg}
+                                      isRightActive={true}
+                                      isLeftActive={isRightActive}
+                                      onRate={this.onRate}
+                                      questionObj={question}
+                                      collapseDelay={900}>
                     <table>
                         <tr>
                             <td style={{

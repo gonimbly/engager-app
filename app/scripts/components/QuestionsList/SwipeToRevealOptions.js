@@ -6,8 +6,16 @@ var SwipeToRevealOptions = React.createClass({
   displayName: "SwipeToRevealOptions",
 
   propTypes: {
-    rightOptions: React.PropTypes.array,
-    leftOptions: React.PropTypes.array,
+    rightOptions: React.PropTypes.shape({
+      width: React.PropTypes.number
+    }).isRequired,
+    leftOptions: React.PropTypes.shape({
+      width: React.PropTypes.number
+    }).isRequired,
+    leftChildren: React.PropTypes.oneOfType([
+      React.PropTypes.element,
+      React.PropTypes.array
+    ]).isRequired,
     className: React.PropTypes.string,
     actionThreshold: React.PropTypes.number,
     visibilityThreshold: React.PropTypes.number,
@@ -24,7 +32,6 @@ var SwipeToRevealOptions = React.createClass({
     isLeftActive: React.PropTypes.bool,
     isRightActive: React.PropTypes.bool,
     onRate: React.PropTypes.func,
-    onDismiss: React.PropTypes.func,
     questionObj: React.PropTypes.object,
     collapseDelay: React.PropTypes.number
   },
@@ -45,8 +52,14 @@ var SwipeToRevealOptions = React.createClass({
 
   getDefaultProps: function getDefaultProps() {
     return {
-      rightOptions: [],
-      leftOptions: [],
+      rightChildren: [],
+      leftChildren: [],
+      leftOptions: {
+        width: 150
+      },
+      rightOptions: {
+        width: 150
+      },
       className: "",
       actionThreshold: 300,
       visibilityThreshold: 50,
@@ -70,14 +83,7 @@ var SwipeToRevealOptions = React.createClass({
       setTimeout(this.transitionBack, this.props.collapseDelay);
   },
 
-  onDismiss: function(question) {
-      this.props.onDismiss(question);
-      this.transitionBack();
-  },
-
   render: function render() {
-    var q = this.props.questionObj;
-
     var classes = this.props.className + " stro-swipe-container";
 
     if (this.state.transitionBack) {
@@ -92,39 +98,22 @@ var SwipeToRevealOptions = React.createClass({
         classes += " show-left-buttons";
     }
 
-    var leftOptions = this.props.leftOptions.map(function (option, index) {
-      var classes = option.className;
-      return (
-        <a className={classes}
-           key={index}>
-          {option.content}
-        </a>
-      );
-    }.bind(this));
-
-    var rightOptions = this.props.rightOptions.map(function (option, index) {
-        return (
-            <div className={'stro-button stro-right-button text-center' + option.class}
-                 onClick={this.onDismiss.bind(this, q)}
-                 key={index}>
-                <span dangerouslySetInnerHTML={{ __html: "Dismiss" }}></span>
-            </div>
-        );
-    }.bind(this));
-
     return (
       <div className='stro-container'>
-        <div className='stro-left'>
-            {leftOptions}
+        <div className='stro-left'
+             style={{width: this.props.leftOptions.width}}
+             onClick={this.transitionBack}>
+            {this.props.leftChildren}
         </div>
-        <div className="stro-right">
-            {rightOptions}
+        <div className="stro-right"
+             style={{width: this.props.rightOptions.width}}
+             onClick={this.transitionBack}>
+            {this.props.rightChildren}
         </div>
         <div className={classes}
              style={this.getContainerStyle()}>
             <Swipeable className='stro-content'
                        onSwipingLeft={this.swipingLeft}
-                       onClick={this.handleContentClick}
                        onSwipingRight={this.swipingRight}
                        delta={15}
                        onSwiped={this.swiped}
@@ -137,6 +126,7 @@ var SwipeToRevealOptions = React.createClass({
   },
 
   swipingLeft: function swipingLeft(event, delta) {
+    console.log('swipingLeft');
       if (this.swipingHandleStylesAndDelta(delta, "left")) {
           return;
       }
@@ -162,6 +152,7 @@ var SwipeToRevealOptions = React.createClass({
   },
 
   swipingRight: function swipingRight(event, delta) {
+    console.log('swipingRight');
       if (this.swipingHandleStylesAndDelta(delta, "right")) {
           return;
       }
@@ -201,12 +192,6 @@ var SwipeToRevealOptions = React.createClass({
       if (this.state.transitionBack) {
           return true;
       }
-      if (direction === "right") {
-          return !this.props.leftOptions.length && !this.state.showRightButtons || this.state.showLeftButtons && !this.props.callActionWhenSwipingFarRight;
-      }
-      else {
-          return !this.props.rightOptions.length && !this.state.showLeftButtons || this.state.showRightButtons && !this.props.callActionWhenSwipingFarLeft;
-      }
   },
 
   shouldTransitionBack: function shouldTransitionBack(direction) {
@@ -233,12 +218,6 @@ var SwipeToRevealOptions = React.createClass({
         // set the rating
         this.props.onReveal("left");
         this.setState({ showLeftButtons: true });
-        break;
-      case "leftAction":
-        this.leftClick(this.props.leftOptions[0]);
-        break;
-      case "rightAction":
-        this.rightClick(this.props.rightOptions[this.props.rightOptions.length - 1]);
         break;
     }
     this.setState({
@@ -269,6 +248,7 @@ var SwipeToRevealOptions = React.createClass({
   },
 
   transitionBack: function transitionBack() {
+    console.log('this.transitionBack');
       this.setState({
           showLeftButtons: false,
           showRightButtons: false,
@@ -284,10 +264,10 @@ var SwipeToRevealOptions = React.createClass({
     var delta = this.state.delta;
     if (this.state.delta === 0 && this.state.showRightButtons) {
       itemWidth = this.getItemWidth("right");
-      delta = -this.props.rightOptions.length * itemWidth;
+      delta = -this.props.rightOptions.width;
     } else if (this.state.delta === 0 && this.state.showLeftButtons) {
       itemWidth = this.getItemWidth("left");
-      delta = this.props.leftOptions.length * itemWidth;
+      delta = this.props.leftOptions.width;
     } else if(delta > this.props.visibilityThreshold && !this.state.showLeftButtons) {
       // swiping right
       // limit distance container can travel
@@ -301,7 +281,7 @@ var SwipeToRevealOptions = React.createClass({
   },
 
   getItemWidth: function getItemWidth(side) {
-    var nbOptions = side === "left" ? this.props.leftOptions.length : this.props.rightOptions.length;
+    var nbOptions = side === "left" ? this.props.leftOptions.width : this.props.rightOptions.width;
     return Math.min(this.props.parentWidth / (nbOptions + 1), this.props.maxItemWidth);
   }
 });

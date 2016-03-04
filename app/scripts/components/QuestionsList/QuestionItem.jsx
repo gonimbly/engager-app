@@ -48,6 +48,32 @@ var QuestionItem = React.createClass({
         }.bind(this), 1000);
     },
 
+    onEmoji: function(emoji, question) {
+        if(!question.rate) {
+            // increase points for first time rating
+            UserActions.increasePoints(question);
+        }
+
+        question.rate = rate;
+
+        // input delay to show user their action
+        setTimeout(function() {
+            switch (this.props.rowType) {
+                case 1:
+                    AppActions.answerQuestion(question, this.state.appData.user);
+                break;
+                case 2:
+                    AppActions.updateAnswer(question, this.state.appData.user);
+                break;
+                case 3:
+                    AppActions.answerDismissedQuestion(question, this.state.appData.user);
+                break;
+                default :
+                    console.log('Unhandled row type:', this.props.rowType);
+            }
+        }.bind(this), 1000);
+    },
+
     onDismiss: function(question) {
         console.log('onDismiss');
         AppActions.dismissQuestion(question);
@@ -84,10 +110,11 @@ var QuestionItem = React.createClass({
         var leftIcons = _.map(icons, function(icon, index) {
             var classes = 'icon';
             return (
-                <a className={classes}
-                   key={index}>
+                <div className={classes}
+                     key={index}
+                     onClick={this.onEmoji.bind(this, icon, question)}>
                   {icon}
-                </a>
+                </div>
             );
         });
         var leftStyle = {
@@ -130,8 +157,6 @@ var QuestionItem = React.createClass({
                                       contentBgColor={bg}
                                       isRightActive={true}
                                       isLeftActive={isRightActive}
-                                      onRate={this.onRate}
-                                      questionObj={question}
                                       collapseDelay={900}>
                     <table>
                         <tr>

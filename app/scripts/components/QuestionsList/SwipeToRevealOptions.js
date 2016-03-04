@@ -29,8 +29,6 @@ var SwipeToRevealOptions = React.createClass({
     contentBgColor: React.PropTypes.string,
     isLeftActive: React.PropTypes.bool,
     isRightActive: React.PropTypes.bool,
-    onRate: React.PropTypes.func,
-    questionObj: React.PropTypes.object,
     collapseDelay: React.PropTypes.number
   },
 
@@ -65,13 +63,7 @@ var SwipeToRevealOptions = React.createClass({
     };
   },
 
-  onRate: function(rate) {
-      if (rate == undefined) {
-          return;
-      }
-
-      this.props.onRate(rate, this.props.questionObj);
-
+  optionClicked: function() {
       setTimeout(this.transitionBack, this.props.collapseDelay);
   },
 
@@ -90,17 +82,27 @@ var SwipeToRevealOptions = React.createClass({
         classes += " show-left-buttons";
     }
 
-    var leftOpacity, rightOpacity;
     var screenWidth = window.screen.width;
+    var leftStyle = {};
+    var rightStyle = {};
     if(this.state.showLeftButtons) {
-      leftOpacity = 1;
-      rightOpacity = 0;
+      leftStyle.opacity = 1;
+      leftStyle.pointerEvents = 'all';
+      
+      rightStyle.opacity = 0;
+      rightStyle.pointerEvents = 'none';
     } else if(this.state.showRightButtons) {
-      leftOpacity = 0;
-      rightOpacity = 1;
+      leftStyle.opacity = 0;
+      leftStyle.pointerEvents = 'none';
+
+      rightStyle.opacity = 1;
+      rightStyle.pointerEvents = 'all';
     } else {
-      leftOpacity = this.state.delta / screenWidth;
-      rightOpacity = -this.state.delta / screenWidth;
+      leftStyle.opacity = this.state.delta / screenWidth;
+      leftStyle.pointerEvents = 'none';
+      
+      rightStyle.opacity = -this.state.delta / screenWidth;
+      rightStyle.pointerEvents = 'none';
     }
 
     return (
@@ -110,13 +112,13 @@ var SwipeToRevealOptions = React.createClass({
                    delta={15}
                    onSwiped={this.swiped}>
           <div className='stro-left'
-               style={{opacity: leftOpacity}}
-               onClick={this.transitionBack}>
+               style={leftStyle}
+               onClick={this.optionClicked}>
               {this.props.leftChildren}
           </div>
           <div className="stro-right"
-               style={{opacity: rightOpacity}}
-               onClick={this.transitionBack}>
+               style={rightStyle}
+               onClick={this.optionClicked}>
               {this.props.rightChildren}
           </div>
           <div className={classes}

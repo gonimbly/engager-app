@@ -57778,6 +57778,32 @@
 	        }.bind(this), 1000);
 	    },
 
+	    onEmoji: function(emoji, question) {
+	        if(!question.rate) {
+	            // increase points for first time rating
+	            UserActions.increasePoints(question);
+	        }
+
+	        question.rate = rate;
+
+	        // input delay to show user their action
+	        setTimeout(function() {
+	            switch (this.props.rowType) {
+	                case 1:
+	                    AppActions.answerQuestion(question, this.state.appData.user);
+	                break;
+	                case 2:
+	                    AppActions.updateAnswer(question, this.state.appData.user);
+	                break;
+	                case 3:
+	                    AppActions.answerDismissedQuestion(question, this.state.appData.user);
+	                break;
+	                default :
+	                    console.log('Unhandled row type:', this.props.rowType);
+	            }
+	        }.bind(this), 1000);
+	    },
+
 	    onDismiss: function(question) {
 	        console.log('onDismiss');
 	        AppActions.dismissQuestion(question);
@@ -57814,8 +57840,9 @@
 	        var leftIcons = _.map(icons, function(icon, index) {
 	            var classes = 'icon';
 	            return (
-	                React.createElement("a", {className: classes, 
-	                   key: index}, 
+	                React.createElement("div", {className: classes, 
+	                     key: index, 
+	                     onClick: this.onEmoji.bind(this, icon, question)}, 
 	                  icon
 	                )
 	            );
@@ -57860,8 +57887,6 @@
 	                                      contentBgColor: bg, 
 	                                      isRightActive: true, 
 	                                      isLeftActive: isRightActive, 
-	                                      onRate: this.onRate, 
-	                                      questionObj: question, 
 	                                      collapseDelay: 900}, 
 	                    React.createElement("table", null, 
 	                        React.createElement("tr", null, 
@@ -57935,8 +57960,6 @@
 	    contentBgColor: React.PropTypes.string,
 	    isLeftActive: React.PropTypes.bool,
 	    isRightActive: React.PropTypes.bool,
-	    onRate: React.PropTypes.func,
-	    questionObj: React.PropTypes.object,
 	    collapseDelay: React.PropTypes.number
 	  },
 
@@ -57971,13 +57994,7 @@
 	    };
 	  },
 
-	  onRate: function(rate) {
-	      if (rate == undefined) {
-	          return;
-	      }
-
-	      this.props.onRate(rate, this.props.questionObj);
-
+	  optionClicked: function() {
 	      setTimeout(this.transitionBack, this.props.collapseDelay);
 	  },
 
@@ -57996,17 +58013,27 @@
 	        classes += " show-left-buttons";
 	    }
 
-	    var leftOpacity, rightOpacity;
 	    var screenWidth = window.screen.width;
+	    var leftStyle = {};
+	    var rightStyle = {};
 	    if(this.state.showLeftButtons) {
-	      leftOpacity = 1;
-	      rightOpacity = 0;
+	      leftStyle.opacity = 1;
+	      leftStyle.pointerEvents = 'all';
+	      
+	      rightStyle.opacity = 0;
+	      rightStyle.pointerEvents = 'none';
 	    } else if(this.state.showRightButtons) {
-	      leftOpacity = 0;
-	      rightOpacity = 1;
+	      leftStyle.opacity = 0;
+	      leftStyle.pointerEvents = 'none';
+
+	      rightStyle.opacity = 1;
+	      rightStyle.pointerEvents = 'all';
 	    } else {
-	      leftOpacity = this.state.delta / screenWidth;
-	      rightOpacity = -this.state.delta / screenWidth;
+	      leftStyle.opacity = this.state.delta / screenWidth;
+	      leftStyle.pointerEvents = 'none';
+	      
+	      rightStyle.opacity = -this.state.delta / screenWidth;
+	      rightStyle.pointerEvents = 'none';
 	    }
 
 	    return (
@@ -58016,13 +58043,13 @@
 	                   delta: 15, 
 	                   onSwiped: this.swiped}, 
 	          React.createElement("div", {className: "stro-left", 
-	               style: {opacity: leftOpacity}, 
-	               onClick: this.transitionBack}, 
+	               style: leftStyle, 
+	               onClick: this.optionClicked}, 
 	              this.props.leftChildren
 	          ), 
 	          React.createElement("div", {className: "stro-right", 
-	               style: {opacity: rightOpacity}, 
-	               onClick: this.transitionBack}, 
+	               style: rightStyle, 
+	               onClick: this.optionClicked}, 
 	              this.props.rightChildren
 	          ), 
 	          React.createElement("div", {className: classes, 

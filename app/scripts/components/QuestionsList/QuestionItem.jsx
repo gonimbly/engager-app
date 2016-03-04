@@ -48,13 +48,14 @@ var QuestionItem = React.createClass({
         }.bind(this), 1000);
     },
 
-    onEmoji: function(emoji, question) {
-        if(!question.rate) {
+    onEmoji: function(rate, emoji, question) {
+        if(!question.emoji) {
             // increase points for first time rating
             UserActions.increasePoints(question);
         }
 
         question.rate = rate;
+        question.emoji = emoji;
 
         // input delay to show user their action
         setTimeout(function() {
@@ -109,14 +110,15 @@ var QuestionItem = React.createClass({
         var icons = ['😡','😕','🙂','😃','😍'];
         var leftIcons = _.map(icons, function(icon, index) {
             var classes = 'icon';
+            var rating = index + 1;
             return (
                 <div className={classes}
                      key={index}
-                     onClick={this.onEmoji.bind(this, icon, question)}>
+                     onClick={this.onEmoji.bind(this, rating, icon, question)}>
                   {icon}
                 </div>
             );
-        });
+        }.bind(this));
         var leftStyle = {
             width: '100%',
             height: '100%',

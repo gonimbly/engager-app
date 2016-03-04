@@ -265,6 +265,7 @@ var AppStore = Reflux.createStore({
             data: {
                 user_name: this.appData.user.first+" "+this.appData.user.last,
                 value: question.rate,
+                emoji: question.emoji,
                 points: question.points,
                 question_text: question.text,
                 user_id: this.appData.user.id,
@@ -285,6 +286,7 @@ var AppStore = Reflux.createStore({
             },
             data: {
                 value: question.rate,
+                emoji: question.emoji,
                 question_id: question.id
             },
             error: function(xhr, status, err) {

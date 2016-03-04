@@ -16,6 +16,7 @@ var model = bookshelf.Model.extend({
 				var eAnswer = {
 					questions_text__c: newModel.get('question_text'),
 					value__c: newModel.get('value'),
+					emoji__c: newModel.get('emoji'),
 					customer_name__c: newModel.get('user_name')
 				};
 				return EngagerAnswer.forge(eAnswer).save();

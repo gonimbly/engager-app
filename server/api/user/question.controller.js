@@ -60,9 +60,6 @@ exports.getAnswered = function(req, res) {
 			var userJson = user.toJSON();
 			var answersByQuestion = _.indexBy(userJson.answers, 'question_id');
 			var answeredQuestions = _.map(userJson.questions, function(question) {
-				console.log('answeredQuestions');
-				console.log(question);
-				console.log(answersByQuestion[question.id]);
 				question.rate = answersByQuestion[question.id].value;
 				question.emoji = answersByQuestion[question.id].emoji;
 				return question;

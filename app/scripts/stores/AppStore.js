@@ -255,7 +255,7 @@ var AppStore = Reflux.createStore({
         });
     },
     answerQuestion: function(question) {
-        $.ajax({
+        return $.ajax({
             url: getUserURL+"/"+this.appData.user.id+"/answer",
             dataType: 'json',
             type: 'POST',
@@ -277,7 +277,7 @@ var AppStore = Reflux.createStore({
         });
     },
     updateAnswer: function(question) {
-        $.ajax({
+        return $.ajax({
             url: getUserURL+"/"+this.appData.user.id+"/answer",
             dataType: 'json',
             type: 'PATCH',
@@ -544,31 +544,37 @@ var AppStore = Reflux.createStore({
         // this.appData.lastSelection = this.appData.rewards[i];
         // this.trigger(this.appData);
     },
-    onAnswerQuestion: function(question, user) {
-        var unanswered = this.appData.questions.unanswered;
-        var i = _.indexOf(unanswered, question);
-
-        this.appData.questions.answered.push(unanswered[i]);
-        this.appData.questions.unanswered.splice(i,1);
-
+    onUpdateAnswer: function(question) {
         this.trigger(this.appData);
-
-        this.activeRewards();
-
-        this.answerQuestion(question);
+        this.updateAnswer(question);
     },
-    onAnswerDismissedQuestion: function(question, user) {
-        var dismissed = this.appData.questions.dismissed;
-        var i = _.indexOf(dismissed, question);
-
-        this.appData.questions.answered.push(dismissed[i]);
-        this.appData.questions.dismissed.splice(i,1);
-
-        this.trigger(this.appData);
-
+    onAnswerQuestion: function(question) {
         this.activeRewards();
 
-        this.answerQuestion(question);
+        this.answerQuestion(question)
+        .then(function () {
+            // move the question to the correct section
+            var unanswered = this.appData.questions.unanswered;
+            var i = _.indexOf(unanswered, question);
+
+            this.appData.questions.answered.push(unanswered[i]);
+            this.appData.questions.unanswered.splice(i,1);
+            this.trigger(this.appData);
+        }.bind(this));
+    },
+    onAnswerDismissedQuestion: function(question) {
+        this.activeRewards();
+
+        this.answerQuestion(question)
+        .then(function () {
+            // move the question to the correct section
+            var dismissed = this.appData.questions.dismissed;
+            var i = _.indexOf(dismissed, question);
+
+            this.appData.questions.answered.push(dismissed[i]);
+            this.appData.questions.dismissed.splice(i,1);
+            this.trigger(this.appData);
+        }.bind(this));
     },
     onDismissQuestion: function(question) {
         var unanswered = this.appData.questions.unanswered;

@@ -9,18 +9,22 @@ var emojione = require('emojione');
 var UserActions = require('../../actions/UserActions');
 var AppActions = require('../../actions/AppActions');
 var AppStore = require('../../stores/AppStore');
-var checkImage = require('../../../images/check.png');
 
 require('./QuestionItem.scss');
 
 var QuestionItem = React.createClass({
     mixins: [Router.Navigation,
-             Router.State,
-             Reflux.connect(AppStore, 'appData')],
+             Router.State],
 
     PropTypes:{
         question: React.PropTypes.object.isRequired,
         rowType: React.PropTypes.number.isRequired
+    },
+
+    getInitialState: function() {
+        return {
+            question: this.props.question
+        };
     },
 
     onEmoji: function(rate, emoji, question) {
@@ -36,25 +40,23 @@ var QuestionItem = React.createClass({
         });
 
         // input delay to show user their action
-        setTimeout(function() {
-            switch (this.props.rowType) {
-                case 1:
-                    AppActions.answerQuestion(question, this.state.appData.user);
-                break;
-                case 2:
-                    AppActions.updateAnswer(question, this.state.appData.user);
-                break;
-                case 3:
-                    AppActions.answerDismissedQuestion(question, this.state.appData.user);
-                break;
-                default :
-                    console.log('Unhandled row type:', this.props.rowType);
-            }
-        }.bind(this), 1000);
+        switch (this.props.rowType) {
+            case 1:
+                AppActions.answerQuestion(question);
+            break;
+            case 2:
+                AppActions.updateAnswer(question);
+            break;
+            case 3:
+                AppActions.answerDismissedQuestion(question);
+            break;
+            default :
+                console.log('Unhandled row type:', this.props.rowType);
+        }
+        console.log('onEmoji complete');
     },
 
     onDismiss: function(question) {
-        console.log('onDismiss');
         AppActions.dismissQuestion(question);
     },
 
@@ -89,7 +91,7 @@ var QuestionItem = React.createClass({
         var leftIcons = _.map(icons, function(icon, index) {
             var classes = 'icon';
             var rating = index + 1;
-            if(questionItemClass === 'question-answered' && question.emoji === icon) {
+            if(question.emoji === icon) {
                 classes += ' active jelly-in';
             }
             emojione.imageType = 'svg';

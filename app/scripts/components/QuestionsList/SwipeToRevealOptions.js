@@ -134,7 +134,6 @@ var SwipeToRevealOptions = React.createClass({
   },
 
   swipingLeft: function swipingLeft(event, delta) {
-    console.log('swipingLeft');
       if (this.swipingHandleStylesAndDelta(delta, "left")) {
           return;
       }
@@ -160,7 +159,6 @@ var SwipeToRevealOptions = React.createClass({
   },
 
   swipingRight: function swipingRight(event, delta) {
-    console.log('swipingRight');
       if (this.swipingHandleStylesAndDelta(delta, "right")) {
           return;
       }
@@ -256,7 +254,6 @@ var SwipeToRevealOptions = React.createClass({
   },
 
   transitionBack: function transitionBack() {
-    console.log('this.transitionBack');
       this.setState({
           showLeftButtons: false,
           showRightButtons: false,

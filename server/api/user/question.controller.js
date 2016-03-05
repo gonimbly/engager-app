@@ -64,6 +64,7 @@ exports.getAnswered = function(req, res) {
 				console.log(question);
 				console.log(answersByQuestion[question.id]);
 				question.rate = answersByQuestion[question.id].value;
+				question.emoji = answersByQuestion[question.id].emoji;
 				return question;
 			});
 			res.json(answeredQuestions);

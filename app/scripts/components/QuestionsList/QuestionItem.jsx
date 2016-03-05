@@ -4,6 +4,7 @@ var Rating = require('react-rating');
 var Router = require('react-router');
 var Reflux = require('reflux');
 var _ = require('lodash');
+var emojione = require('emojione');
 
 var UserActions = require('../../actions/UserActions');
 var AppActions = require('../../actions/AppActions');
@@ -22,32 +23,6 @@ var QuestionItem = React.createClass({
         rowType: React.PropTypes.number.isRequired
     },
 
-    onRate: function(rate, question) {
-        if(!question.rate) {
-            // increase points for first time rating
-            UserActions.increasePoints(question);
-        }
-
-        question.rate = rate;
-
-        // input delay to show user their action
-        setTimeout(function() {
-            switch (this.props.rowType) {
-                case 1:
-                    AppActions.answerQuestion(question, this.state.appData.user);
-                break;
-                case 2:
-                    AppActions.updateAnswer(question, this.state.appData.user);
-                break;
-                case 3:
-                    AppActions.answerDismissedQuestion(question, this.state.appData.user);
-                break;
-                default :
-                    console.log('Unhandled row type:', this.props.rowType);
-            }
-        }.bind(this), 1000);
-    },
-
     onEmoji: function(rate, emoji, question) {
         if(!question.emoji) {
             // increase points for first time rating
@@ -56,6 +31,9 @@ var QuestionItem = React.createClass({
 
         question.rate = rate;
         question.emoji = emoji;
+        this.setState({
+            question: question
+        });
 
         // input delay to show user their action
         setTimeout(function() {
@@ -96,7 +74,7 @@ var QuestionItem = React.createClass({
             break;
             case 2: // answered
                 questionItemClass = 'question-answered';
-                bg = '#B0D579';
+                bg = '#e9e7e7';
                 swipe = false;
                 isRightActive = false;
             break;
@@ -111,11 +89,16 @@ var QuestionItem = React.createClass({
         var leftIcons = _.map(icons, function(icon, index) {
             var classes = 'icon';
             var rating = index + 1;
+            if(questionItemClass === 'question-answered' && question.emoji === icon) {
+                classes += ' active jelly-in';
+            }
+            emojione.imageType = 'svg';
+            var iconImg = emojione.unicodeToImage(icon);
             return (
                 <div className={classes}
                      key={index}
-                     onClick={this.onEmoji.bind(this, rating, icon, question)}>
-                  {icon}
+                     onClick={this.onEmoji.bind(this, rating, icon, question)}
+                     dangerouslySetInnerHTML={{ __html: iconImg }}>
                 </div>
             );
         }.bind(this));
@@ -148,6 +131,27 @@ var QuestionItem = React.createClass({
 
         questionItemClass += ' question-item';
 
+        var rightColumn;
+        switch (rowType) {
+            case 1: // unanswered
+            case 3: // dismissed
+                rightColumn = (
+                    <span className='question-item-points text-center'>
+                        <label>{question.points}</label>
+                        <div className='points-copy'>pts</div>
+                    </span>
+                );
+            break;
+            case 2: // answered
+                var rightColumnImg = emojione.unicodeToImage(question.emoji);
+                rightColumn = (
+                    <span className='feedback icon active'
+                          dangerouslySetInnerHTML={{ __html: rightColumnImg }}>
+                    </span>
+                );
+            break;
+        }
+
         return (
             <div className={questionItemClass}>
                 <SwipeToRevealOptions actionThreshold={300}
@@ -178,13 +182,7 @@ var QuestionItem = React.createClass({
                                     marginTop: '10px',
                                     verticalAlign: 'middle',
                                 }}>
-                                <span className='question-item-points text-center'>
-                                    <label>{question.points}</label>
-                                    <div className='points-copy'>pts</div>
-                                </span>
-                                <span className='question-item-check text-center'>
-                                    <img src={checkImage} width='20px' height='16px'/>
-                                </span>
+                                {rightColumn}
                             </td>
                         </tr>
                     </table>

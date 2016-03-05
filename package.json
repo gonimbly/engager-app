@@ -34,6 +34,7 @@
     "react-bootstrap": "^0.24.5",
     "react-cookie": "^0.3.4",
     "react-copy-to-clipboard": "^2.0.1",
+    "react-fastclick-alt": "^1.0.1",
     "react-mdl": "^0.9.1",
     "react-modal": "^0.3.0",
     "react-rating": "0.0.13",

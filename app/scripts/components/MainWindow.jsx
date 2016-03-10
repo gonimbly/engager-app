@@ -1,9 +1,11 @@
 var React = require('react');
+var React = require('react');
 var AppContainer = require('./AppContainer/AppContainer');
 var Router = require('react-router');
 var Reflux = require('reflux');
 var AppStore = require('../stores/AppStore');
 var Cookie = require('react-cookie');
+var FastClick = require('react-fastclick-alt');
 
 var MainWindow = React.createClass({
     mixins: [Router.Navigation,
@@ -17,7 +19,7 @@ var MainWindow = React.createClass({
             window.location = "/#/signin";
         }
 
-        return <AppContainer />;
+        return <FastClick><AppContainer /></FastClick>;
     }
 });
 

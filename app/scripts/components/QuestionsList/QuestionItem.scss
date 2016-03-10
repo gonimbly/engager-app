@@ -4,8 +4,6 @@
     width: 100%;
     margin-left: 20px;
     margin-right: 20px;
-    right: 0px;
-    vertical-align: middle;
     color: #71c04f;
     font-size: 17px;
     font-weight: 400;
@@ -24,15 +22,8 @@
     }
   }
 
-  .question-item-check {
-    height: 80px;
-    width: 100%;
-    margin-left: 20px;
-    margin-right: 20px;
-    right: 0px;
-    font-size: 17px;
-    vertical-align: middle;
-    color: #71c04f;
+  .question-item-feedback {
+    
   }
 
   .question-item-text {
@@ -41,25 +32,9 @@
     font-weight: 200;
   }
 
-  &.question-unanswered {
-    .question-item-check {
-      display: none;
-    }
-  }
-
   &.question-answered {
-    .question-item-points {
-      display: none;
-    }
-
     .question-item-text {
       color: #1E1E1E;
-    }
-  }
-
-  &.question-dismissed {
-    .question-item-check {
-      display: none;
     }
   }
 }

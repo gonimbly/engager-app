@@ -6,8 +6,14 @@ var SwipeToRevealOptions = React.createClass({
   displayName: "SwipeToRevealOptions",
 
   propTypes: {
-    rightOptions: React.PropTypes.array,
-    leftOptions: React.PropTypes.array,
+    leftChildren: React.PropTypes.oneOfType([
+      React.PropTypes.element,
+      React.PropTypes.array
+    ]).isRequired,
+    rightChildren: React.PropTypes.oneOfType([
+      React.PropTypes.element,
+      React.PropTypes.array
+    ]).isRequired,
     className: React.PropTypes.string,
     actionThreshold: React.PropTypes.number,
     visibilityThreshold: React.PropTypes.number,
@@ -23,9 +29,6 @@ var SwipeToRevealOptions = React.createClass({
     contentBgColor: React.PropTypes.string,
     isLeftActive: React.PropTypes.bool,
     isRightActive: React.PropTypes.bool,
-    onRate: React.PropTypes.func,
-    onDismiss: React.PropTypes.func,
-    questionObj: React.PropTypes.object,
     collapseDelay: React.PropTypes.number
   },
 
@@ -39,46 +42,32 @@ var SwipeToRevealOptions = React.createClass({
       transitionBack: false,
       action: null,
       callActionWhenSwipingFarRight: false,
-      callActionWhenSwipingFarLeft: false,
-      starsVisible: null
+      callActionWhenSwipingFarLeft: false
     };
   },
 
   getDefaultProps: function getDefaultProps() {
     return {
-      rightOptions: [],
-      leftOptions: [],
+      rightChildren: [],
+      leftChildren: [],
       className: "",
       actionThreshold: 300,
-      visibilityThreshold: 50,
+      visibilityThreshold: 0,
       transitionBackTimeout: 400,
       onRightClick: function onRightClick() {},
       onLeftClick: function onLeftClick() {},
       onReveal: function onReveal() {},
       closeOthers: function closeOthers() {},
-      maxItemWidth: 150,
+      maxItemWidth: window.screen.width,
       parentWidth: window.outerWidth || screen.width
     };
   },
 
-  onRate: function(rate) {
-      if (rate == undefined) {
-          return;
-      }
-
-      this.props.onRate(rate, this.props.questionObj);
-
+  optionClicked: function() {
       setTimeout(this.transitionBack, this.props.collapseDelay);
   },
 
-  onDismiss: function(question) {
-      this.props.onDismiss(question);
-      this.transitionBack();
-  },
-
   render: function render() {
-    var q = this.props.questionObj;
-
     var classes = this.props.className + " stro-swipe-container";
 
     if (this.state.transitionBack) {
@@ -93,50 +82,53 @@ var SwipeToRevealOptions = React.createClass({
         classes += " show-left-buttons";
     }
 
-    var leftOptions = this.props.leftOptions.map(function (option, index) {
-      return (
-        <div className={'stro-button stro-left-button ' + option['class']}
-             key={index}>
-            <Rating full={'fa fa-star'}
-                    empty={'fa fa-star-o'}
-                    start={0}
-                    stop={5}
-                    initialRate={this.state.starsVisible}
-                    onRate={this.onRate}/>
-        </div>
-      );
-    }.bind(this));
+    var screenWidth = window.screen.width;
+    var leftStyle = {};
+    var rightStyle = {};
+    if(this.state.showLeftButtons) {
+      leftStyle.opacity = 1;
+      leftStyle.pointerEvents = 'all';
+      
+      rightStyle.opacity = 0;
+      rightStyle.pointerEvents = 'none';
+    } else if(this.state.showRightButtons) {
+      leftStyle.opacity = 0;
+      leftStyle.pointerEvents = 'none';
 
-    var rightOptions = this.props.rightOptions.map(function (option, index) {
-        return (
-            <div className={'stro-button stro-right-button text-center' + option.class}
-                 onClick={this.onDismiss.bind(this, q)}
-                 key={index}>
-                <span dangerouslySetInnerHTML={{ __html: "Dismiss" }}></span>
-            </div>
-        );
-    }.bind(this));
+      rightStyle.opacity = 1;
+      rightStyle.pointerEvents = 'all';
+    } else {
+      leftStyle.opacity = this.state.delta / screenWidth;
+      leftStyle.pointerEvents = 'none';
+      
+      rightStyle.opacity = -this.state.delta / screenWidth;
+      rightStyle.pointerEvents = 'none';
+    }
 
     return (
       <div className='stro-container'>
-        <div className='stro-left'>
-            {leftOptions}
-        </div>
-        <div className="stro-right">
-            {rightOptions}
-        </div>
-        <div className={classes}
-             style={this.getContainerStyle()}>
-            <Swipeable className='stro-content'
-                       onSwipingLeft={this.swipingLeft}
-                       onClick={this.handleContentClick}
-                       onSwipingRight={this.swipingRight}
-                       delta={15}
-                       onSwiped={this.swiped}
-                       style={{backgroundColor: this.props.contentBgColor}}>
-                {this.props.children}
-            </Swipeable>
-        </div>
+        <Swipeable onSwipingLeft={this.swipingLeft}
+                   onSwipingRight={this.swipingRight}
+                   delta={15}
+                   onSwiped={this.swiped}>
+          <div className='stro-left'
+               style={leftStyle}
+               onClick={this.optionClicked}>
+              {this.props.leftChildren}
+          </div>
+          <div className="stro-right"
+               style={rightStyle}
+               onClick={this.optionClicked}>
+              {this.props.rightChildren}
+          </div>
+          <div className={classes}
+               style={this.getContainerStyle()}>
+               <div className="stro-content"
+                    style={{backgroundColor: this.props.contentBgColor}}>
+                  {this.props.children}
+              </div>
+          </div>
+        </Swipeable>
       </div>
     );
   },
@@ -171,15 +163,6 @@ var SwipeToRevealOptions = React.createClass({
           return;
       }
 
-
-      var modDelta = delta % 30;
-      var starsVisible = Math.floor(delta / 30);
-      if(modDelta > this.props.visibilityThreshold) {
-        starsVisible++;
-      }
-
-      starsVisible = Math.min(starsVisible, 5);
-
       var action = null;
       if (delta > this.props.visibilityThreshold) {
           action = "leftVisible";
@@ -196,8 +179,7 @@ var SwipeToRevealOptions = React.createClass({
       this.setState({
           delta: delta,
           action: action,
-          swipingRight: true,
-          starsVisible: starsVisible
+          swipingRight: true
       });
   },
 
@@ -215,12 +197,6 @@ var SwipeToRevealOptions = React.createClass({
   shouldAbort: function shouldAbort(direction) {
       if (this.state.transitionBack) {
           return true;
-      }
-      if (direction === "right") {
-          return !this.props.leftOptions.length && !this.state.showRightButtons || this.state.showLeftButtons && !this.props.callActionWhenSwipingFarRight;
-      }
-      else {
-          return !this.props.rightOptions.length && !this.state.showLeftButtons || this.state.showRightButtons && !this.props.callActionWhenSwipingFarLeft;
       }
   },
 
@@ -245,21 +221,9 @@ var SwipeToRevealOptions = React.createClass({
         this.setState({ showRightButtons: true });
         break;
       case "leftVisible":
-        if(this.state.starsVisible > 0) {
-          // set the rating
-          this.props.onReveal("left");
-          this.setState({ showLeftButtons: true });
-          this.onRate(this.state.starsVisible);
-        } else {
-          // if user hasn't filled a whole star then transition back
-          this.transitionBack();
-        }
-        break;
-      case "leftAction":
-        this.leftClick(this.props.leftOptions[0]);
-        break;
-      case "rightAction":
-        this.rightClick(this.props.rightOptions[this.props.rightOptions.length - 1]);
+        // set the rating
+        this.props.onReveal("left");
+        this.setState({ showLeftButtons: true });
         break;
     }
     this.setState({
@@ -303,12 +267,13 @@ var SwipeToRevealOptions = React.createClass({
   getContainerStyle: function getContainerStyle() {
     var itemWidth;
     var delta = this.state.delta;
+    var screenWidth = window.screen.width;
     if (this.state.delta === 0 && this.state.showRightButtons) {
       itemWidth = this.getItemWidth("right");
-      delta = -this.props.rightOptions.length * itemWidth;
+      delta = -screenWidth;
     } else if (this.state.delta === 0 && this.state.showLeftButtons) {
       itemWidth = this.getItemWidth("left");
-      delta = this.props.leftOptions.length * itemWidth;
+      delta = screenWidth;
     } else if(delta > this.props.visibilityThreshold && !this.state.showLeftButtons) {
       // swiping right
       // limit distance container can travel
@@ -322,8 +287,7 @@ var SwipeToRevealOptions = React.createClass({
   },
 
   getItemWidth: function getItemWidth(side) {
-    var nbOptions = side === "left" ? this.props.leftOptions.length : this.props.rightOptions.length;
-    return Math.min(this.props.parentWidth / (nbOptions + 1), this.props.maxItemWidth);
+    return Math.min(this.props.parentWidth / (window.screen.width + 1), this.props.maxItemWidth);
   }
 });
 

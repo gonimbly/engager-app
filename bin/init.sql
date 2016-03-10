@@ -1,7 +1,6 @@
 CREATE TABLE IF NOT EXISTS answers (
     id SERIAL,
     value integer,
-    emoji text,
     question_id integer,
     question_text text,
     user_id integer,

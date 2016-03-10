@@ -11,7 +11,7 @@ var config = {
 if( process.argv[2] === 'latest' ) {
     knex.migrate.latest(config)
         .then(function() {
-            console.log('Successfully migrated latest') ;
+            console.log('Successfully migrated latest');
             process.exit();
         })
         .catch(function(error) {
@@ -24,7 +24,7 @@ if( process.argv[2] === 'latest' ) {
 else if( process.argv[2] === 'rollback' ) {
     knex.migrate.rollback(config)
         .then(function() {
-            console.log('Successfully migrated back') ;
+            console.log('Successfully migrated back');
             process.exit();
         })
         .catch(function(error) {

@@ -3,7 +3,7 @@
 
 var knex = require('../db/knexpg');
 var config = {
-    directory: './bin/migrations'
+    directory: './migrations'
 };
 
 if( process.argv[2] === 'latest' ) {

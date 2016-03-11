@@ -16,7 +16,9 @@ var Button = ReactMDL.Button;
 var loginStyle = {
     backgroundColor: '#FFFFFF',
     paddingLeft: '40px',
-    paddingRight: '40px'
+    paddingRight: '40px',
+    maxWidth: '400px',
+    margin: '0 auto'
 };
 
 var logoContainerStyle = {

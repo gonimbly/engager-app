@@ -7,14 +7,28 @@ var UserActions = require("../actions/UserActions");
 var AppStore = require('../stores/AppStore');
 var Cookie = require('react-cookie');
 var Spinner = require('react-spinkit');
+var engagerLogo = require('../../images/ENGAGER_BANNER_600.svg');
 
 var Textfield = ReactMDL.Textfield;
 var Button = ReactMDL.Button;
 
+
 var loginStyle = {
     backgroundColor: '#FFFFFF',
-    position: 'absolute',
-    height: '100%',
+    paddingLeft: '40px',
+    paddingRight: '40px',
+    maxWidth: '400px',
+    margin: '0 auto'
+};
+
+var logoContainerStyle = {
+    textAlign: 'center',
+    paddingTop: '25px',
+    paddingBottom: '25px'
+};
+
+var logoStyle = {
+    width: '100%'
 };
 
 var titleStyle = {
@@ -29,7 +43,7 @@ var buttonStyle = {
     marginTop: '30px',
     marginBottom: '10px',
     backgroundColor: '#71c04f',
-    width: '300px',
+    width: '100%',
     color: '#FFFFFF',
 };
 
@@ -42,7 +56,7 @@ var spinnerStyle = {
 var signupStyle = {
     marginBottom: '10px',
     backgroundColor: '#1c1c1c',
-    width: '300px',
+    width: '100%',
     color: '#FFFFFF',
 };
 
@@ -71,7 +85,9 @@ var LoginWindow = React.createClass({
     render: function() {
         return (
             <div style={loginStyle} className="text-center">
-                <h1 style={titleStyle} className="text-center">Engager Log In</h1><br/>
+                <div style={logoContainerStyle}>
+                    <img src={engagerLogo} alt='Engager' style={logoStyle}/>
+                </div>
                 <Textfield
                     onChange={this.onChangeEmail}
                     label="Enter your email"

@@ -7,14 +7,27 @@ var UserActions = require("../actions/UserActions");
 var AppStore = require('../stores/AppStore');
 var Cookie = require('react-cookie');
 var Spinner = require('react-spinkit');
+var engagerLogo = require('../../images/ENGAGER_BANNER_600.svg');
 
 var Textfield = ReactMDL.Textfield;
 var Button = ReactMDL.Button;
 
-var loginStyle = {
+var registerStyle = {
     backgroundColor: '#FFFFFF',
-    position: 'absolute',
-    height: '100%',
+    paddingLeft: '40px',
+    paddingRight: '40px',
+    maxWidth: '400px',
+    margin: '0 auto'
+};
+
+var logoContainerStyle = {
+    textAlign: 'center',
+    paddingTop: '25px',
+    paddingBottom: '25px'
+};
+
+var logoStyle = {
+    width: '100%'
 };
 
 var titleStyle = {
@@ -29,7 +42,7 @@ var buttonStyle = {
     marginTop: '30px',
     marginBottom: '10px',
     backgroundColor: '#71c04f',
-    width: '300px',
+    width: '100%',
     color: '#FFFFFF',
 };
 
@@ -39,10 +52,10 @@ var spinnerStyle = {
     marginTop: '20px',
 };
 
-var signupStyle = {
+var loginStyle = {
     marginBottom: '10px',
     backgroundColor: '#1c1c1c',
-    width: '300px',
+    width: '100%',
     color: '#FFFFFF',
 };
 
@@ -74,35 +87,37 @@ var RegisterWindow = React.createClass({
      },
      render: function() {
          return (
-            <div style={loginStyle} className="text-center">
-                <h1 style={titleStyle} className="text-center">Engager Register</h1>
-                    <Textfield
-                        onChange={this.onChangeName.bind(this)}
-                        value={this.state.appData.user.name}
-                        label="Enter your full name"
-                        floatingLabel={true}
-                        className="textfield">
-                    </Textfield><br/>
-                    <Textfield
-                        onChange={this.onChangeEmail.bind(this)}
-                        value={this.state.appData.user.email}
-                        label="Enter your email"
-                        floatingLabel={true}
-                        className="textfield">
-                    </Textfield><br/>
-                    <Textfield
-                        onChange={this.onChangePassword.bind(this)}
-                        value={this.state.appData.user.password}
-                        label="Enter your password"
-                        floatingLabel={true}
-                        className="textfield"
-                        type="password">
-                    </Textfield><br/>
-                    <span className="signup-error-message text-center">{this.state.appData.errorMessages.signin.msg}</span>
-                    <Button className="text-center" style={buttonStyle} raised={true} ripple={true} onClick={this.onClickSignup.bind(this)}>Register</Button>
-                    <p style={orStyle} className="text-center">- or -</p>
-                    <Button className="text-center" style={signupStyle} raised={true} ripple={true} onClick={this.onClickSignin.bind(this)}>Already a user! Log In now</Button>
-                    <Spinner style={spinnerStyle} spinnerName='three-bounce' className={this.state.appData.animations.loaderIcon}/>
+            <div style={registerStyle} className="text-center">
+                <div style={logoContainerStyle}>
+                    <img src={engagerLogo} alt='Engager' style={logoStyle}/>
+                </div>
+                <Textfield
+                    onChange={this.onChangeName.bind(this)}
+                    value={this.state.appData.user.name}
+                    label="Enter your full name"
+                    floatingLabel={true}
+                    className="textfield">
+                </Textfield><br/>
+                <Textfield
+                    onChange={this.onChangeEmail.bind(this)}
+                    value={this.state.appData.user.email}
+                    label="Enter your email"
+                    floatingLabel={true}
+                    className="textfield">
+                </Textfield><br/>
+                <Textfield
+                    onChange={this.onChangePassword.bind(this)}
+                    value={this.state.appData.user.password}
+                    label="Enter your password"
+                    floatingLabel={true}
+                    className="textfield"
+                    type="password">
+                </Textfield><br/>
+                <span className="signup-error-message text-center">{this.state.appData.errorMessages.signin.msg}</span>
+                <Button className="text-center" style={buttonStyle} raised={true} ripple={true} onClick={this.onClickSignup.bind(this)}>Register</Button>
+                <p style={orStyle} className="text-center">- or -</p>
+                <Button className="text-center" style={loginStyle} raised={true} ripple={true} onClick={this.onClickSignin.bind(this)}>Already a user! Log In now</Button>
+                <Spinner style={spinnerStyle} spinnerName='three-bounce' className={this.state.appData.animations.loaderIcon}/>
             </div>
         );
     }

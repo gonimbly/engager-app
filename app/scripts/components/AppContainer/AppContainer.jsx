@@ -35,7 +35,7 @@ var AppContainer = React.createClass({
           <div className='header'>
             <div className='logo'>
               <a href='http://www.gonimbly.com/contact' target='blank'>
-                <img src={logoImage} height='30px' alt="Go Nimbly" />
+                <img src={logoImage} height='30' alt="Go Nimbly" />
               </a>
             </div>
             <RewardClaimTooltip />

@@ -12,7 +12,7 @@ var AppActions = require('../../actions/AppActions');
 var AppStore = require('../../stores/AppStore');
 var RewardPopup = require('../RewardPopup/RewardPopup');
 var RewardClaimTooltip = require('../RewardClaimTooltip/RewardClaimTooltip');
-var Spinner = require('react-spinkit');
+var Spinner = require('react-spinkit');4
 var logoImage = require('../../../images/GoNimbly_Horizontal_75.svg');
 
 require('./AppContainer.scss');
@@ -23,6 +23,7 @@ var AppContainer = React.createClass({
            Reflux.connect(AppStore, 'appData')],
 
   render: function() {
+
     if(this.state.appData.loadingInfo) {
       app= (
         <div style={{position: 'absolute', top: '60%', left: '45%', zIndex: '1000'}} className={this.state.appData.loadingInfo}>

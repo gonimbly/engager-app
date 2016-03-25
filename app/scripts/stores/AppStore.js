@@ -1,6 +1,8 @@
 var Reflux = require('reflux');
 var _ = require('lodash');
 var Cookie = require('react-cookie');
+var Promise = require('bluebird');
+var firstBy = require('thenby');
 
 var AppActions = require("../actions/AppActions");
 var UserActions = require('../actions/UserActions')
@@ -55,7 +57,6 @@ var AppStore = Reflux.createStore({
         this.onLoadToken();
 
         // sort the list.
-        this.sortQuestions();
         this.activeRewards();
 
         this.listenTo(AppActions.clickOnService, this.onClickReward);
@@ -148,7 +149,7 @@ var AppStore = Reflux.createStore({
     },
     getUserInfo: function() {
         // get user info
-        $.ajax({
+        return $.ajax({
             url: getUserURL,
             dataType: 'json',
             crossDomain: true,
@@ -167,7 +168,13 @@ var AppStore = Reflux.createStore({
                 this.trigger(this.appData);
 
                 // get new questions
-                this.getNewQuestions();
+                var promises = [];
+                promises.push(this.getNewQuestions());
+                promises.push(this.getAnsweredQuestions());
+                promises.push(this.getDismissedQuestions());
+                promises.push(this.getWalletInfo());
+
+                return Promise.all(promises);
             }.bind(this),
             error: function(xhr, status, err) {
                 if (err == "Unauthorized") {
@@ -198,7 +205,7 @@ var AppStore = Reflux.createStore({
         }
     },
     getNewQuestions: function() {
-        $.ajax({
+        return $.ajax({
             url: getUserURL+"/"+this.appData.user.id+"/questions/new",
             dataType: 'json',
             type: 'GET',
@@ -207,9 +214,8 @@ var AppStore = Reflux.createStore({
             },
             success: function(data) {
                 this.appData.questions.unanswered = data.questions;
-
-                // get new questions
-                this.getAnsweredQuestions();
+                this.sortQuestions(this.appData.questions.unanswered);
+                this.trigger(this.appData);
             }.bind(this),
             error: function(xhr, status, err) {
                 console.error(status, err.toString());
@@ -217,7 +223,7 @@ var AppStore = Reflux.createStore({
         });
     },
     getAnsweredQuestions: function() {
-        $.ajax({
+        return $.ajax({
             url: getUserURL+"/"+this.appData.user.id+"/questions/answered",
             dataType: 'json',
             type: 'GET',
@@ -226,9 +232,8 @@ var AppStore = Reflux.createStore({
             },
             success: function(data) {
                 this.appData.questions.answered = data;
-
-                // get new questions
-                this.getDismissedQuestions();
+                this.sortQuestions(this.appData.questions.answered);
+                this.trigger(this.appData);
             }.bind(this),
             error: function(xhr, status, err) {
                 console.error(status, err.toString());
@@ -236,7 +241,7 @@ var AppStore = Reflux.createStore({
         });
     },
     getDismissedQuestions: function() {
-        $.ajax({
+        return $.ajax({
             url: getUserURL+"/"+this.appData.user.id+"/questions/dismissed",
             dataType: 'json',
             type: 'GET',
@@ -245,9 +250,8 @@ var AppStore = Reflux.createStore({
             },
             success: function(data) {
                 this.appData.questions.dismissed = data.questions;
-
-                // get wallet info
-                this.getWalletInfo();
+                this.sortQuestions(this.appData.questions.dismissed);
+                this.trigger(this.appData);
             }.bind(this),
             error: function(xhr, status, err) {
                 console.error(status, err.toString());
@@ -295,7 +299,7 @@ var AppStore = Reflux.createStore({
         });
     },
     getWalletInfo: function() {
-        $.ajax({
+        return $.ajax({
             url: getUserURL+"/"+this.appData.user.id+"/wallet",
             dataType: 'json',
             type: 'GET',
@@ -490,25 +494,27 @@ var AppStore = Reflux.createStore({
 
         this.trigger(this.appData);
     },
-    sortQuestions: function() {
-        this.appData.questions.unanswered.forEach(function(el, index, arr) {
-            arr.sort(function(a, b) {
-                var aPoints = parseInt(a.points);
-                var bPoints = parseInt(b.points);
+    sortQuestions: function(questions) {
+        questions.sort(
+            firstBy('points', -1)
+            .thenBy('text')
+        );
+    },
+    pointSort: function(a, b) {
+        var aPoints = parseInt(a.points);
+        var bPoints = parseInt(b.points);
 
-                if (aPoints == bPoints) {
-                    return 0;
-                }
+        if (aPoints == bPoints) {
+            return 0;
+        }
 
-                if (aPoints > bPoints) {
-                    return -1;
-                }
+        if (aPoints > bPoints) {
+            return -1;
+        }
 
-                if (aPoints < bPoints) {
-                    return 1;
-                }
-            });
-        });
+        if (aPoints < bPoints) {
+            return 1;
+        }
     },
     onReceiveScore: function(question) {
         var pts = question.points;

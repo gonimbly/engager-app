@@ -22,8 +22,9 @@ var RewardInfo = React.createClass({
       textAlign: 'center'
     },
     lineRedeem: {
-      fontSize: '14px',
-      marginBottom: '10px'
+      fontSize: '18px',
+      marginBottom: '10px',
+      fontWeight: '200'
     },
     buttonRedeem: {
       backgroundColor: '#71c04f',
@@ -45,9 +46,10 @@ var RewardInfo = React.createClass({
       backgroundColor: '#B0D579',
       color: '#3B3B3A',
       textAlign: 'center',
-      paddingTop: '7px',
-      paddingBottom: '3px',
-      fontWeight: '300'
+      paddingTop: '8px',
+      paddingBottom: '6px',
+      fontWeight: '200',
+      fontSize: '16px'
     }
   },
 
@@ -67,7 +69,7 @@ var RewardInfo = React.createClass({
       var helpText;
       if(this.state.appData.redeemedReward) {
         helpText = (
-          <div style={style.line3}>We just sent {this.state.appData.selectedReward.description} <br />to your email!</div>
+          <div style={style.line3}>We just sent <b>{this.state.appData.selectedReward.description}</b> to your email!</div>
         );
       } else {
         helpText = (

@@ -28,7 +28,9 @@ var RewardInfo = React.createClass({
     buttonRedeem: {
       backgroundColor: '#71c04f',
       color: '#FFFFFF',
-      marginBottom: '10px'
+      marginBottom: '10px',
+      fontWeight: 'bold',
+      textTransform: 'none'
     },
     line1: {
       fontSize: '20px',
@@ -58,7 +60,7 @@ var RewardInfo = React.createClass({
       lines = (
         <div>
           <div style={[style.allLines, style.lineRedeem]}>You unlocked free Uber Credit!</div>
-          <Button className="text-center" style={style.buttonRedeem} raised={true} ripple={true} onClick={AppActions.openReward.bind(this, reward)}>Redeem</Button>
+          <Button className="text-center tint" style={style.buttonRedeem} raised ripple onClick={AppActions.openReward.bind(this, reward)}>Redeem</Button>
         </div>
       );
     } else {

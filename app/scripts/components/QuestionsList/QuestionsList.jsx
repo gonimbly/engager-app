@@ -58,9 +58,12 @@ var QuestionsList = React.createClass({
         var dismissed = this.state.appData.questions.dismissed;
 
         var unansweredList = _.map(questions, function(question) {
+            // show correct answer state even if it's in the wrong list, to avoid jumping
+            var answered = _.has(question, 'rate');
+            var rowType = answered ? 2 : 1;
             return (
                 <li key={question.id} style={style.listItem}>
-                    <QuestionItem question={question} rowType={1} />
+                    <QuestionItem question={question} rowType={rowType} />
                 </li>
             )
         }.bind(this));
@@ -74,6 +77,9 @@ var QuestionsList = React.createClass({
         }.bind(this));
 
         var dismissedList = _.map(dismissed, function(question) {
+            // show correct answer state even if it's in the wrong list, to avoid jumping
+            var answered = _.has(question, 'rate');
+            var rowType = answered ? 2 : 3;
             return (
                 <li key={question.id} style={style.listItem}>
                     <QuestionItem question={question} rowType={3} />

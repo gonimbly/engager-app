@@ -67,6 +67,13 @@ Have fun!
   unicode-range: U+1F300-1F5FF, U+1F600-1F64F, U+1F680-1F6FF, U+2600-26FF;
 }
 
+.wordwrap {
+   white-space: pre-wrap;      /* CSS3 */
+   white-space: -moz-pre-wrap; /* Firefox */
+   white-space: -o-pre-wrap;   /* Opera 7 */
+   word-wrap: break-word;      /* IE */
+}
+
 html {
   height: 100%;
   overflow: hidden;
@@ -160,13 +167,6 @@ body {
     border-color: #71c04f;
 }
 
-.wordwrap {
-   white-space: pre-wrap;      /* CSS3 */
-   white-space: -moz-pre-wrap; /* Firefox */
-   white-space: -o-pre-wrap;   /* Opera 7 */
-   word-wrap: break-word;      /* IE */
-}
-
 .browsehappy {
     margin: 0.2em 0;
     background: #ccc;
@@ -248,7 +248,6 @@ body {
     vertical-align: top;
     background-color: #f8f8fa;
     height: 80px;
-    padding-left: 10px;
     text-align: left;
     color: #000000
 }
@@ -388,8 +387,6 @@ body {
   display: inline-block;
   line-height: 50px;
   font-family: emoji;
-  width: 50px;
-  height: 50px;
   text-align: center;
 
   .emojione {

@@ -557,16 +557,7 @@ var AppStore = Reflux.createStore({
     onAnswerQuestion: function(question) {
         this.activeRewards();
 
-        this.answerQuestion(question)
-        .then(function () {
-            // move the question to the correct section
-            var unanswered = this.appData.questions.unanswered;
-            var i = _.indexOf(unanswered, question);
-
-            this.appData.questions.answered.push(unanswered[i]);
-            this.appData.questions.unanswered.splice(i,1);
-            this.trigger(this.appData);
-        }.bind(this));
+        this.answerQuestion(question);
     },
     onAnswerDismissedQuestion: function(question) {
         this.activeRewards();

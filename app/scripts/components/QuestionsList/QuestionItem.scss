@@ -1,40 +1,13 @@
 .question-item {
   .question-item-points {
-    height: 80px;
-    width: 100%;
-    margin-left: 20px;
-    margin-right: 20px;
     color: #71c04f;
     font-size: 17px;
     font-weight: 400;
 
-    label {
-      padding-top: 20px;
-      margin-bottom: 0;
-    }
-
     .points-copy {
-      margin: 0;
-      line-height: 4px;
       font-size: 15px;
       font-weight: 200;
       text-indent: -1px;
-    }
-  }
-
-  .question-item-feedback {
-    
-  }
-
-  .question-item-text {
-    color: #3B3B3C;
-    font-size: 16px;
-    font-weight: 200;
-  }
-
-  &.question-answered {
-    .question-item-text {
-      color: #1E1E1E;
     }
   }
 }

@@ -16,14 +16,33 @@ exports.up = function(knex, Promise) {
         .forge()
         .fetchAll({require: true, debug:true})
         .then(function(models){
-          console.log('models',models);
+          return models.map(function(model){
+            console.log('model.toJSON().emoji',model.toJSON().emoji);
+            if(model.get('value') === 1){
+              model.set('emoji',':rage:')
+            }
+            if(model.get('value') === 2){
+              model.set('emoji', ':confused:')
+            }
+            if(model.get('value') === 3){
+              model.set('emoji', ':slightly_smiling_face:')
+            }
+            if(model.get('value') === 4){
+              model.set('emoji', ':smiley:')
+            }
+            if(model.get('value') === 5){
+              model.set('emoji', ':heart_eyes:')
+            }
+            console.log('model.toJSON().emoji',model.toJSON().emoji);
+
+            return model.save();
+          });
         })
         .catch(function(bad){
           console.log('bad',bad);
         })
     })
-    .then(function(obj){
-      console.log('obj',obj);
+    .then(function(){
       throw 'Wont finish migration';
     });
 };

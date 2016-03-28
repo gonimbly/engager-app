@@ -18,24 +18,25 @@ exports.up = function(knex, Promise) {
         .then(function(models){
           return models.map(function(model){
             console.log('model.toJSON().emoji',model.toJSON().emoji);
+            var data;
             if(model.get('value') === 1){
-              model.set('emoji',':rage:')
+              data = {'emoji': ':rage:'};
             }
             if(model.get('value') === 2){
-              model.set('emoji', ':confused:')
+              data = {'emoji': ':confused:'};
             }
             if(model.get('value') === 3){
-              model.set('emoji', ':slightly_smiling_face:')
+              data = {'emoji': ':slightly_smiling_face:'};
             }
             if(model.get('value') === 4){
-              model.set('emoji', ':smiley:')
+              data = {'emoji': ':smiley:'};
             }
             if(model.get('value') === 5){
-              model.set('emoji', ':heart_eyes:')
+              data = {'emoji': ':heart_eyes:'};
             }
             console.log('model.toJSON().emoji',model.toJSON().emoji);
 
-            return model.save();
+            return model.save(data, {patch: true});
           });
         })
         .catch(function(bad){

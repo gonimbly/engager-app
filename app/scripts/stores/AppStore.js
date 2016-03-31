@@ -362,9 +362,10 @@ var AppStore = Reflux.createStore({
                 reward_id: reward.id,
                 amount: reward.cost
             },
-            success: function(data) {
+            success: function(code) {
                 var userScore = this.appData.user.score;
                 this.appData.redeemedReward = this.appData.selectedReward;
+                this.appData.redeemedCode = code;
                 this.appData.user.score = parseInt(userScore) - parseInt(reward.cost);
 
                 this.trigger(this.appData);

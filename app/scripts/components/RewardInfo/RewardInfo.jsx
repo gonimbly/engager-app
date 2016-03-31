@@ -3,6 +3,7 @@ var Radium = require('radium');
 var Reflux = require('reflux');
 var ReactMDL = require('react-mdl');
 var Button = ReactMDL.Button;
+var isMobile = require('ismobilejs');
 
 var AppStore = require('../../stores/AppStore');
 var AppActions = require('../../actions/AppActions');
@@ -53,6 +54,19 @@ var RewardInfo = React.createClass({
     }
   },
 
+  launchApp: function() {
+    // uber://?action=applyPromo&promo=mypromo
+    var url;
+    if(isMobile.any) {
+      url = 'uber://?action=applyPromo&promo=' + this.state.appData.redeemedCode.text;
+      window.location = url;
+    } else {
+      // uber doesn't really have a api for desktop...
+      url = 'https://get.uber.com/go/' + this.state.appData.redeemedCode.text;
+      window.open(url);
+    }
+  },
+
   render: function() {
     var lines;
     var style = this.style;
@@ -69,7 +83,7 @@ var RewardInfo = React.createClass({
       var helpText;
       if(this.state.appData.redeemedReward) {
         helpText = (
-          <div style={style.line3}>We just sent <b>{this.state.appData.selectedReward.description}</b> to your email!</div>
+          <div style={style.line3} onClick={this.launchApp}>We just sent <b>{this.state.appData.redeemedReward.description}</b> to your email! Click here to launch</div>
         );
       } else {
         helpText = (

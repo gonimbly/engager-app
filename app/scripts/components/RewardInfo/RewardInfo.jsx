@@ -60,10 +60,6 @@ var RewardInfo = React.createClass({
     if(isMobile.any) {
       url = 'uber://?action=applyPromo&promo=' + this.state.appData.redeemedCode.text;
       window.location = url;
-    } else {
-      // uber doesn't really have a api for desktop...
-      url = 'https://get.uber.com/go/' + this.state.appData.redeemedCode.text;
-      window.open(url);
     }
   },
 

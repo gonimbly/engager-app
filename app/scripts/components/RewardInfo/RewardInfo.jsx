@@ -79,7 +79,7 @@ var RewardInfo = React.createClass({
       var helpText;
       if(this.state.appData.redeemedReward) {
         helpText = (
-          <div style={style.line3} onClick={this.launchApp}>We just sent <b>{this.state.appData.redeemedReward.description}</b> to your email! Click here to launch</div>
+          <div style={style.line3} onClick={this.launchApp}>You have <b>{this.state.appData.redeemedReward.description}</b><br/> Click here to launch!</div>
         );
       } else {
         helpText = (

@@ -48719,7 +48719,7 @@
 	      var helpText;
 	      if(this.state.appData.redeemedReward) {
 	        helpText = (
-	          React.createElement("div", {style: style.line3, onClick: this.launchApp}, "We just sent ", React.createElement("b", null, this.state.appData.redeemedReward.description), " to your email! Click here to launch")
+	          React.createElement("div", {style: style.line3, onClick: this.launchApp}, "You have ", React.createElement("b", null, this.state.appData.redeemedReward.description), React.createElement("br", null), " Click here to launch!")
 	        );
 	      } else {
 	        helpText = (
